@@ -18,12 +18,13 @@ import org.puredata.android.io.PdAudio;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
-public class MainActivity extends AppCompatActivity implements TestFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements TestFragment.OnFragmentInteractionListener{
 
     protected BluetoothSPP bt;
 

@@ -30,7 +30,7 @@ import java.io.IOException;
  * Use the {@link TestFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TestFragment extends Fragment {
+public class TestFragment extends PureDataBaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -76,25 +76,13 @@ public class TestFragment extends Fragment {
         }
         try{
             initPD();
-            loadPDPatch();
+            //loadPDPatch(myContext.getFilesDir(), "simplepatch.pd");
+            loadPDPatch("simplepatch.pd");
         }catch (IOException e){
             Log.d("Damn", "Broken");
         }
     }
-    private void initPD() throws IOException{
-        int sampleRate = AudioParameters.suggestSampleRate();
-        PdAudio.initAudio(sampleRate, 0, 2, 8, true);
 
-        dispatcher = new PdUiDispatcher();
-        PdBase.setReceiver(dispatcher);
-
-    }
-    private void loadPDPatch() throws IOException {
-        File dir = myContext.getFilesDir();
-        IoUtils.extractZipResource(getResources().openRawResource(R.raw.simplepatch),dir,true);
-        File pdPatch = new File(dir, "simplepatch.pd");
-        PdBase.openPatch(pdPatch.getAbsolutePath());
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -104,48 +92,45 @@ public class TestFragment extends Fragment {
        onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
            @Override
            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-               float val = (isChecked)? 1.0f : 0.0f;
+               float val = (isChecked) ? 1.0f : 0.0f;
                PdBase.sendFloat("onOff", val);
            }
        });
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        PdAudio.startAudio(myContext);
-    }
+    //@Override
+    //public void onResume() {
+    //    super.onResume();
+    //    PdAudio.startAudio(myContext);
+    //}
+    //
+    //@Override
+    //public void onPause() {
+    //    super.onPause();
+    //    PdAudio.startAudio(myContext);
+    //}
+    //
+    //// TODO: Rename method, update argument and hook method into UI event
+    //public void onButtonPressed(Uri uri) {
+    //    if (mListener != null) {
+    //        mListener.onFragmentInteraction(uri);
+    //    }
+    //}
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        PdAudio.startAudio(myContext);
-    }
+    //@Override
+    //public void onAttach(Context context) {
+    //    super.onAttach(context);
+    //    //myContext = (FragmentActivity) context;
+//
+    //    if (context instanceof OnFragmentInteractionListener) {
+    //        mListener = (OnFragmentInteractionListener) context;
+    //    } else {
+    //        throw new RuntimeException(context.toString()
+    //                + " must implement OnFragmentInteractionListener");
+    //    }
+    //}
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        myContext = (FragmentActivity) context;
-
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    public OnFragmentInteractionListener getmListener() {
-        return mListener;
-    }
 
     @Override
     public void onDetach() {
