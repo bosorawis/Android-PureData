@@ -29,26 +29,22 @@ import java.io.IOException;
 public class PureDataBaseFragment extends Fragment {
 
 
-    private PdUiDispatcher dispatcher;
-    private FragmentActivity myContext;
+    //private PdUiDispatcher dispatcher;
+    protected FragmentActivity myContext;
+    private String patchName;
+
 
 
     protected void initPD() throws IOException {
         int sampleRate = AudioParameters.suggestSampleRate();
+        Log.d("PureDataFragment","sample rate: "+ Integer.toString(sampleRate));
         PdAudio.initAudio(sampleRate, 0, 2, 8, true);
 
-        dispatcher = new PdUiDispatcher();
-        PdBase.setReceiver(dispatcher);
+        //dispatcher = new PdUiDispatcher();
+        //PdBase.setReceiver(dispatcher);
 
     }
 
-
-    protected void loadPDPatch(String patchName) throws IOException {
-        File dir = myContext.getFilesDir();
-        IoUtils.extractZipResource(getResources().openRawResource(R.raw.simplepatch), dir, true);
-        File pdPatch = new File(dir, patchName);
-        PdBase.openPatch(pdPatch.getAbsolutePath());
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -65,7 +61,8 @@ public class PureDataBaseFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        PdAudio.startAudio(myContext);
+        PdAudio.stopAudio();
     }
+
 
 }

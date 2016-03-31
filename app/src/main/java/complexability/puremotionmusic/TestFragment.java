@@ -38,7 +38,7 @@ public class TestFragment extends PureDataBaseFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private FragmentActivity myContext;
+    //private FragmentActivity myContext;
 
     private OnFragmentInteractionListener mListener;
 
@@ -75,8 +75,12 @@ public class TestFragment extends PureDataBaseFragment {
         }
         try{
             initPD();
-            //loadPDPatch(myContext.getFilesDir(), "simplepatch.pd");
-            loadPDPatch("simplepatch.pd");
+            dispatcher = new PdUiDispatcher();
+            PdBase.setReceiver(dispatcher);
+            //loadPDPatch("simplepatch.pd");
+            //loadPDPatch("reverb.pd");
+            loadPDPatch("basic_sequencer.pd");
+            //loadPDPatch("sequencer3.pd");
         }catch (IOException e){
             Log.d("Damn", "Broken");
         }
@@ -129,6 +133,16 @@ public class TestFragment extends PureDataBaseFragment {
     //                + " must implement OnFragmentInteractionListener");
     //    }
     //}
+    protected void loadPDPatch(String patchName) throws IOException {
+        File dir = myContext.getFilesDir();
+        //IoUtils.extractZipResource(getResources().openRawResource(R.raw.reverb), dir, true);
+        //IoUtils.extractZipResource(getResources().openRawResource(R.raw.simplepatch), dir, true);
+        //IoUtils.extractZipResource(getResources().openRawResource(R.raw.sequencer3), dir, true);
+        //IoUtils.extractZipResource(getResources().openRawResource(R.raw.basic_sequencer), dir, true);
+        IoUtils.extractZipResource(getResources().openRawResource(R.raw.basic_sequencer), dir, true);
+        File pdPatch = new File(dir, patchName);
+        PdBase.openPatch(pdPatch.getAbsolutePath());
+    }
 
 
     @Override
