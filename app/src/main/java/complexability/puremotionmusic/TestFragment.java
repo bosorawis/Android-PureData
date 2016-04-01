@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.ToggleButton;
 
 import org.puredata.android.io.AudioParameters;
 import org.puredata.android.io.PdAudio;
@@ -69,10 +70,18 @@ public class TestFragment extends PureDataBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("TestFragment", "onCreate");
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        Log.d("TestFragment", "onCreateView");
         try{
             initPD();
             dispatcher = new PdUiDispatcher();
@@ -84,55 +93,19 @@ public class TestFragment extends PureDataBaseFragment {
         }catch (IOException e){
             Log.d("Damn", "Broken");
         }
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-       View view = inflater.inflate(R.layout.fragment_test, container, false);
-       Switch onOffSwitch = (Switch) view.findViewById(R.id.onOffSwitch);
-       onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-           @Override
-           public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-               float val = (isChecked) ? 1.0f : 0.0f;
-               PdBase.sendFloat("onOff", val);
-           }
-       });
+        View view = inflater.inflate(R.layout.fragment_test, container, false);
+        ToggleButton onOffButton = (ToggleButton) view.findViewById(R.id.onOffToggle);
+        onOffButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                float val = (isChecked) ? 1.0f : 0.0f;
+                PdBase.sendFloat("onOff",val);
+            }
+        });
         return view;
     }
 
-    //@Override
-    //public void onResume() {
-    //    super.onResume();
-    //    PdAudio.startAudio(myContext);
-    //}
-    //
-    //@Override
-    //public void onPause() {
-    //    super.onPause();
-    //    PdAudio.startAudio(myContext);
-    //}
-    //
-    //// TODO: Rename method, update argument and hook method into UI event
-    //public void onButtonPressed(Uri uri) {
-    //    if (mListener != null) {
-    //        mListener.onFragmentInteraction(uri);
-    //    }
-    //}
-
-    //@Override
-    //public void onAttach(Context context) {
-    //    super.onAttach(context);
-    //    //myContext = (FragmentActivity) context;
-//
-    //    if (context instanceof OnFragmentInteractionListener) {
-    //        mListener = (OnFragmentInteractionListener) context;
-    //    } else {
-    //        throw new RuntimeException(context.toString()
-    //                + " must implement OnFragmentInteractionListener");
-    //    }
-    //}
     protected void loadPDPatch(String patchName) throws IOException {
         File dir = myContext.getFilesDir();
         //IoUtils.extractZipResource(getResources().openRawResource(R.raw.reverb), dir, true);

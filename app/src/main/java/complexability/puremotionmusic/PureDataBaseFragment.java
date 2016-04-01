@@ -15,6 +15,7 @@ import android.widget.Switch;
 
 import org.puredata.android.io.AudioParameters;
 import org.puredata.android.io.PdAudio;
+import org.puredata.android.service.PdService;
 import org.puredata.android.utils.PdUiDispatcher;
 import org.puredata.core.PdBase;
 import org.puredata.core.utils.IoUtils;
@@ -55,14 +56,45 @@ public class PureDataBaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("PureDataFragment", "onResume");
+
         PdAudio.startAudio(myContext);
     }
 
     @Override
     public void onPause() {
+        Log.d("PureDataFragment", "onPause");
+
         super.onPause();
         PdAudio.stopAudio();
     }
 
+    @Override
+    public void onDestroy() {
+        Log.d("PureDataFragment", "onDestroy");
+        super.onDestroy();
+        //if (PdAudio.isRunning()) {
+        //PdAudio.stopAudio();
 
+        PdAudio.release();
+        //}
+       // if (PdBase.isRunning()) {
+
+        PdBase.release();
+        //}
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.d("PureDataFragment", "onDestroyView");
+        super.onDestroyView();
+        //if (PdAudio.isRunning()) {
+        PdAudio.stopAudio();
+
+        PdAudio.release();
+        //}
+        //if (PdBase.isRunning()) {
+        PdBase.release();
+        //}
+    }
 }
