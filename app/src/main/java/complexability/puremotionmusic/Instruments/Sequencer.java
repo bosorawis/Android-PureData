@@ -87,7 +87,6 @@ public class Sequencer extends PureDataBaseFragment {
             loadPDPatch("basic_sequencer.pd");
             //loadPDPatch("sequencer3.pd");
         }catch (IOException e){
-            Log.d("Damn", "Broken");
         }
 
         View view = inflater.inflate(R.layout.fragment_test, container, false);
