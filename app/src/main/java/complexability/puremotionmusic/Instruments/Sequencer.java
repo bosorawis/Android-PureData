@@ -4,10 +4,21 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
+import org.puredata.android.utils.PdUiDispatcher;
+import org.puredata.core.PdBase;
+import org.puredata.core.utils.IoUtils;
+
+import java.io.File;
+import java.io.IOException;
+
+import complexability.puremotionmusic.PureDataBaseFragment;
 import complexability.puremotionmusic.R;
 
 /**
@@ -18,7 +29,7 @@ import complexability.puremotionmusic.R;
  * Use the {@link Sequencer#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Sequencer extends Fragment {
+public class Sequencer extends PureDataBaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,6 +38,7 @@ public class Sequencer extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private PdUiDispatcher dispatcher;
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,7 +77,29 @@ public class Sequencer extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sequencer, container, false);
+        Log.d("TestFragment", "onCreateView");
+        try{
+            initPD();
+            dispatcher = new PdUiDispatcher();
+            PdBase.setReceiver(dispatcher);
+            //loadPDPatch("simplepatch.pd");
+            //loadPDPatch("reverb.pd");
+            loadPDPatch("basic_sequencer.pd");
+            //loadPDPatch("sequencer3.pd");
+        }catch (IOException e){
+            Log.d("Damn", "Broken");
+        }
+
+        View view = inflater.inflate(R.layout.fragment_test, container, false);
+        ToggleButton onOffButton = (ToggleButton) view.findViewById(R.id.onOffToggle);
+        onOffButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                float val = (isChecked) ? 1.0f : 0.0f;
+                PdBase.sendFloat("onOff", val);
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -84,6 +118,16 @@ public class Sequencer extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+    protected void loadPDPatch(String patchName) throws IOException {
+        File dir = myContext.getFilesDir();
+        //IoUtils.extractZipResource(getResources().openRawResource(R.raw.reverb), dir, true);
+        //IoUtils.extractZipResource(getResources().openRawResource(R.raw.simplepatch), dir, true);
+        //IoUtils.extractZipResource(getResources().openRawResource(R.raw.sequencer3), dir, true);
+        //IoUtils.extractZipResource(getResources().openRawResource(R.raw.basic_sequencer), dir, true);
+        IoUtils.extractZipResource(getResources().openRawResource(R.raw.basic_sequencer), dir, true);
+        File pdPatch = new File(dir, patchName);
+        PdBase.openPatch(pdPatch.getAbsolutePath());
     }
 
     @Override

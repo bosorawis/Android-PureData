@@ -20,6 +20,7 @@ import android.widget.Toast;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
+import complexability.puremotionmusic.Instruments.Sequencer;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity
             fragment = new TestFragment();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            fragment = new TestFragment();
+            fragment = new Sequencer();
 
         } else if (id == R.id.nav_slideshow) {
 
