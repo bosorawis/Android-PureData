@@ -1,6 +1,7 @@
 package complexability.puremotionmusic.Instruments;
 
 import android.content.Context;
+import android.media.effect.Effect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
@@ -19,6 +21,8 @@ import org.puredata.core.utils.IoUtils;
 import java.io.File;
 import java.io.IOException;
 
+import complexability.puremotionmusic.Helper.Constants;
+import complexability.puremotionmusic.Helper.Effects;
 import complexability.puremotionmusic.PureDataBaseFragment;
 import complexability.puremotionmusic.R;
 
@@ -42,8 +46,16 @@ public class Sequencer extends PureDataBaseFragment {
     private PdUiDispatcher dispatcher;
 
     private OnFragmentInteractionListener mListener;
+
+
+    Constants constants = new Constants();
+
+    Effects effectList[] = new Effects[4];
+
     public Sequencer() {
         // Required empty public constructor
+        effectList[0] = constants.getEffect(Constants.VOLUME);
+        effectList[1] = constants.getEffect(Constants.NOTE);
     }
 
     /**
@@ -89,7 +101,7 @@ public class Sequencer extends PureDataBaseFragment {
         }catch (IOException e){
         }
 
-        View view = inflater.inflate(R.layout.fragment_sequencer, container, false);
+        final View view = inflater.inflate(R.layout.fragment_sequencer, container, false);
         ToggleButton onOffButton = (ToggleButton) view.findViewById(R.id.onOffButton);
         onOffButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -120,7 +132,15 @@ public class Sequencer extends PureDataBaseFragment {
                 float x = (float) progress + 30;
                 PdBase.sendFloat("val", x);
             }
+
         });
+        Button testButton = (Button) view.findViewById(R.id.testButton);
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
         return view;
     }
 

@@ -20,6 +20,13 @@
             android:layout_gravity="center"
             android:checked="false" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Popup"
+            android:id="@+id/testButton"
+            android:layout_gravity="center_vertical" />
+
         <SeekBar
             android:layout_width="679dp"
             android:layout_height="wrap_content"
