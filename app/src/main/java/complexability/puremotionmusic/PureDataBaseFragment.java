@@ -80,7 +80,6 @@ public class PureDataBaseFragment extends Fragment {
         //}
        // if (PdBase.isRunning()) {
 
-        PdBase.release();
         //}
     }
 

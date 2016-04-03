@@ -5,20 +5,28 @@
     tools:context="complexability.puremotionmusic.Instruments.Sequencer">
 
     <!-- TODO: Update blank fragment layout -->
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="onOff"
-        android:id="@+id/onOffButton"
-        android:layout_gravity="center"
-        android:checked="false" />
 
-    <SeekBar
-        android:layout_width="679dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/seekBar"
-        android:layout_gravity="center_horizontal|top"
-        android:max="100"
-        android:progress="10"
-        android:indeterminate="false" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right|top">
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="onOff"
+            android:id="@+id/onOffButton"
+            android:layout_gravity="center"
+            android:checked="false" />
+
+        <SeekBar
+            android:layout_width="679dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBar"
+            android:layout_gravity="center_vertical"
+            android:max="100"
+            android:progress="10"
+            android:indeterminate="false" />
+    </LinearLayout>
 </FrameLayout>

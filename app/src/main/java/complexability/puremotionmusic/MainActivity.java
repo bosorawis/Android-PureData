@@ -17,13 +17,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import junit.framework.Test;
+
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 import complexability.puremotionmusic.Instruments.Sequencer;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        TestFragment.OnFragmentInteractionListener, Sequencer.OnFragmentInteractionListener{
 
     protected BluetoothSPP bt;
 
@@ -142,11 +145,11 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
 
-        if (id == R.id.nav_camera) {
-            fragment = new TestFragment();
+        if (id == R.id.sequencer) {
+            fragment = new Sequencer();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            fragment = new Sequencer();
+            fragment = new TestFragment();
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -200,6 +203,12 @@ public class MainActivity extends AppCompatActivity
                 finish();
             }
         }
+    }
+    public void onTestFragmentInteraction(String string){
+        Log.d("MainActivity", "onTestFragmentInteraction: " + string);
+    }
+    public void onSequencerFragmentInteraction(String string){
+        Log.d("MainActivity", "onSequencerFragmentInteraction: " + string);
     }
 
 }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
 import org.puredata.android.utils.PdUiDispatcher;
@@ -41,7 +42,6 @@ public class Sequencer extends PureDataBaseFragment {
     private PdUiDispatcher dispatcher;
 
     private OnFragmentInteractionListener mListener;
-
     public Sequencer() {
         // Required empty public constructor
     }
@@ -84,18 +84,41 @@ public class Sequencer extends PureDataBaseFragment {
             PdBase.setReceiver(dispatcher);
             //loadPDPatch("simplepatch.pd");
             //loadPDPatch("reverb.pd");
-            loadPDPatch("basic_sequencer.pd");
+            loadPDPatch("new_sequencer.pd");
             //loadPDPatch("sequencer3.pd");
         }catch (IOException e){
         }
 
-        View view = inflater.inflate(R.layout.fragment_test, container, false);
-        ToggleButton onOffButton = (ToggleButton) view.findViewById(R.id.onOffToggle);
+        View view = inflater.inflate(R.layout.fragment_sequencer, container, false);
+        ToggleButton onOffButton = (ToggleButton) view.findViewById(R.id.onOffButton);
         onOffButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 float val = (isChecked) ? 1.0f : 0.0f;
                 PdBase.sendFloat("onOff", val);
+            }
+        });
+        SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Log.d("Seek bar", "val: " + Integer.toString(progress));
+                float x = (float) progress + 30;
+                PdBase.sendFloat("val", x);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                int progress = seekBar.getProgress();
+                float x = (float) progress + 30;
+                PdBase.sendFloat("val", x);
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int progress = seekBar.getProgress();
+                float x = (float) progress + 30;
+                PdBase.sendFloat("val", x);
             }
         });
         return view;
@@ -104,7 +127,7 @@ public class Sequencer extends PureDataBaseFragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            //mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -124,7 +147,7 @@ public class Sequencer extends PureDataBaseFragment {
         //IoUtils.extractZipResource(getResources().openRawResource(R.raw.simplepatch), dir, true);
         //IoUtils.extractZipResource(getResources().openRawResource(R.raw.sequencer3), dir, true);
         //IoUtils.extractZipResource(getResources().openRawResource(R.raw.basic_sequencer), dir, true);
-        IoUtils.extractZipResource(getResources().openRawResource(R.raw.basic_sequencer), dir, true);
+        IoUtils.extractZipResource(getResources().openRawResource(R.raw.new_sequencer), dir, true);
         File pdPatch = new File(dir, patchName);
         PdBase.openPatch(pdPatch.getAbsolutePath());
     }
@@ -147,6 +170,6 @@ public class Sequencer extends PureDataBaseFragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        public void onSequencerFragmentInteraction(String string);
     }
 }
