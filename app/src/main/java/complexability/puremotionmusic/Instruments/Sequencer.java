@@ -53,6 +53,7 @@ public class Sequencer extends PureDataBaseFragment {
 
     private OnFragmentInteractionListener mListener;
 
+    final int[] selected = {0};
 
 
     static Constants constants = new Constants();
@@ -124,6 +125,7 @@ public class Sequencer extends PureDataBaseFragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 float val = (isChecked) ? 1.0f : 0.0f;
                 PdBase.sendFloat("onOff", val);
+                Log.d("Sequencer", "selected: " + Integer.toString(selected[0]));
             }
         });
         SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
@@ -149,7 +151,6 @@ public class Sequencer extends PureDataBaseFragment {
             }
 
         });
-        final int[] selected = {0};
         Button testButton = (Button) view.findViewById(R.id.testButton);
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
