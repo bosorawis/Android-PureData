@@ -1,7 +1,9 @@
 package complexability.puremotionmusic;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import org.puredata.android.io.AudioParameters;
 import org.puredata.android.io.PdAudio;
@@ -23,6 +26,8 @@ import org.puredata.core.utils.IoUtils;
 
 import java.io.File;
 import java.io.IOException;
+
+import complexability.puremotionmusic.Helper.Effects;
 
 
 /**
@@ -39,7 +44,7 @@ public class PureDataBaseFragment extends Fragment {
 
     protected void initPD() throws IOException {
         int sampleRate = AudioParameters.suggestSampleRate();
-        Log.d("PureDataFragment","sample rate: "+ Integer.toString(sampleRate));
+        Log.d("PureDataFragment", "sample rate: " + Integer.toString(sampleRate));
         PdAudio.initAudio(sampleRate, 0, 2, 8, true);
 
         //dispatcher = new PdUiDispatcher();
@@ -97,4 +102,5 @@ public class PureDataBaseFragment extends Fragment {
         PdBase.release();
         //}
     }
+
 }

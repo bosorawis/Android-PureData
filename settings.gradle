@@ -1,5 +1,3 @@
-include ':CircleOfFifths', ':app', ':library'
+include ':app', ':library'
 include ':PdCore'
 include ':PdTest'
-include ':ScenePlayer'
-include ':Voice-O-Rama'

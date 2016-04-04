@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity
         TestFragment.OnFragmentInteractionListener, Sequencer.OnFragmentInteractionListener{
 
     protected BluetoothSPP bt;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

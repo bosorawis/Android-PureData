@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sequencer_effect_name">
+        <item>Volume</item>
+        <item>Frequency</item>
+        <item>Reverb</item>
+    </string-array>
+
+    <string-array name="sequencer_effect_id">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+
+</resources>

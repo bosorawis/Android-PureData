@@ -1,6 +1,8 @@
 package complexability.puremotionmusic.Instruments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.effect.Effect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +14,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
+import android.widget.Toast;
 import android.widget.ToggleButton;
+
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.puredata.android.utils.PdUiDispatcher;
 import org.puredata.core.PdBase;
@@ -48,14 +54,19 @@ public class Sequencer extends PureDataBaseFragment {
     private OnFragmentInteractionListener mListener;
 
 
-    Constants constants = new Constants();
 
-    Effects effectList[] = new Effects[4];
+    static Constants constants = new Constants();
+
+    static Effects[] effectList = new Effects[3];
 
     public Sequencer() {
+        Log.d("Sequencer","Constructor");
+
         // Required empty public constructor
         effectList[0] = constants.getEffect(Constants.VOLUME);
         effectList[1] = constants.getEffect(Constants.NOTE);
+        effectList[2] = constants.getEffect(Constants.REVERB);
+
     }
 
     /**
@@ -68,17 +79,21 @@ public class Sequencer extends PureDataBaseFragment {
      */
     // TODO: Rename and change types and number of parameters
     public static Sequencer newInstance(String param1, String param2) {
+        Log.d("Sequencer","hello");
         Sequencer fragment = new Sequencer();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -86,10 +101,11 @@ public class Sequencer extends PureDataBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.d("TestFragment", "onCreateView");
+
         try{
             initPD();
             dispatcher = new PdUiDispatcher();
@@ -114,7 +130,6 @@ public class Sequencer extends PureDataBaseFragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d("Seek bar", "val: " + Integer.toString(progress));
                 float x = (float) progress + 30;
                 PdBase.sendFloat("val", x);
             }
@@ -134,10 +149,28 @@ public class Sequencer extends PureDataBaseFragment {
             }
 
         });
+        final int[] selected = {0};
         Button testButton = (Button) view.findViewById(R.id.testButton);
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new MaterialDialog.Builder(myContext)
+                        .title(R.string.title)
+                        .items(R.array.sequencer_effect_name)
+                        .itemsCallbackSingleChoice(selected[0], new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                /**
+                                 * If you use alwaysCallSingleChoiceCallback(), which is discussed below,
+                                 * returning false here won't allow the newly selected radio button to actually be selected.
+                                 **/
+                                selected[0] = which;
+                                Log.d("Sequencer", (String) text);
+                                return true;
+                            }
+                        })
+                        .positiveText(R.string.choose)
+                        .show();
             }
         });
 
@@ -192,4 +225,6 @@ public class Sequencer extends PureDataBaseFragment {
         // TODO: Update argument type and name
         public void onSequencerFragmentInteraction(String string);
     }
+
+
 }
