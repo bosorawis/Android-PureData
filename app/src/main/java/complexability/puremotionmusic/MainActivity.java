@@ -23,6 +23,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 import complexability.puremotionmusic.Instruments.Sequencer;
+import complexability.puremotionmusic.Instruments.TestReverb;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -151,6 +152,9 @@ public class MainActivity extends AppCompatActivity
             fragment = new TestFragment();
 
         } else if (id == R.id.nav_slideshow) {
+            Intent i = new Intent(getBaseContext(), TestReverb.class);
+            startActivity(i);
+            return true;
 
         } else if (id == R.id.nav_manage) {
 

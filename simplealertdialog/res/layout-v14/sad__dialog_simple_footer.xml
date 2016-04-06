@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2014 Soichiro Kashima
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/footer"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/button_negative"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/button_negative_label"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:duplicateParentState="true"
+            android:gravity="center"
+            android:text="@android:string/cancel"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/button_divider"
+        android:layout_width="0.6dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="0"
+        android:background="@color/sad__holo_dark_divider" />
+
+    <LinearLayout
+        android:id="@+id/button_neutral"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/button_neutral_label"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:duplicateParentState="true"
+            android:gravity="center"
+            android:text="@android:string/untitled"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/button_divider_neutral"
+        android:layout_width="0.6dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="0"
+        android:background="@color/sad__holo_dark_divider" />
+
+    <LinearLayout
+        android:id="@+id/button_positive"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/button_positive_label"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:duplicateParentState="true"
+            android:gravity="center"
+            android:text="@android:string/ok"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+</LinearLayout>

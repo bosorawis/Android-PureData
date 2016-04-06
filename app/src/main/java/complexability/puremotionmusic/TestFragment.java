@@ -83,7 +83,7 @@ public class TestFragment extends PureDataBaseFragment {
             PdBase.setReceiver(dispatcher);
             //loadPDPatch("simplepatch.pd");
             //loadPDPatch("reverb.pd");
-            loadPDPatch("basic_sequencer.pd");
+            loadPDPatch("freev.pd");
             //loadPDPatch("sequencer3.pd");
         }catch (IOException e){
             Log.d("Damn", "Broken");
@@ -107,7 +107,7 @@ public class TestFragment extends PureDataBaseFragment {
         //IoUtils.extractZipResource(getResources().openRawResource(R.raw.simplepatch), dir, true);
         //IoUtils.extractZipResource(getResources().openRawResource(R.raw.sequencer3), dir, true);
         //IoUtils.extractZipResource(getResources().openRawResource(R.raw.basic_sequencer), dir, true);
-        IoUtils.extractZipResource(getResources().openRawResource(R.raw.basic_sequencer), dir, true);
+        IoUtils.extractZipResource(getResources().openRawResource(R.raw.freev), dir, true);
         File pdPatch = new File(dir, patchName);
         PdBase.openPatch(pdPatch.getAbsolutePath());
     }
