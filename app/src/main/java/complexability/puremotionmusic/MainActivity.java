@@ -22,12 +22,14 @@ import junit.framework.Test;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
+import complexability.puremotionmusic.Instruments.ReverbFragment;
 import complexability.puremotionmusic.Instruments.Sequencer;
 import complexability.puremotionmusic.Instruments.TestReverb;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        TestFragment.OnFragmentInteractionListener, Sequencer.OnFragmentInteractionListener{
+        TestFragment.OnFragmentInteractionListener, Sequencer.OnFragmentInteractionListener,
+        ReverbFragment.OnFragmentInteractionListener{
 
     protected BluetoothSPP bt;
     @Override
@@ -149,7 +151,7 @@ public class MainActivity extends AppCompatActivity
             fragment = new Sequencer();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            fragment = new TestFragment();
+            fragment = new ReverbFragment();
 
         } else if (id == R.id.nav_slideshow) {
             Intent i = new Intent(getBaseContext(), TestReverb.class);
@@ -212,6 +214,9 @@ public class MainActivity extends AppCompatActivity
     }
     public void onSequencerFragmentInteraction(String string){
         Log.d("MainActivity", "onSequencerFragmentInteraction: " + string);
+    }
+    public void onReverbFragmentInteraction(String string){
+        Log.d("MainActivity", "onReverbFragmentInteraction: " + string);
     }
 
 }
