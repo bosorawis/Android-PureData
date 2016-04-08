@@ -1,6 +1,8 @@
 package complexability.puremotionmusic.Helper;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.pow;
@@ -12,9 +14,21 @@ import static java.lang.StrictMath.atan2;
  * Created by Sorawis on 4/7/2016.
  */
 public class InstrumentBase extends Fragment {
+    protected FragmentActivity myContext;
 
     private static final float GRAVITY = (float) 1.00;
-    private static final float ACCEL_THRESHOLD = (float) 0.01;
+    private static final float ACCEL_THRESHOLD = (float) 0.1;
+
+    public static final int ECHO = 0;
+    public static final int REVERB = 1;
+    public static final int VOLUME = 2;
+
+    public static final String[] EffectNames = {
+            "Echo",
+            "Reverb",
+            "Volume",
+    };
+
 
     protected float concat(byte lowByte, byte highByte){
         //Log.d(TAG, "concat: " + Integer.toString((highByte << 8) | lowByte));(highByte << 8) | lowByte;
@@ -150,5 +164,10 @@ public class InstrumentBase extends Fragment {
         return roll;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        myContext = (FragmentActivity) context;
+    }
 
 }

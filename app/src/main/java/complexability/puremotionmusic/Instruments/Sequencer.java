@@ -171,7 +171,7 @@ public class Sequencer extends PureDataBaseFragment {
                                  * returning false here won't allow the newly selected radio button to actually be selected.
                                  **/
                                 selected[0] = which;
-                                Log.d("Sequencer", (String) text);
+                                Log.d("Sequencer", String.valueOf(selected[0]));
                                 return true;
                             }
                         })

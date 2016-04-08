@@ -17,7 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.puredata.android.io.AudioParameters;
 import org.puredata.android.io.PdAudio;
@@ -51,7 +54,7 @@ import static java.lang.StrictMath.atan2;
  * Use the {@link ReverbFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReverbFragment extends InstrumentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class ReverbFragment extends InstrumentBase implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -59,6 +62,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
     private static final String TAG = "ReverbFragment";
 
+    private static final int[] availableEffect = new int[]{ECHO, REVERB, VOLUME};
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -66,8 +70,26 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
     private OnFragmentInteractionListener mListener;
     private PdService pdService = null;
-    private Button playButton;
+    private int[] selected = new int[10];
+    private String[] choices;
+
+    /*
+    User interface elements
+    */
+    private Button left_updown_btn;
+    private Button left_leftright_btn;
+    private Button left_forwardback_btn;
+    private Button left_pitch_btn;
+    private Button left_roll_btn;
+
+    private TextView left_updown_text;
+    private TextView left_leftright_text;
+    private TextView left_forwardback_text;
+    private TextView left_pitch_text;
+    private TextView left_roll_text;
+
     private ToggleButton onOffButton;
+    //*******************************************
     BluetoothSPP bt;
     public ReverbFragment() {
         // Required empty public constructor
@@ -158,28 +180,45 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_reverb, container, false);
+        /*
+        GUI Initialization
+         */
         onOffButton = (ToggleButton) view.findViewById(R.id.toggleButton);
-        playButton = (Button) view.findViewById(R.id.playButton);
+
+        left_updown_btn = (Button) view.findViewById(R.id.left_updown_button);
+        left_leftright_btn = (Button) view.findViewById(R.id.left_leftright_button);
+        left_forwardback_btn = (Button) view.findViewById(R.id.left_forwardback_button);
+        left_pitch_btn = (Button) view.findViewById(R.id.left_pitch_button);
+        left_roll_btn = (Button) view.findViewById(R.id.left_roll_button);
+
+        left_updown_btn.setOnClickListener(this);
+        left_leftright_btn.setOnClickListener(this);
+        left_forwardback_btn.setOnClickListener(this);
+        left_pitch_btn.setOnClickListener(this);
+        left_roll_btn.setOnClickListener(this);
+
+        left_updown_text = (TextView) view.findViewById(R.id.left_updown_text);
+        left_leftright_text  = (TextView) view.findViewById(R.id.left_leftright_text);
+        left_forwardback_text = (TextView) view.findViewById(R.id.left_frontback_text);
+        left_pitch_text = (TextView) view.findViewById(R.id.left_pitch_text);
+        left_roll_text = (TextView) view.findViewById(R.id.left_roll_text);
+
+
+
         onOffButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 float val = (isChecked) ? 1.0f : 0.0f;
-                PdBase.sendFloat("onOff", val);
+                startAudio();
                 PdBase.sendFloat("init_vars", val);
+                PdBase.sendFloat("onOff", val);
             }
         });
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pdService.isRunning()) {
-                    stopAudio();
-                } else {
-                    Log.d(TAG, "startAudio");
-                    startAudio();
-                    Log.d(TAG, "after");
-                }
-            }
-        });
+
+        //**********************************************************************************
+        /*
+        Bluetooth set onlistener
+         */
         bt = ((MainActivity) getActivity()).getBt();
         bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             public void onDataReceived(byte[] data, String message) {
@@ -210,6 +249,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        choices =  getActivity().getResources().getStringArray(R.array.reverb_effect_name);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -229,6 +269,47 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         if (pdService.isRunning()) {
             startAudio();
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        int motion = 0;
+        switch(v.getId()){
+            case R.id.left_updown_button:
+                motion = 0;
+                break;
+            case R.id.left_leftright_button:
+                motion = 1;
+                break;
+            case R.id.left_forwardback_button:
+                motion = 2;
+                break;
+            case R.id.left_pitch_button:
+                motion = 3;
+                break;
+            case R.id.left_roll_button:
+                motion = 4;
+                break;
+        }
+        final int finalMotion = motion;
+
+        new MaterialDialog.Builder(myContext)
+                .title(R.string.title)
+                .items(R.array.reverb_effect_name)
+                .itemsCallbackSingleChoice(selected[motion], new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        /**
+                         * If you use alwaysCallSingleChoiceCallback(), which is discussed below,
+                         * returning false here won't allow the newly selected radio button to actually be selected.
+                         **/
+                        selected[finalMotion] = which;
+                        Log.d(TAG, choices[which]);
+                        return true;
+                    }
+                })
+                .positiveText(R.string.choose)
+                .show();
     }
 
     /**
@@ -299,6 +380,9 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
+        if(pdService.isRunning()) {
+            stopAudio();
+        }
         bt.setOnDataReceivedListener(null);
         ((MainActivity) getActivity()).cleanUpBluetoothListener();
 
@@ -309,7 +393,11 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     public void onDestroyView() {
         super.onDestroyView();
         Log.d(TAG, "onDestroyView");
+        if(pdService.isRunning()) {
+            stopAudio();
+        }
         cleanup();
+
         //bt.setOnDataReceivedListener(null);
         bt.resetOnDataReceivedListener();
     }
