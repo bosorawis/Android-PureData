@@ -71,6 +71,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     private OnFragmentInteractionListener mListener;
     private PdService pdService = null;
     private int[] selected = new int[10];
+    private String[] selectedString = new String[10];
     private String[] choices;
 
     /*
@@ -88,6 +89,18 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     private TextView left_pitch_text;
     private TextView left_roll_text;
 
+
+    private Button   right_updown_btn;
+    private Button   right_leftright_btn;
+    private Button   right_forwardback_btn;
+    private Button   right_pitch_btn;
+    private Button   right_roll_btn;
+
+    private TextView right_updown_text;
+    private TextView right_leftright_text;
+    private TextView right_forwardback_text;
+    private TextView right_pitch_text;
+    private TextView right_roll_text;
     private ToggleButton onOffButton;
     //*******************************************
     BluetoothSPP bt;
@@ -183,6 +196,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         /*
         GUI Initialization
          */
+
         onOffButton = (ToggleButton) view.findViewById(R.id.toggleButton);
 
         left_updown_btn = (Button) view.findViewById(R.id.left_updown_button);
@@ -191,11 +205,24 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         left_pitch_btn = (Button) view.findViewById(R.id.left_pitch_button);
         left_roll_btn = (Button) view.findViewById(R.id.left_roll_button);
 
+
+        right_updown_btn = (Button) view.findViewById(R.id.right_updown_button);
+        right_leftright_btn = (Button) view.findViewById(R.id.right_leftright_button);
+        right_forwardback_btn = (Button) view.findViewById(R.id.right_forwardback_button);
+        right_pitch_btn = (Button) view.findViewById(R.id.right_pitch_button);
+        right_roll_btn = (Button) view.findViewById(R.id.right_roll_button);
+
         left_updown_btn.setOnClickListener(this);
         left_leftright_btn.setOnClickListener(this);
         left_forwardback_btn.setOnClickListener(this);
         left_pitch_btn.setOnClickListener(this);
         left_roll_btn.setOnClickListener(this);
+
+        right_updown_btn.setOnClickListener(this);
+        right_leftright_btn.setOnClickListener(this);
+        right_forwardback_btn.setOnClickListener(this);
+        right_pitch_btn.setOnClickListener(this);
+        right_roll_btn.setOnClickListener(this);
 
         left_updown_text = (TextView) view.findViewById(R.id.left_updown_text);
         left_leftright_text  = (TextView) view.findViewById(R.id.left_leftright_text);
@@ -203,7 +230,13 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         left_pitch_text = (TextView) view.findViewById(R.id.left_pitch_text);
         left_roll_text = (TextView) view.findViewById(R.id.left_roll_text);
 
+        right_updown_text = (TextView) view.findViewById(R.id.right_updown_text);
+        right_leftright_text  = (TextView) view.findViewById(R.id.right_leftright_text);
+        right_forwardback_text = (TextView) view.findViewById(R.id.right_frontback_text);
+        right_pitch_text = (TextView) view.findViewById(R.id.right_pitch_text);
+        right_roll_text = (TextView) view.findViewById(R.id.right_roll_text);
 
+        initText();
 
         onOffButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -250,6 +283,11 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     public void onAttach(Context context) {
         super.onAttach(context);
         choices =  getActivity().getResources().getStringArray(R.array.reverb_effect_name);
+        for (int i = 0 ; i < selectedString.length ; i++){
+            //TODO Initializing
+            selected[i] = -1;
+            selectedString[i] = getStringFromId(selected[i]);
+        }
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -274,25 +312,54 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     @Override
     public void onClick(View v) {
         int motion = 0;
+        TextView cur = null;
         switch(v.getId()){
+            //Left
             case R.id.left_updown_button:
                 motion = 0;
+                cur = left_updown_text;
                 break;
             case R.id.left_leftright_button:
                 motion = 1;
+                cur = left_leftright_text;
                 break;
             case R.id.left_forwardback_button:
                 motion = 2;
+                cur = left_forwardback_text;
                 break;
             case R.id.left_pitch_button:
                 motion = 3;
+                cur = left_pitch_text;
                 break;
             case R.id.left_roll_button:
                 motion = 4;
+                cur = left_roll_text;
+                break;
+            //Right
+            case R.id.right_updown_button:
+                motion = 5;
+                cur = right_updown_text;
+                break;
+            case R.id.right_leftright_button:
+                motion = 6;
+                cur = right_leftright_text;
+                break;
+            case R.id.right_forwardback_button:
+                motion = 7;
+                cur = right_forwardback_text;
+                break;
+            case R.id.right_pitch_button:
+                motion = 8;
+                cur = right_pitch_text;
+                break;
+            case R.id.right_roll_button:
+                motion = 9;
+                cur = right_roll_text;
                 break;
         }
         final int finalMotion = motion;
 
+        final TextView finalCur = cur;
         new MaterialDialog.Builder(myContext)
                 .title(R.string.title)
                 .items(R.array.reverb_effect_name)
@@ -304,6 +371,9 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
                          * returning false here won't allow the newly selected radio button to actually be selected.
                          **/
                         selected[finalMotion] = which;
+                        selectedString[finalMotion] = (String) text;
+                        assert finalCur != null;
+                        finalCur.setText(selectedString[finalMotion]);
                         Log.d(TAG, choices[which]);
                         return true;
                     }
@@ -442,5 +512,18 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         PdBase.sendFloat(Param[0], (val[2]));
 
     }
+    public void initText(){
+        left_updown_text.setText(selectedString[0]);
+        left_leftright_text.setText(selectedString[1]);
+        left_forwardback_text .setText(selectedString[2]);
+        left_pitch_text.setText(selectedString[3]);
+        left_roll_text.setText(selectedString[4]);
 
+        right_updown_text.setText(selectedString[5]);
+        right_leftright_text.setText(selectedString[6]);
+        right_forwardback_text.setText(selectedString[7]);
+        right_pitch_text.setText(selectedString[8]);
+        right_roll_text.setText(selectedString[9]);
+
+    }
 }

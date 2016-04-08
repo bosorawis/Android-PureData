@@ -19,9 +19,26 @@ public class InstrumentBase extends Fragment {
     private static final float GRAVITY = (float) 1.00;
     private static final float ACCEL_THRESHOLD = (float) 0.1;
 
+
+    public static final int NONE = -1;
     public static final int ECHO = 0;
     public static final int REVERB = 1;
     public static final int VOLUME = 2;
+
+    protected String getStringFromId(int id){
+        switch(id){
+            case NONE:
+                return "None";
+            case ECHO:
+                return "ECHO";
+            case REVERB:
+                return "Reverb";
+            case VOLUME:
+                return "Volume";
+            default:
+                return null;
+        }
+    }
 
     public static final String[] EffectNames = {
             "Echo",
