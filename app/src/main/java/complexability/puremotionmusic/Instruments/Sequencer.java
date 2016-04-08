@@ -27,8 +27,10 @@ import org.puredata.core.utils.IoUtils;
 import java.io.File;
 import java.io.IOException;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import complexability.puremotionmusic.Helper.Constants;
 import complexability.puremotionmusic.Helper.Effects;
+import complexability.puremotionmusic.MainActivity;
 import complexability.puremotionmusic.PureDataBaseFragment;
 import complexability.puremotionmusic.R;
 
@@ -45,6 +47,7 @@ public class Sequencer extends PureDataBaseFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = "Sequencer";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -59,6 +62,8 @@ public class Sequencer extends PureDataBaseFragment {
     static Constants constants = new Constants();
 
     static Effects[] effectList = new Effects[3];
+
+    BluetoothSPP bt;
 
     public Sequencer() {
         Log.d("Sequencer","Constructor");
@@ -174,7 +179,17 @@ public class Sequencer extends PureDataBaseFragment {
                         .show();
             }
         });
+        bt = ((MainActivity) getActivity()).getBt();
+        bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
+            public void onDataReceived(byte[] data, String message) {
+                Log.d(TAG,"hello");
+                //Log.d(TAG, Arrays.toString(data));
 
+                if (data != null) {
+                    Log.d(TAG, Integer.toString(data.length));
+                }
+            }
+        });
         return view;
     }
 
@@ -227,5 +242,9 @@ public class Sequencer extends PureDataBaseFragment {
         public void onSequencerFragmentInteraction(String string);
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        bt.resetOnDataReceivedListener();
+    }
 }

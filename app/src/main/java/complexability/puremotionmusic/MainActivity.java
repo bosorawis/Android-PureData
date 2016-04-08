@@ -2,8 +2,11 @@ package complexability.puremotionmusic;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -19,6 +22,9 @@ import android.widget.Toast;
 
 import junit.framework.Test;
 
+import org.puredata.android.service.PdService;
+import org.puredata.core.PdBase;
+
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
@@ -31,9 +37,15 @@ public class MainActivity extends AppCompatActivity
         TestFragment.OnFragmentInteractionListener, Sequencer.OnFragmentInteractionListener,
         ReverbFragment.OnFragmentInteractionListener{
 
+
+    private static final String TAG = "MainActivity";
     protected BluetoothSPP bt;
+    protected PdService pdService = null;
+    private final Object lock = new Object();
+    Fragment currentFragment = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -82,17 +94,23 @@ public class MainActivity extends AppCompatActivity
         /**
          * Data receive method
          */
-        bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
-            public void onDataReceived(byte[] data, String message) {
-                if (data != null) {
-                    Log.d("MainActivity", "Bt read: " + message);
-                }
-            }
-        });
+    }
+    public BluetoothSPP getBt(){
+        return bt;
+    }
+    public void cleanUpBluetoothListener(){
+        bt.setOnDataReceivedListener(null);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG,"onPause");
+    }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG,"onDestroy");
     }
 
     @Override
@@ -170,6 +188,7 @@ public class MainActivity extends AppCompatActivity
         assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
         fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
+        currentFragment = fragment;
         return true;
     }
 
@@ -218,5 +237,6 @@ public class MainActivity extends AppCompatActivity
     public void onReverbFragmentInteraction(String string){
         Log.d("MainActivity", "onReverbFragmentInteraction: " + string);
     }
+
 
 }

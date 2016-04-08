@@ -20,6 +20,7 @@ import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import org.puredata.android.io.AudioParameters;
+import org.puredata.android.io.PdAudio;
 import org.puredata.android.service.PdPreferences;
 import org.puredata.android.service.PdService;
 import org.puredata.core.PdBase;
@@ -31,7 +32,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import complexability.puremotionmusic.Helper.InstrumentBase;
+import complexability.puremotionmusic.MainActivity;
 import complexability.puremotionmusic.R;
+
+import static java.lang.Math.PI;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+import static java.lang.StrictMath.abs;
+import static java.lang.StrictMath.atan2;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,13 +51,14 @@ import complexability.puremotionmusic.R;
  * Use the {@link ReverbFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReverbFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class ReverbFragment extends InstrumentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private static final String TAG = "Fragment";
+    private static final String TAG = "ReverbFragment";
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -57,6 +68,7 @@ public class ReverbFragment extends Fragment implements SharedPreferences.OnShar
     private PdService pdService = null;
     private Button playButton;
     private ToggleButton onOffButton;
+    BluetoothSPP bt;
     public ReverbFragment() {
         // Required empty public constructor
     }
@@ -128,7 +140,11 @@ public class ReverbFragment extends Fragment implements SharedPreferences.OnShar
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             pdService = ((PdService.PdBinder)service).getService();
-            initPd();
+            try {
+                initPd();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -149,6 +165,7 @@ public class ReverbFragment extends Fragment implements SharedPreferences.OnShar
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 float val = (isChecked) ? 1.0f : 0.0f;
                 PdBase.sendFloat("onOff", val);
+                PdBase.sendFloat("init_vars", val);
             }
         });
         playButton.setOnClickListener(new View.OnClickListener() {
@@ -157,9 +174,20 @@ public class ReverbFragment extends Fragment implements SharedPreferences.OnShar
                 if (pdService.isRunning()) {
                     stopAudio();
                 } else {
-                    Log.d(TAG,"startAudio");
+                    Log.d(TAG, "startAudio");
                     startAudio();
                     Log.d(TAG, "after");
+                }
+            }
+        });
+        bt = ((MainActivity) getActivity()).getBt();
+        bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
+            public void onDataReceived(byte[] data, String message) {
+                //Log.d(TAG,"hello");
+                //Log.d(TAG, Arrays.toString(data));
+                if (data != null) {
+                    //Log.d(TAG, Integer.toString(data.length));
+                    dataProc(data);
                 }
             }
         });
@@ -167,7 +195,7 @@ public class ReverbFragment extends Fragment implements SharedPreferences.OnShar
         AudioParameters.init(getActivity());
         PdPreferences.initPreferences(getActivity().getApplicationContext());
         PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
-        getActivity().bindService(new Intent(getActivity(), PdService.class), pdConnection, pdService.BIND_AUTO_CREATE);
+        getActivity().bindService(new Intent(getActivity(), PdService.class), pdConnection, Context.BIND_AUTO_CREATE);
 
         return view;
     }
@@ -222,14 +250,18 @@ public class ReverbFragment extends Fragment implements SharedPreferences.OnShar
      * Initialize pd with a patch file
      *
      */
-    private void initPd() {
+    private void initPd() throws IOException {
         Resources res = getResources();
         File patchFile = null;
+        int sampleRate = AudioParameters.suggestSampleRate();
+        Log.d("PureDataFragment", "sample rate: " + Integer.toString(sampleRate));
+        PdAudio.initAudio(sampleRate, 0, 2, 8, true);
+
         try {
             PdBase.setReceiver(receiver);
             PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.freevvv);
-            patchFile = IoUtils.extractResource(in, "test.pd", getActivity().getCacheDir());
+            InputStream in = res.openRawResource(R.raw.pd_test);
+            patchFile = IoUtils.extractResource(in, "pd_test.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -244,6 +276,7 @@ public class ReverbFragment extends Fragment implements SharedPreferences.OnShar
      */
     private void startAudio() {
         String name = getResources().getString(R.string.app_name);
+
         try {
             pdService.initAudio(-1, -1, -1, -1);   // negative values will be replaced with defaults/preferences
             pdService.startAudio(new Intent(getActivity(), ReverbFragment.class), R.drawable.icon, name, "Return to " + name + ".");
@@ -265,7 +298,20 @@ public class ReverbFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy");
+        bt.setOnDataReceivedListener(null);
+        ((MainActivity) getActivity()).cleanUpBluetoothListener();
+
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView");
         cleanup();
+        //bt.setOnDataReceivedListener(null);
+        bt.resetOnDataReceivedListener();
     }
 
     @Override
@@ -280,4 +326,33 @@ public class ReverbFragment extends Fragment implements SharedPreferences.OnShar
     public void onResume() {
         super.onResume();
     }
+
+    public void dataProc(byte[] data){
+        //Log.d(TAG, String.valueOf(data));
+        //For testing only
+        String Param[] = {"wet"};
+        float[] val = new float[10];
+        float[] finalData = new float[10];
+        if(data.length != 18){
+            Log.d(TAG, "FUCK!!!!");
+        }
+        for (int i = 0 ; i < data.length ; i = i + 2){
+            //val[i/2] =  ((float) (concat(data[i],data[i+1])/(pow(2,16))));
+            //if(i == 4){
+            //    short d = 0;
+            //    d = (short) (((data[i+1] << 8) + data[i]) & 0xFFFF);
+            //    //Log.d(TAG, "val: " + Short.toString((d)));
+            //}
+            val[i/2] = concat(data[i], data[i+1]);
+        }
+        //Log.d(TAG, "val: " + Float.toString(val[2]));
+        finalData[0] = calculatePitch(val[0],val[1],val[2]);
+        finalData[1] = calculateRoll(val[0], val[1], val[2]);
+
+        Log.d(TAG,"pitch: " +  Float.toString(finalData[0]) + "\t\t\t roll: "+ Float.toString(finalData[1]));
+
+        PdBase.sendFloat(Param[0], (val[2]));
+
+    }
+
 }

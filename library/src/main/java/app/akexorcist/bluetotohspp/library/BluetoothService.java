@@ -356,10 +356,10 @@ public class BluetoothService {
                 try {
                     int data = mmInStream.read();
                     if(data == 0x0A) {
-                        Log.d("Data", "Begin Package");
-                    } else if(data == 0x29) {
-                        Log.d("Data","End Package");
-                        arr_byte.add(data);
+                        //Log.d("Data", "Begin Package");
+                    } else if(data == 0x0D) {
+                        //Log.d("Data","End Package");
+                        //arr_byte.add(data);
                         buffer = new byte[arr_byte.size()];
                         for(int i = 0 ; i < arr_byte.size() ; i++) {
                             buffer[i] = arr_byte.get(i).byteValue();
@@ -369,7 +369,7 @@ public class BluetoothService {
                                 , buffer.length, -1, buffer).sendToTarget();
                         arr_byte = new ArrayList<Integer>();
                     } else {
-                        Log.d("Data",String.format("value = %x",data));
+                        //Log.d("Data",String.format("value = %x",data));
                         arr_byte.add(data);
                     }
                 } catch (IOException e) {

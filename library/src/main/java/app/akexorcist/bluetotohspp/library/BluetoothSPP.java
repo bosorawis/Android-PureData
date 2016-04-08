@@ -169,14 +169,14 @@ public class BluetoothSPP {
     @SuppressLint("HandlerLeak")
     private final Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
-            Log.d("BluetoothSPP", "handleMessage");
+            //Log.d("BluetoothSPP", "handleMessage");
             switch (msg.what) {
                 case BluetoothState.MESSAGE_WRITE:
                     break;
                 case BluetoothState.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     String readMessage = new String(readBuf);
-                    Log.d("read",readMessage);
+                    //Log.d("read",readMessage);
                     if(readBuf != null && readBuf.length > 0) {
                         if(mDataReceivedListener != null)
                             mDataReceivedListener.onDataReceived(readBuf, readMessage);
@@ -264,6 +264,10 @@ public class BluetoothSPP {
         Log.d("BluetoothSPP","setOnDataReceivedListener");
         if (mDataReceivedListener == null)
             mDataReceivedListener = listener;
+    }
+    public void resetOnDataReceivedListener () {
+        Log.d("BluetoothSPP","setOnDataReceivedListener");
+        mDataReceivedListener = null;
     }
 
     public void setBluetoothConnectionListener (BluetoothConnectionListener listener) {
