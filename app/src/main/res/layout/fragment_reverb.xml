@@ -419,7 +419,6 @@
                                 android:drawableEnd="@drawable/ic_backward"
                                 android:id="@+id/right_forwardback_button" />
                         </LinearLayout>
-
                         <LinearLayout
                             android:orientation="horizontal"
                             android:layout_width="match_parent"

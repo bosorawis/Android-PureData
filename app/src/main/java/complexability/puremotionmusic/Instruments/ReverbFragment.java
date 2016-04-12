@@ -63,7 +63,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     private static final String TAG = "ReverbFragment";
 
     private static final int[] availableEffect = new int[]{ECHO, REVERB, VOLUME};
-
+    private static final String[] mappingName  = {"wet"};
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -148,6 +148,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         @Override
         public void receiveBang(String source) {
             pdPost("bang");
+            Log.d(TAG, source + ": BANG!");
         }
 
         @Override
@@ -374,7 +375,9 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
                         selectedString[finalMotion] = (String) text;
                         assert finalCur != null;
                         finalCur.setText(selectedString[finalMotion]);
-                        Log.d(TAG, choices[which]);
+                        if(which < availableEffect.length && which >= 0) {
+                            Log.d(TAG, choices[which]);
+                        }
                         return true;
                     }
                 })
@@ -410,7 +413,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
         try {
             PdBase.setReceiver(receiver);
-            PdBase.subscribe("android");
+            PdBase.subscribe("metro_bng");
+            //PdBase.subscribe("android");
             InputStream in = res.openRawResource(R.raw.pd_test);
             patchFile = IoUtils.extractResource(in, "pd_test.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
@@ -504,12 +508,10 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
             val[i/2] = concat(data[i], data[i+1]);
         }
         //Log.d(TAG, "val: " + Float.toString(val[2]));
-        finalData[0] = calculatePitch(val[0],val[1],val[2]);
-        finalData[1] = calculateRoll(val[0], val[1], val[2]);
-
-        Log.d(TAG,"pitch: " +  Float.toString(finalData[0]) + "\t\t\t roll: "+ Float.toString(finalData[1]));
-
-        PdBase.sendFloat(Param[0], (val[2]));
+        //finalData[0] = calculatePitch(val[0],val[1],val[2]);
+        //finalData[1] = calculateRoll(val[0], val[1], val[2]);
+        //Log.d(TAG,"pitch: " +  Float.toString(finalData[0]) + "\t\t\t roll: "+ Float.toString(finalData[1]));
+        //PdBase.sendFloat(Param[0], (val[2]));
 
     }
     public void initText(){
