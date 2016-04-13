@@ -34,17 +34,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Objects;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import complexability.puremotionmusic.Helper.InstrumentBase;
+import complexability.puremotionmusic.Helper.Mapper;
 import complexability.puremotionmusic.MainActivity;
 import complexability.puremotionmusic.R;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
-import static java.lang.StrictMath.abs;
-import static java.lang.StrictMath.atan2;
+import static java.lang.StrictMath.floor;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,51 +55,36 @@ import static java.lang.StrictMath.atan2;
 public class ReverbFragment extends InstrumentBase implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final int TOTAL_MOTION = 4;
+    private static final int TOTAL_EFFECT = 3;
 
     private static final String TAG = "ReverbFragment";
+    private static final int[] AVAILABLE_EFFECT = new int[]{ECHO, REVERB, VOLUME};
+    private static final String[] AVAILABLE_MAPPING_NAME  = {"ech,","wet","vol", "curr_note"};
+    private static final String[] AVAILABLE_EFFECT_NAME  = {"Echo,","Reverb","Volume","Frequency"};
 
-    private static final int[] availableEffect = new int[]{ECHO, REVERB, VOLUME};
-    private static final String[] mappingName  = {"wet"};
+
+
+    private static Mapper[] mapper = new Mapper[TOTAL_EFFECT];
+
+
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
 
     private OnFragmentInteractionListener mListener;
     private PdService pdService = null;
-    private int[] selected = new int[10];
-    private String[] selectedString = new String[10];
+    private int[] selected = new int[TOTAL_MOTION];
+    private String[] selectedString = new String[TOTAL_MOTION];
     private String[] choices;
 
-    /*
-    User interface elements
-    */
-    private Button left_updown_btn;
-    private Button left_leftright_btn;
-    private Button left_forwardback_btn;
-    private Button left_pitch_btn;
-    private Button left_roll_btn;
+    float[] motionData = new float[10];
 
-    private TextView left_updown_text;
-    private TextView left_leftright_text;
-    private TextView left_forwardback_text;
     private TextView left_pitch_text;
     private TextView left_roll_text;
 
 
-    private Button   right_updown_btn;
-    private Button   right_leftright_btn;
-    private Button   right_forwardback_btn;
-    private Button   right_pitch_btn;
-    private Button   right_roll_btn;
-
-    private TextView right_updown_text;
-    private TextView right_leftright_text;
-    private TextView right_forwardback_text;
     private TextView right_pitch_text;
     private TextView right_roll_text;
-    private ToggleButton onOffButton;
     //*******************************************
     BluetoothSPP bt;
     public ReverbFragment() {
@@ -120,8 +103,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     public static ReverbFragment newInstance(String param1, String param2) {
         ReverbFragment fragment = new ReverbFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -129,10 +110,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
     private PdReceiver receiver = new PdReceiver() {
 
@@ -147,8 +124,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
         @Override
         public void receiveBang(String source) {
-            pdPost("bang");
-            Log.d(TAG, source + ": BANG!");
+            //pdPost("bang");
+            //Log.d(TAG, source + ": BANG!");
         }
 
         @Override
@@ -194,46 +171,47 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_reverb, container, false);
+
+        /*
+        Value Initialization
+         */
+        choices =  getActivity().getResources().getStringArray(R.array.reverb_effect_name);
+        for (int i = 0 ; i < selectedString.length ; i++){
+            //TODO Initializing
+            selected[i] = -1;
+            selectedString[i] = getStringFromId(selected[i]);
+        }
+        /*
+        Initializa Mapper for mapping motions
+         */
+        //for (int i = 0 ; i  < TOTAL_MOTION ; i++){
+        //    mapper[i] = new Mapper(-1, AVAILABLE_EFFECT_NAME[i], AVAILABLE_MAPPING_NAME[i]);
+        //}
+
         /*
         GUI Initialization
          */
 
-        onOffButton = (ToggleButton) view.findViewById(R.id.toggleButton);
+        ToggleButton onOffButton = (ToggleButton) view.findViewById(R.id.toggleButton);
+        /*
+        Button
+         */
+        Button left_pitch_btn = (Button) view.findViewById(R.id.left_pitch_button);
+        Button left_roll_btn = (Button) view.findViewById(R.id.left_roll_button);
+        Button right_pitch_btn = (Button) view.findViewById(R.id.right_pitch_button);
+        Button right_roll_btn = (Button) view.findViewById(R.id.right_roll_button);
 
-        left_updown_btn = (Button) view.findViewById(R.id.left_updown_button);
-        left_leftright_btn = (Button) view.findViewById(R.id.left_leftright_button);
-        left_forwardback_btn = (Button) view.findViewById(R.id.left_forwardback_button);
-        left_pitch_btn = (Button) view.findViewById(R.id.left_pitch_button);
-        left_roll_btn = (Button) view.findViewById(R.id.left_roll_button);
 
-
-        right_updown_btn = (Button) view.findViewById(R.id.right_updown_button);
-        right_leftright_btn = (Button) view.findViewById(R.id.right_leftright_button);
-        right_forwardback_btn = (Button) view.findViewById(R.id.right_forwardback_button);
-        right_pitch_btn = (Button) view.findViewById(R.id.right_pitch_button);
-        right_roll_btn = (Button) view.findViewById(R.id.right_roll_button);
-
-        left_updown_btn.setOnClickListener(this);
-        left_leftright_btn.setOnClickListener(this);
-        left_forwardback_btn.setOnClickListener(this);
         left_pitch_btn.setOnClickListener(this);
         left_roll_btn.setOnClickListener(this);
-
-        right_updown_btn.setOnClickListener(this);
-        right_leftright_btn.setOnClickListener(this);
-        right_forwardback_btn.setOnClickListener(this);
         right_pitch_btn.setOnClickListener(this);
         right_roll_btn.setOnClickListener(this);
 
-        left_updown_text = (TextView) view.findViewById(R.id.left_updown_text);
-        left_leftright_text  = (TextView) view.findViewById(R.id.left_leftright_text);
-        left_forwardback_text = (TextView) view.findViewById(R.id.left_frontback_text);
+        /*
+        Text boxes
+         */
         left_pitch_text = (TextView) view.findViewById(R.id.left_pitch_text);
         left_roll_text = (TextView) view.findViewById(R.id.left_roll_text);
-
-        right_updown_text = (TextView) view.findViewById(R.id.right_updown_text);
-        right_leftright_text  = (TextView) view.findViewById(R.id.right_leftright_text);
-        right_forwardback_text = (TextView) view.findViewById(R.id.right_frontback_text);
         right_pitch_text = (TextView) view.findViewById(R.id.right_pitch_text);
         right_roll_text = (TextView) view.findViewById(R.id.right_roll_text);
 
@@ -256,10 +234,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         bt = ((MainActivity) getActivity()).getBt();
         bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             public void onDataReceived(byte[] data, String message) {
-                //Log.d(TAG,"hello");
-                //Log.d(TAG, Arrays.toString(data));
                 if (data != null) {
-                    //Log.d(TAG, Integer.toString(data.length));
                     dataProc(data);
                 }
             }
@@ -283,12 +258,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        choices =  getActivity().getResources().getStringArray(R.array.reverb_effect_name);
-        for (int i = 0 ; i < selectedString.length ; i++){
-            //TODO Initializing
-            selected[i] = -1;
-            selectedString[i] = getStringFromId(selected[i]);
-        }
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -315,46 +285,20 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         int motion = 0;
         TextView cur = null;
         switch(v.getId()){
-            //Left
-            case R.id.left_updown_button:
-                motion = 0;
-                cur = left_updown_text;
-                break;
-            case R.id.left_leftright_button:
-                motion = 1;
-                cur = left_leftright_text;
-                break;
-            case R.id.left_forwardback_button:
-                motion = 2;
-                cur = left_forwardback_text;
-                break;
             case R.id.left_pitch_button:
-                motion = 3;
+                motion = LEFT_PITCH;
                 cur = left_pitch_text;
                 break;
             case R.id.left_roll_button:
-                motion = 4;
+                motion = LEFT_ROLL;
                 cur = left_roll_text;
                 break;
-            //Right
-            case R.id.right_updown_button:
-                motion = 5;
-                cur = right_updown_text;
-                break;
-            case R.id.right_leftright_button:
-                motion = 6;
-                cur = right_leftright_text;
-                break;
-            case R.id.right_forwardback_button:
-                motion = 7;
-                cur = right_forwardback_text;
-                break;
             case R.id.right_pitch_button:
-                motion = 8;
+                motion = RIGHT_PITCH;
                 cur = right_pitch_text;
                 break;
             case R.id.right_roll_button:
-                motion = 9;
+                motion = RIGHT_ROLL;
                 cur = right_roll_text;
                 break;
         }
@@ -375,8 +319,9 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
                         selectedString[finalMotion] = (String) text;
                         assert finalCur != null;
                         finalCur.setText(selectedString[finalMotion]);
-                        if(which < availableEffect.length && which >= 0) {
+                        if(which < AVAILABLE_EFFECT.length && which >= 0) {
                             Log.d(TAG, choices[which]);
+                            //userSelected(finalMotion, choices[which]);
                         }
                         return true;
                     }
@@ -415,8 +360,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
             PdBase.setReceiver(receiver);
             PdBase.subscribe("metro_bng");
             //PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.pd_test);
-            patchFile = IoUtils.extractResource(in, "pd_test.pd", getActivity().getCacheDir());
+            InputStream in = res.openRawResource(R.raw.android_interface);
+            patchFile = IoUtils.extractResource(in, "android_interface.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -471,8 +416,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
             stopAudio();
         }
         cleanup();
-
-        //bt.setOnDataReceivedListener(null);
         bt.resetOnDataReceivedListener();
     }
 
@@ -493,39 +436,60 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         //Log.d(TAG, String.valueOf(data));
         //For testing only
         String Param[] = {"wet"};
-        float[] val = new float[10];
-        float[] finalData = new float[10];
-        if(data.length != 18){
-            Log.d(TAG, "FUCK!!!!");
-        }
-        for (int i = 0 ; i < data.length ; i = i + 2){
-            //val[i/2] =  ((float) (concat(data[i],data[i+1])/(pow(2,16))));
-            //if(i == 4){
-            //    short d = 0;
-            //    d = (short) (((data[i+1] << 8) + data[i]) & 0xFFFF);
-            //    //Log.d(TAG, "val: " + Short.toString((d)));
-            //}
-            val[i/2] = concat(data[i], data[i+1]);
-        }
-        //Log.d(TAG, "val: " + Float.toString(val[2]));
-        //finalData[0] = calculatePitch(val[0],val[1],val[2]);
-        //finalData[1] = calculateRoll(val[0], val[1], val[2]);
-        //Log.d(TAG,"pitch: " +  Float.toString(finalData[0]) + "\t\t\t roll: "+ Float.toString(finalData[1]));
-        //PdBase.sendFloat(Param[0], (val[2]));
 
+        float l_x_accel = concat(data[0], data[1]);
+        float l_y_accel = concat(data[2], data[3]);
+        float l_z_accel = concat(data[4], data[5]);
+
+        float r_x_accel = concat(data[12], data[13]);
+        float r_y_accel = concat(data[14], data[15]);
+        float r_z_accel = concat(data[16], data[17]);
+
+
+        motionData[LEFT_PITCH] = calculatePitch(l_x_accel, l_y_accel, l_z_accel);
+        motionData[LEFT_ROLL] = calculateRoll(l_x_accel, l_y_accel, l_z_accel);
+        motionData[RIGHT_PITCH] = calculatePitch(r_x_accel, r_y_accel, r_z_accel);
+        motionData[RIGHT_ROLL]  = calculateRoll(r_x_accel, r_y_accel, r_z_accel);
+
+        for(int i = 0 ; i < TOTAL_MOTION ; i++){
+            Log.d(TAG, "selected[" + Integer.toString(i) +"]: " + selectedString[i]);
+            switch (selectedString[i]){
+                case "None":
+                    break;
+                case "Echo":
+                    break;
+                case "Reverb":
+                    PdBase.sendFloat("wet", ((180+motionData[i]))/400);
+                    break;
+                case "Volume":
+                    break;
+                    //PdBase.sendFloat(mapper[VOLUME].getMapName(), motionData[i]);
+                case "Frequency":
+                    Log.d(TAG, "HELLO!!");
+                    PdBase.sendFloat("curr_note", (float) floor((180+motionData[i])/21));
+                default:
+                    break;
+            }
+        }
     }
     public void initText(){
-        left_updown_text.setText(selectedString[0]);
-        left_leftright_text.setText(selectedString[1]);
-        left_forwardback_text .setText(selectedString[2]);
-        left_pitch_text.setText(selectedString[3]);
-        left_roll_text.setText(selectedString[4]);
 
-        right_updown_text.setText(selectedString[5]);
-        right_leftright_text.setText(selectedString[6]);
-        right_forwardback_text.setText(selectedString[7]);
-        right_pitch_text.setText(selectedString[8]);
-        right_roll_text.setText(selectedString[9]);
+        left_pitch_text.setText(selectedString[LEFT_PITCH]);
+        left_roll_text.setText(selectedString[LEFT_ROLL]);
 
+        right_pitch_text.setText(selectedString[RIGHT_PITCH]);
+        right_roll_text.setText(selectedString[RIGHT_ROLL]);
+
+    }
+    private void userSelected(int motionID, String item){
+        if(Objects.equals(item, "None")){
+            return;
+        }
+        for(int i = 0 ; i < mapper.length ; i++){
+            if(Objects.equals(mapper[i].getEffect(), item)){
+                mapper[i].setMotion(motionID);
+                return;
+            }
+        }
     }
 }

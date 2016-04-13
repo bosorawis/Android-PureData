@@ -57,83 +57,26 @@
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:weightSum="5"
+                        android:weightSum="2"
                         android:layout_weight="1" >
 
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" >
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:text="ROLL"
+                            android:id="@+id/left_roll_button"
+                            android:drawableStart="@drawable/ic_rot_left"
+                            android:drawableEnd="@drawable/ic_rot_right"
+                            android:layout_weight="1" />
 
-                            <Button
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:text="UP DOWN"
-                                android:id="@+id/left_updown_button"
-                                android:drawableEnd="@drawable/ic_down"
-                                android:drawableStart="@drawable/ic_up" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" >
-
-                            <Button
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:text="LEFT RIGHT"
-                                android:id="@+id/left_leftright_button"
-                                android:drawableStart="@drawable/ic_left"
-                                android:drawableEnd="@drawable/ic_right" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" >
-
-                            <Button
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:text="FRONT BACK"
-                                android:drawableStart="@drawable/ic_forward"
-                                android:drawableEnd="@drawable/ic_backward"
-                                android:id="@+id/left_forwardback_button" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" >
-
-                            <Button
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:text="PITCH"
-                                android:drawableStart="@drawable/ic_pitch_forward"
-                                android:drawableEnd="@drawable/ic_pitch_backward"
-                                android:id="@+id/left_pitch_button" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" >
-
-                            <Button
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:text="ROLL"
-                                android:id="@+id/left_roll_button"
-                                android:drawableStart="@drawable/ic_rot_left"
-                                android:drawableEnd="@drawable/ic_rot_right" />
-                        </LinearLayout>
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:text="PITCH"
+                            android:drawableStart="@drawable/ic_pitch_forward"
+                            android:drawableEnd="@drawable/ic_pitch_backward"
+                            android:id="@+id/left_pitch_button"
+                            android:layout_weight="1" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -144,96 +87,30 @@
 
                         <LinearLayout
                             android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
                             android:layout_weight="1"
-                            android:weightSum="5">
+                            android:weightSum="2">
 
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+
+
+                            <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="None"
+                                android:id="@+id/left_roll_text"
                                 android:layout_weight="1"
-                                android:gravity="center">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="?android:attr/textAppearanceLarge"
-                                    android:text="Hello"
-                                    android:id="@+id/left_updown_text"
-                                    android:layout_weight="1"
-                                    android:gravity="center" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:gravity="center" />
+                            <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="None"
+                                android:id="@+id/left_pitch_text"
                                 android:layout_weight="1"
-                                android:baselineAligned="false"
-                                android:gravity="center|center_vertical|center_horizontal">
+                                android:gravity="center" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="?android:attr/textAppearanceLarge"
-                                    android:text="Hello"
-                                    android:id="@+id/left_leftright_text"
-                                    android:layout_weight="1"
-                                    android:gravity="center" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="?android:attr/textAppearanceLarge"
-                                    android:text="Hello"
-                                    android:id="@+id/left_frontback_text"
-                                    android:layout_weight="1"
-                                    android:gravity="center" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="?android:attr/textAppearanceLarge"
-                                    android:text="Large Text"
-                                    android:id="@+id/left_pitch_text"
-                                    android:layout_weight="1"
-                                    android:gravity="center" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="?android:attr/textAppearanceLarge"
-                                    android:text="Large Text"
-                                    android:id="@+id/left_roll_text"
-                                    android:layout_weight="1"
-                                    android:gravity="center" />
-                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -279,175 +156,52 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:weightSum="5" >
+                        android:weightSum="2" >
 
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="None"
+                            android:id="@+id/right_roll_text"
                             android:layout_weight="1"
-                            android:gravity="center" >
+                            android:gravity="center" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:text="Hello"
-                                android:id="@+id/right_updown_text"
-                                android:layout_weight="1"
-                                android:gravity="center" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="None"
+                            android:id="@+id/right_pitch_text"
                             android:layout_weight="1"
-                            android:baselineAligned="false"
-                            android:gravity="center|center_vertical|center_horizontal" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:text="Hello"
-                                android:id="@+id/right_leftright_text"
-                                android:layout_weight="1"
-                                android:gravity="center" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:text="Hello"
-                                android:id="@+id/right_frontback_text"
-                                android:layout_weight="1"
-                                android:gravity="center" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:text="Hello"
-                                android:id="@+id/right_pitch_text"
-                                android:layout_weight="1"
-                                android:gravity="center" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:text="Large Text"
-                                android:id="@+id/right_roll_text"
-                                android:layout_weight="1"
-                                android:gravity="center" />
-                        </LinearLayout>
+                            android:gravity="center" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:weightSum="5"
+                        android:weightSum="2"
                         android:layout_weight="1" >
 
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" >
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:text="ROLL"
+                            android:id="@+id/right_roll_button"
+                            android:drawableStart="@drawable/ic_rot_left"
+                            android:drawableEnd="@drawable/ic_rot_right"
+                            android:layout_weight="1" />
 
-                            <Button
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:text="UP DOWN"
-                                android:id="@+id/right_updown_button"
-                                android:drawableEnd="@drawable/ic_down"
-                                android:drawableStart="@drawable/ic_up" />
-                        </LinearLayout>
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:text="PITCH"
+                            android:drawableStart="@drawable/ic_pitch_forward"
+                            android:drawableEnd="@drawable/ic_pitch_backward"
+                            android:id="@+id/right_pitch_button"
+                            android:layout_weight="1" />
 
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" >
-
-                            <Button
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:text="LEFT RIGHT"
-                                android:id="@+id/right_leftright_button"
-                                android:drawableStart="@drawable/ic_left"
-                                android:drawableEnd="@drawable/ic_right" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" >
-
-                            <Button
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:text="FRONT BACK"
-                                android:drawableStart="@drawable/ic_forward"
-                                android:drawableEnd="@drawable/ic_backward"
-                                android:id="@+id/right_forwardback_button" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" >
-
-                            <Button
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:text="PITCH"
-                                android:drawableStart="@drawable/ic_pitch_forward"
-                                android:drawableEnd="@drawable/ic_pitch_backward"
-                                android:id="@+id/right_pitch_button" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" >
-
-                            <Button
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:text="ROLL"
-                                android:id="@+id/right_roll_button"
-                                android:drawableStart="@drawable/ic_rot_left"
-                                android:drawableEnd="@drawable/ic_rot_right" />
-                        </LinearLayout>
                     </LinearLayout>
 
                 </LinearLayout>

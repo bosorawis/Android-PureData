@@ -15,15 +15,20 @@
 
 
     <string-array name="reverb_effect_name">
+        <item>None</item>
+        <item>Echo</item>
+        <item>Reverb</item>
         <item>Volume</item>
         <item>Frequency</item>
-        <item>Reverb</item>
+
     </string-array>
 
     <string-array name="reverb_effect_id">
+        <item>-1</item>
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
 </resources>

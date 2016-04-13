@@ -42,6 +42,10 @@ public class PureDataBaseFragment extends Fragment {
 
 
 
+
+
+
+
     protected void initPD() throws IOException {
         int sampleRate = AudioParameters.suggestSampleRate();
         Log.d("PureDataFragment", "sample rate: " + Integer.toString(sampleRate));
