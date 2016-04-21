@@ -415,8 +415,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
             PdBase.setReceiver(receiver);
             PdBase.subscribe("metro_bng");
             //PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.pd_test);
-            patchFile = IoUtils.extractResource(in, "pd_test.pd", getActivity().getCacheDir());
+            InputStream in = res.openRawResource(R.raw.android_raw_pitch_roll_test);
+            patchFile = IoUtils.extractResource(in, "android_raw_pitch_roll_test.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -510,8 +510,13 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         //Log.d(TAG, "val: " + Float.toString(val[2]));
         //finalData[0] = calculatePitch(val[0],val[1],val[2]);
         //finalData[1] = calculateRoll(val[0], val[1], val[2]);
-        //Log.d(TAG,"pitch: " +  Float.toString(finalData[0]) + "\t\t\t roll: "+ Float.toString(finalData[1]));
-        //PdBase.sendFloat(Param[0], (val[2]));
+        Log.d(TAG + "LEFT","pitch: " +  Float.toString(val[0]) + "\t\t\t roll: "+ Float.toString(val[1]));
+        Log.d(TAG + "RIGHT","pitch: " +  Float.toString(val[2]) + "\t\t\t roll: "+ Float.toString(val[3]));
+
+        PdBase.sendFloat("left_pitch", (val[0]));
+        PdBase.sendFloat("left_roll", (val[1]));
+        PdBase.sendFloat("right_pitch", (val[2]));
+        PdBase.sendFloat("right_roll", (val[3]));
 
     }
     public void initText(){
