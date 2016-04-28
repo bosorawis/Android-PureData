@@ -15,20 +15,27 @@
 
 
     <string-array name="reverb_effect_name">
-        <item>None</item>
-        <item>Echo</item>
+        <item>Chord</item>
+        <item>Note</item>
+        <item>Band pass</item>
+        <item>Compressor</item>
         <item>Reverb</item>
         <item>Volume</item>
-        <item>Frequency</item>
+        <item>Rhythm</item>
+        <item>BPM</item>
 
     </string-array>
 
     <string-array name="reverb_effect_id">
-        <item>-1</item>
         <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+
     </string-array>
 
 </resources>

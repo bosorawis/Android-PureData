@@ -42,6 +42,7 @@ import complexability.puremotionmusic.Helper.Mapper;
 import complexability.puremotionmusic.MainActivity;
 import complexability.puremotionmusic.R;
 
+import static java.lang.StrictMath.PI;
 import static java.lang.StrictMath.floor;
 
 /**
@@ -60,8 +61,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
     private static final String TAG = "ReverbFragment";
     private static final int[] AVAILABLE_EFFECT = new int[]{ECHO, REVERB, VOLUME};
-    private static final String[] AVAILABLE_MAPPING_NAME  = {"ech,","wet","vol", "curr_note"};
-    private static final String[] AVAILABLE_EFFECT_NAME  = {"Echo,","Reverb","Volume","Frequency"};
+    //private static final String[] AVAILABLE_MAPPING_NAME  = {"ech,","wet","vol", "curr_note"};
+    private static final String[] AVAILABLE_EFFECT_NAME  = {"Chord","Note","Band Pass","Compressor", "Reverb", "Volume", "Rhythm", "BPM"};
 
 
 
@@ -76,7 +77,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     private int[] selected = new int[TOTAL_MOTION];
     private String[] selectedString = new String[TOTAL_MOTION];
     private String[] choices;
-
+    //private int[] userOptons = new int[TOTAL_MOTION];
     float[] motionData = new float[10];
 
     private TextView left_pitch_text;
@@ -316,9 +317,9 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
                          * returning false here won't allow the newly selected radio button to actually be selected.
                          **/
                         selected[finalMotion] = which;
-                        selectedString[finalMotion] = (String) text;
-                        assert finalCur != null;
-                        finalCur.setText(selectedString[finalMotion]);
+                        //selectedString[finalMotion] = (String) text;
+                        //finalCur.setText(AVAILABLE_EFFECT_NAME[finalMotion]);
+                        sendChange(finalMotion,which);
                         if(which < AVAILABLE_EFFECT.length && which >= 0) {
                             Log.d(TAG, choices[which]);
                             //userSelected(finalMotion, choices[which]);
@@ -328,6 +329,32 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
                 })
                 .positiveText(R.string.choose)
                 .show();
+    }
+
+    private void sendChange(int finalMotion, int which) {
+        Log.d(TAG,"final:" + Integer.toString(finalMotion) +"\t\t   which:" + Integer.toString(which));
+        //which = which-1;
+        switch (finalMotion){
+
+            case LEFT_PITCH:
+                left_pitch_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                PdBase.sendFloat("left_pitch_sel",which);
+                break;
+            case RIGHT_PITCH:
+                right_pitch_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                PdBase.sendFloat("right_pitch_sel", which);
+                break;
+            case LEFT_ROLL:
+                left_roll_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                PdBase.sendFloat("left_roll_sel", which);
+                break;
+            case RIGHT_ROLL:
+                right_roll_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                PdBase.sendFloat("right_roll_sel", which);
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -355,13 +382,12 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         int sampleRate = AudioParameters.suggestSampleRate();
         Log.d("PureDataFragment", "sample rate: " + Integer.toString(sampleRate));
         PdAudio.initAudio(sampleRate, 0, 2, 8, true);
-
         try {
             PdBase.setReceiver(receiver);
             PdBase.subscribe("metro_bng");
             //PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.android_raw_pitch_roll_test);
-            patchFile = IoUtils.extractResource(in, "android_raw_pitch_roll_test.pd", getActivity().getCacheDir());
+            InputStream in = res.openRawResource(R.raw.android_interface_basic_with_control);
+            patchFile = IoUtils.extractResource(in, "android_interface_basic_with_control.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -450,46 +476,50 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         motionData[LEFT_ROLL] = calculateRoll(l_x_accel, l_y_accel, l_z_accel);
         motionData[RIGHT_PITCH] = calculatePitch(r_x_accel, r_y_accel, r_z_accel);
         motionData[RIGHT_ROLL]  = calculateRoll(r_x_accel, r_y_accel, r_z_accel);
-
-        for(int i = 0 ; i < TOTAL_MOTION ; i++){
-            Log.d(TAG, "selected[" + Integer.toString(i) +"]: " + selectedString[i]);
-            switch (selectedString[i]){
-                case "None":
-                    break;
-                case "Echo":
-                    break;
-                case "Reverb":
-                    PdBase.sendFloat("wet", ((180+motionData[i]))/400);
-                    break;
-                case "Volume":
-                    break;
-                    //PdBase.sendFloat(mapper[VOLUME].getMapName(), motionData[i]);
-                case "Frequency":
-                    Log.d(TAG, "HELLO!!");
-                    PdBase.sendFloat("curr_note", (float) floor((180+motionData[i])/21));
-                default:
-                    break;
-            }
-        }
+        PdBase.sendFloat("left_pitch",motionData[LEFT_PITCH]);
+        PdBase.sendFloat("left_roll", motionData[LEFT_ROLL]);
+        PdBase.sendFloat("right_pitch", motionData[RIGHT_PITCH]);
+        PdBase.sendFloat("right_roll", motionData[RIGHT_ROLL]);
+                //for(int i = 0 ; i < TOTAL_MOTION ; i++){
+        //    Log.d(TAG, "selected[" + Integer.toString(i) +"]: " + selectedString[i]);
+        //    switch (selectedString[i]){
+        //        case "None":
+        //            break;
+        //        case "Echo":
+        //            break;
+        //        case "Reverb":
+        //            PdBase.sendFloat("wet", ((180+motionData[i]))/400);
+        //            break;
+        //        case "Volume":
+        //            break;
+        //            //PdBase.sendFloat(mapper[VOLUME].getMapName(), motionData[i]);
+        //        case "Frequency":
+        //            Log.d(TAG, "HELLO!!");
+        //            PdBase.sendFloat("curr_note", (float) floor((180+motionData[i])/21));
+        //        default:
+        //            break;
+        //    }
+        //}
     }
     public void initText(){
-
-        left_pitch_text.setText(selectedString[LEFT_PITCH]);
-        left_roll_text.setText(selectedString[LEFT_ROLL]);
-
-        right_pitch_text.setText(selectedString[RIGHT_PITCH]);
-        right_roll_text.setText(selectedString[RIGHT_ROLL]);
-
+        left_pitch_text.setText(AVAILABLE_EFFECT_NAME[0]);
+        left_roll_text.setText(AVAILABLE_EFFECT_NAME[1]);
+        right_pitch_text.setText(AVAILABLE_EFFECT_NAME[2]);
+        right_roll_text.setText(AVAILABLE_EFFECT_NAME[3]);
+        selected[0] = 0;
+        selected[1] = 1;
+        selected[2] = 2;
+        selected[3] = 3;
     }
-    private void userSelected(int motionID, String item){
-        if(Objects.equals(item, "None")){
-            return;
-        }
-        for(int i = 0 ; i < mapper.length ; i++){
-            if(Objects.equals(mapper[i].getEffect(), item)){
-                mapper[i].setMotion(motionID);
-                return;
-            }
-        }
-    }
+    //private void userSelected(int motionID, String item){
+    //    if(Objects.equals(item, "None")){
+    //        return;
+    //    }
+    //    for(int i = 0 ; i < mapper.length ; i++){
+    //        //if(Objects.equals(mapper[i].getEffect(), item)){
+    //        //    mapper[i].setMotion(motionID);
+    //        //    return;
+    //        //}
+    //    }
+    //}
 }
