@@ -360,8 +360,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
             PdBase.setReceiver(receiver);
             PdBase.subscribe("metro_bng");
             //PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.android_interface);
-            patchFile = IoUtils.extractResource(in, "android_interface.pd", getActivity().getCacheDir());
+            InputStream in = res.openRawResource(R.raw.android_raw_pitch_roll_test);
+            patchFile = IoUtils.extractResource(in, "android_raw_pitch_roll_test.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
         } catch (IOException e) {
             Log.e(TAG, e.toString());

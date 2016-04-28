@@ -20,3 +20,23 @@ LOCAL_SHARED_LIBRARIES = pd
 include $(BUILD_SHARED_LIBRARY)
 
 #---------------------------------------------------------------
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := spigot_tilde
+LOCAL_CFLAGS := -DPD
+LOCAL_SRC_FILES := spigot~.c
+LOCAL_SHARED_LIBRARIES = pd
+include $(BUILD_SHARED_LIBRARY)
+
+#---------------------------------------------------------------
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := arraycopy
+LOCAL_CFLAGS := -DPD
+LOCAL_SRC_FILES := arraycopy.c
+LOCAL_SHARED_LIBRARIES = pd
+include $(BUILD_SHARED_LIBRARY)
+
+#---------------------------------------------------------------
+
+

@@ -13,10 +13,9 @@ endif
 #---------------------------------------------------------------
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := helloworld
+LOCAL_MODULE := freeverb_tilde
 LOCAL_CFLAGS := -DPD
-LOCAL_SRC_FILES := helloworld.c
+LOCAL_SRC_FILES := freeverb~.c
 LOCAL_SHARED_LIBRARIES = pd
 include $(BUILD_SHARED_LIBRARY)
 
-#---------------------------------------------------------------

@@ -183,8 +183,8 @@ public class PdTest extends Activity implements OnClickListener, OnEditorActionL
 		try {
 			PdBase.setReceiver(receiver);
 			PdBase.subscribe("android");
-			InputStream in = res.openRawResource(R.raw.test);
-			patchFile = IoUtils.extractResource(in, "test.pd", getCacheDir());
+			InputStream in = res.openRawResource(R.raw.freev);
+			patchFile = IoUtils.extractResource(in, "freev.pd", getCacheDir());
 			PdBase.openPatch(patchFile);
 		} catch (IOException e) {
 			Log.e(TAG, e.toString());

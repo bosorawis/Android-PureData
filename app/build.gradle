@@ -1,5 +1,19 @@
 apply plugin: 'com.android.application'
 
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile project(':library')
+    compile project(':PdCore')
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
+        transitive = true
+    }
+
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
+    compile 'com.android.support:support-v4:23.2.1'
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -20,8 +34,8 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'src/main/AndroidManifest.xml'
-            jniLibs.srcDir 'libs'
             jni.srcDirs = [] //disable automatic ndk-build call
+            jniLibs.srcDir 'libs'
         }
 
         // Move the tests to tests/java, tests/res, etc...
@@ -68,18 +82,4 @@ def getNdkBuildExecutablePath() {
         throw new Exception("ndk-build executable not found: $ndkBuildFile.absolutePath")
     }
     ndkBuildFile.absolutePath
-}
-
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile project(':library')
-    compile project(':PdCore')
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
-        transitive = true
-    }
-
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
-    compile 'com.android.support:support-v4:23.2.1'
 }
