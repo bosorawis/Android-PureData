@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import junit.framework.Test;
@@ -33,8 +36,7 @@ import complexability.puremotionmusic.Instruments.Sequencer;
 import complexability.puremotionmusic.Instruments.TestReverb;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        TestFragment.OnFragmentInteractionListener, Sequencer.OnFragmentInteractionListener,
+        implements NavigationView.OnNavigationItemSelectedListener, Sequencer.OnFragmentInteractionListener,
         ReverbFragment.OnFragmentInteractionListener{
 
 
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity
     protected BluetoothSPP bt;
     protected PdService pdService = null;
     private final Object lock = new Object();
+    ImageButton eightBit;
     Fragment currentFragment = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,17 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        eightBit = (ImageButton) findViewById(R.id.imageButton);
+        eightBit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = null;
+                FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
+                fragment = new ReverbFragment();
+                fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
 
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -168,7 +181,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.sequencer) {
             fragment = new Sequencer();
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_eight_bit_piano) {
             fragment = new ReverbFragment();
 
         } else if (id == R.id.nav_slideshow) {
@@ -187,7 +200,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
-        fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.container,fragment).commit();
+        transaction.addToBackStack(null);
+        //fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
         currentFragment = fragment;
         return true;
     }
@@ -227,9 +243,6 @@ public class MainActivity extends AppCompatActivity
                 finish();
             }
         }
-    }
-    public void onTestFragmentInteraction(String string){
-        Log.d("MainActivity", "onTestFragmentInteraction: " + string);
     }
     public void onSequencerFragmentInteraction(String string){
         Log.d("MainActivity", "onSequencerFragmentInteraction: " + string);

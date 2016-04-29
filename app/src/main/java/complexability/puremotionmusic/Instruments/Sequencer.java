@@ -110,7 +110,6 @@ public class Sequencer extends PureDataBaseFragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.d("TestFragment", "onCreateView");
 
         try{
             initPD();

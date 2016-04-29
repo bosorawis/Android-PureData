@@ -106,5 +106,4 @@ public class PureDataBaseFragment extends Fragment {
         PdBase.release();
         //}
     }
-
 }

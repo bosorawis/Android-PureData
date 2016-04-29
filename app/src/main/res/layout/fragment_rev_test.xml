@@ -36,7 +36,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:weightSum="8">
+                android:weightSum="10">
 
                 <TextView
                     android:layout_width="fill_parent"
@@ -44,7 +44,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Left Hand"
                     android:id="@+id/textView8"
-                    android:layout_weight="7"
+                    android:layout_weight="4"
                     android:gravity="center"
                     android:drawableStart="@drawable/ic_left_hand"/>
 
@@ -52,7 +52,7 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:focusable="false"
                     android:baselineAligned="false">
 
@@ -118,6 +118,18 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
+                <RelativeLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3">
+
+                    <complexability.puremotionmusic.Helper.DrawTheBall
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/view" />
+                </RelativeLayout>
 
             </LinearLayout>
         </LinearLayout>
