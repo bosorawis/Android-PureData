@@ -61,7 +61,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
     private static final String TAG = "ReverbFragment";
     private static final int[] AVAILABLE_EFFECT = new int[]{ECHO, REVERB, VOLUME};
-    //private static final String[] AVAILABLE_MAPPING_NAME  = {"ech,","wet","vol", "curr_note"};
     private static final String[] AVAILABLE_EFFECT_NAME  = {"Chord","Note","Band Pass","Compressor", "Reverb", "Volume", "Rhythm", "BPM"};
 
 
@@ -125,8 +124,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
         @Override
         public void receiveBang(String source) {
-            //pdPost("bang");
-            //Log.d(TAG, source + ": BANG!");
         }
 
         @Override
@@ -171,8 +168,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_reverb, container, false);
-
+        //final View view = inflater.inflate(R.layout.fragment_reverb, container, false);
+        final View view = inflater.inflate(R.layout.fragment_rev_test, container, false);
         /*
         Value Initialization
          */
@@ -185,10 +182,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         /*
         Initializa Mapper for mapping motions
          */
-        //for (int i = 0 ; i  < TOTAL_MOTION ; i++){
-        //    mapper[i] = new Mapper(-1, AVAILABLE_EFFECT_NAME[i], AVAILABLE_MAPPING_NAME[i]);
-        //}
-
         /*
         GUI Initialization
          */
@@ -305,7 +298,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         }
         final int finalMotion = motion;
 
-        final TextView finalCur = cur;
         new MaterialDialog.Builder(myContext)
                 .title(R.string.title)
                 .items(R.array.reverb_effect_name)
@@ -333,7 +325,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
     private void sendChange(int finalMotion, int which) {
         Log.d(TAG,"final:" + Integer.toString(finalMotion) +"\t\t   which:" + Integer.toString(which));
-        //which = which-1;
         switch (finalMotion){
 
             case LEFT_PITCH:
@@ -459,17 +450,17 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     }
 
     public void dataProc(byte[] data){
-        //Log.d(TAG, String.valueOf(data));
-        //For testing only
         String Param[] = {"wet"};
-
+        if(data.length <= 11){
+            return;
+        }
         float l_x_accel = concat(data[0], data[1]);
         float l_y_accel = concat(data[2], data[3]);
         float l_z_accel = concat(data[4], data[5]);
 
-        float r_x_accel = concat(data[12], data[13]);
-        float r_y_accel = concat(data[14], data[15]);
-        float r_z_accel = concat(data[16], data[17]);
+        float r_x_accel = concat(data[6], data[7]);
+        float r_y_accel = concat(data[8], data[9]);
+        float r_z_accel = concat(data[10], data[11]);
 
 
         motionData[LEFT_PITCH] = calculatePitch(l_x_accel, l_y_accel, l_z_accel);
@@ -480,26 +471,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         PdBase.sendFloat("left_roll", motionData[LEFT_ROLL]);
         PdBase.sendFloat("right_pitch", motionData[RIGHT_PITCH]);
         PdBase.sendFloat("right_roll", motionData[RIGHT_ROLL]);
-                //for(int i = 0 ; i < TOTAL_MOTION ; i++){
-        //    Log.d(TAG, "selected[" + Integer.toString(i) +"]: " + selectedString[i]);
-        //    switch (selectedString[i]){
-        //        case "None":
-        //            break;
-        //        case "Echo":
-        //            break;
-        //        case "Reverb":
-        //            PdBase.sendFloat("wet", ((180+motionData[i]))/400);
-        //            break;
-        //        case "Volume":
-        //            break;
-        //            //PdBase.sendFloat(mapper[VOLUME].getMapName(), motionData[i]);
-        //        case "Frequency":
-        //            Log.d(TAG, "HELLO!!");
-        //            PdBase.sendFloat("curr_note", (float) floor((180+motionData[i])/21));
-        //        default:
-        //            break;
-        //    }
-        //}
     }
     public void initText(){
         left_pitch_text.setText(AVAILABLE_EFFECT_NAME[0]);
@@ -511,15 +482,4 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         selected[2] = 2;
         selected[3] = 3;
     }
-    //private void userSelected(int motionID, String item){
-    //    if(Objects.equals(item, "None")){
-    //        return;
-    //    }
-    //    for(int i = 0 ; i < mapper.length ; i++){
-    //        //if(Objects.equals(mapper[i].getEffect(), item)){
-    //        //    mapper[i].setMotion(motionID);
-    //        //    return;
-    //        //}
-    //    }
-    //}
 }
