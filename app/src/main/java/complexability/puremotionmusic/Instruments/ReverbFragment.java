@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import complexability.puremotionmusic.Helper.DrawTheBall;
 import complexability.puremotionmusic.Helper.InstrumentBase;
 import complexability.puremotionmusic.Helper.Mapper;
 import complexability.puremotionmusic.MainActivity;
@@ -86,6 +87,10 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     private TextView right_pitch_text;
     private TextView right_roll_text;
     //*******************************************
+
+    DrawTheBall drawTheLeftBall;
+    DrawTheBall drawTheRightBall;
+
     BluetoothSPP bt;
     public ReverbFragment() {
         // Required empty public constructor
@@ -170,6 +175,10 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         // Inflate the layout for this fragment
         //final View view = inflater.inflate(R.layout.fragment_reverb, container, false);
         final View view = inflater.inflate(R.layout.fragment_rev_test, container, false);
+
+        drawTheLeftBall = (DrawTheBall) view.findViewById(R.id.draw_the_left_ball) ;
+        drawTheRightBall = (DrawTheBall) view.findViewById(R.id.draw_the_right_ball) ;
+
         /*
         Value Initialization
          */
@@ -463,14 +472,25 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         float r_z_accel = concat(data[10], data[11]);
 
 
+
         motionData[LEFT_PITCH] = calculatePitch(l_x_accel, l_y_accel, l_z_accel);
         motionData[LEFT_ROLL] = calculateRoll(l_x_accel, l_y_accel, l_z_accel);
-        motionData[RIGHT_PITCH] = calculatePitch(r_x_accel, r_y_accel, r_z_accel);
-        motionData[RIGHT_ROLL]  = calculateRoll(r_x_accel, r_y_accel, r_z_accel);
+        //motionData[RIGHT_PITCH] = calculatePitch(r_x_accel, r_y_accel, r_z_accel);
+        //motionData[RIGHT_ROLL]  = calculateRoll(r_x_accel, r_y_accel, r_z_accel);
+
+        //motionData[LEFT_PITCH]  = testLeftPitch(l_x_accel, l_y_accel, l_z_accel);
+        //motionData[LEFT_ROLL]   = testLeftRoll(l_x_accel, l_y_accel, l_z_accel);
+        motionData[RIGHT_PITCH] = testRightPitch(r_x_accel, r_y_accel, r_z_accel);
+        motionData[RIGHT_ROLL]  = testRightRoll(r_x_accel, r_y_accel, r_z_accel);
+
         PdBase.sendFloat("left_pitch",motionData[LEFT_PITCH]);
         PdBase.sendFloat("left_roll", motionData[LEFT_ROLL]);
         PdBase.sendFloat("right_pitch", motionData[RIGHT_PITCH]);
         PdBase.sendFloat("right_roll", motionData[RIGHT_ROLL]);
+
+        Log.d(TAG,"data x: " + Integer.toString((int)motionData[LEFT_PITCH]) + "\t y: "+Integer.toString((int)motionData[LEFT_ROLL]));
+        drawTheLeftBall.updateValue(motionData[LEFT_PITCH], motionData[LEFT_ROLL]);
+        drawTheRightBall.updateValue(motionData[RIGHT_PITCH], motionData[RIGHT_ROLL]);
     }
     public void initText(){
         left_pitch_text.setText(AVAILABLE_EFFECT_NAME[0]);

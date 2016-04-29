@@ -17,7 +17,7 @@ import static java.lang.StrictMath.floor;
 public class InstrumentBase extends Fragment {
     protected FragmentActivity myContext;
 
-    private static final float GRAVITY = (float) 0.05;
+    private static final float GRAVITY = (float) 0.1;
     private static final float ACCEL_THRESHOLD = (float) 0.1;
 
     protected static final int LEFT_ROLL = 1;
@@ -29,6 +29,13 @@ public class InstrumentBase extends Fragment {
     public static final int ECHO = 0;
     public static final int REVERB = 1;
     public static final int VOLUME = 2;
+    static float l_lastFx = 0;
+    static float l_lastFy = 0;
+    static float l_lastFz = 0;
+
+    static float r_lastFx = 0;
+    static float r_lastFy = 0;
+    static float r_lastFz = 0;
 
     protected String getStringFromId(int id){
         switch(id){
@@ -107,6 +114,60 @@ public class InstrumentBase extends Fragment {
             roll = (float) ((float)(180/PI)*atan2(y_accel, sqrt(pow(x_accel,2) +pow(z_accel,2))));
         }
         return (float) floor(roll);
+    }
+
+    protected float testLeftRoll(float x_accel, float y_accel, float z_accel){
+        float alpha = (float) 0.5;
+        float fxg = (float) (x_accel *alpha +(l_lastFx * (1.0-alpha)));
+        l_lastFx = fxg;
+        float fyg = (float) (y_accel *alpha +(l_lastFy * (1.0-alpha)));
+        l_lastFy = fyg;
+        float fzg = (float) (z_accel *alpha +(l_lastFz * (1.0-alpha)));
+        l_lastFz = fzg;
+
+
+
+
+        float roll = (float) (atan2(fyg, fzg)*180/PI);
+        return roll;
+    }
+
+    protected float testLeftPitch(float x_accel, float y_accel, float z_accel){
+        float alpha = (float) 0.5;
+        float fxg = (float) (x_accel *alpha +(l_lastFx * (1.0-alpha)));
+        l_lastFx = fxg;
+        float fyg = (float) (y_accel *alpha +(l_lastFy * (1.0-alpha)));
+        l_lastFy = fyg;
+        float fzg = (float) (z_accel *alpha +(l_lastFz * (1.0-alpha)));
+        l_lastFz = fzg;
+
+        float pitch = (float) (atan2(-fxg, sqrt(fyg*fyg + fzg*fzg))*180/PI);
+        return pitch;
+    }
+
+    protected float testRightRoll(float x_accel, float y_accel, float z_accel){
+        float alpha = (float) 0.5;
+        float fxg = (float) (x_accel *alpha +(r_lastFx * (1.0-alpha)));
+        r_lastFx = fxg;
+        float fyg = (float) (y_accel *alpha +(r_lastFy * (1.0-alpha)));
+        r_lastFy = fyg;
+        float fzg = (float) (z_accel *alpha +(r_lastFz * (1.0-alpha)));
+        r_lastFz = fzg;
+        float roll = (float) (atan2(fyg, fzg)*180/PI);
+        return roll;
+    }
+
+    protected float testRightPitch(float x_accel, float y_accel, float z_accel){
+        float alpha = (float) 0.5;
+        float fxg = (float) (x_accel *alpha +(r_lastFx * (1.0-alpha)));
+        r_lastFx = fxg;
+        float fyg = (float) (y_accel *alpha +(r_lastFy * (1.0-alpha)));
+        r_lastFy = fyg;
+        float fzg = (float) (z_accel *alpha +(r_lastFz * (1.0-alpha)));
+        r_lastFz = fzg;
+
+        float pitch = (float) (atan2(-fxg, sqrt(fyg*fyg + fzg*fzg))*180/PI);
+        return pitch;
     }
 
     @Override
