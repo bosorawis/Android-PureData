@@ -62,14 +62,16 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     private static final int TOTAL_EFFECT = 3;
 
     private static final String TAG = "ReverbFragment";
-    private static final int[] AVAILABLE_EFFECT = new int[]{ECHO, REVERB, VOLUME};
+    private static final int[] AVAILABLE_EFFECT = new int[]{0, 1, 2};
     private static final String[] AVAILABLE_EFFECT_NAME  = {"Chord","Note","Band Pass","Compressor", "Reverb", "Volume", "Rhythm", "BPM"};
 
 
 
     private static Mapper[] mapper = new Mapper[TOTAL_EFFECT];
 
+    private static float[] rightMotion = new float[2];
 
+    private boolean firstRun = true;
     // TODO: Rename and change types of parameters
 
 
@@ -238,7 +240,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         bt = ((MainActivity) getActivity()).getBt();
         bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             public void onDataReceived(byte[] data, String message) {
-                if (data != null) {
+                if (data.length >=24) {
                     dataProc(data);
                 }
             }
@@ -456,17 +458,26 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     }
 
     public void dataProc(byte[] data){
-        String Param[] = {"wet"};
-        if(data.length <= 11){
-            return;
-        }
+        //String Param[] = {"wet"};
+        //if(data.length <= 11){
+        //    return;
+        //}
         float l_x_accel = concat(data[0], data[1]);
         float l_y_accel = concat(data[2], data[3]);
         float l_z_accel = concat(data[4], data[5]);
 
-        float r_x_accel = concat(data[6], data[7]);
-        float r_y_accel = concat(data[8], data[9]);
-        float r_z_accel = concat(data[10], data[11]);
+        float r_x_accel = concat(data[RIGHT_X_ACCEL_LOWBYTE], data[RIGHT_X_ACCEL_HIGHBYTE]);
+        float r_y_accel = concat(data[RIGHT_Y_ACCEL_LOWBYTE], data[RIGHT_Y_ACCEL_HIGHBYTE]);
+        float r_z_accel = concat(data[RIGHT_Z_ACCEL_LOWBYTE], data[RIGHT_Z_ACCEL_HIGHBYTE]);
+
+
+        float l_x_gyro = concat(data[0], data[1]);
+        float l_y_gyro = concat(data[2], data[3]);
+        float l_z_gyro = concat(data[4], data[5]);
+
+        float r_x_gyro = concat(data[RIGHT_X_GYRO_LOWBYTE], data[RIGHT_X_GYRO_HIGHBYTE]);
+        float r_y_gyro = concat(data[RIGHT_Y_GYRO_LOWBYTE], data[RIGHT_Y_GYRO_HIGHBYTE]);
+        float r_z_gyro = concat(data[RIGHT_Y_GYRO_LOWBYTE], data[RIGHT_Z_GYRO_HIGHBYTE]);
 
 
 
@@ -480,14 +491,16 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         motionData[RIGHT_PITCH] = alsoRightPitch(r_x_accel, r_y_accel, r_z_accel);
         motionData[RIGHT_ROLL]  = alsoRightRoll(r_x_accel, r_y_accel, r_z_accel);
 
+        rightMotion = calculateRightKalmanPitchRoll(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
+
         PdBase.sendFloat("left_pitch",motionData[LEFT_PITCH]);
         PdBase.sendFloat("left_roll", motionData[LEFT_ROLL]);
         PdBase.sendFloat("right_pitch", motionData[RIGHT_PITCH]);
         PdBase.sendFloat("right_roll", motionData[RIGHT_ROLL]);
 
-        Log.d(TAG,"data x: " + Integer.toString((int)motionData[LEFT_PITCH]) + "\t y: "+Integer.toString((int)motionData[LEFT_ROLL]));
+        Log.d(TAG,"data x: " + Integer.toString((int)rightMotion[0]) + "\t y: "+Integer.toString((int)rightMotion[1]));
         drawTheLeftBall.updateValue( motionData[LEFT_ROLL], motionData[LEFT_PITCH]);
-        drawTheRightBall.updateValue(motionData[RIGHT_ROLL], motionData[RIGHT_PITCH]);
+        drawTheRightBall.updateValue(rightMotion[0], rightMotion[1]);
     }
     public void initText(){
         left_pitch_text.setText(AVAILABLE_EFFECT_NAME[0]);
