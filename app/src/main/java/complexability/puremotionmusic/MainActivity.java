@@ -44,17 +44,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //eightBit = (ImageButton) findViewById(R.id.imageButton);
-        //eightBit.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        Fragment fragment = null;
-        //        FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
-        //        fragment = new ReverbFragment();
-        //        fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
-        //    }
-        //});
-
         /*
         Create a MainFragment
          */
@@ -298,7 +287,5 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.addToBackStack(null);
         transaction.replace(R.id.container,fragment).commit();
-
     }
-
 }

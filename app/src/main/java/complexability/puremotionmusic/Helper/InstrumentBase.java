@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
 import static java.lang.Math.PI;
+import static java.lang.Math.atan;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import static java.lang.StrictMath.abs;
@@ -167,6 +168,31 @@ public class InstrumentBase extends Fragment {
         r_lastFz = fzg;
 
         float pitch = (float) (atan2(-fxg, sqrt(fyg*fyg + fzg*fzg))*180/PI);
+        return pitch;
+    }
+
+    protected float alsoRightRoll(float x_accel, float y_accel, float z_accel){
+        float alpha = (float) 0.5;
+        float fxg = (float) (x_accel *alpha +(r_lastFx * (1.0-alpha)));
+        r_lastFx = fxg;
+        float fyg = (float) (y_accel *alpha +(r_lastFy * (1.0-alpha)));
+        r_lastFy = fyg;
+        float fzg = (float) (z_accel *alpha +(r_lastFz * (1.0-alpha)));
+        r_lastFz = fzg;
+        float roll = (float) ((float)  atan(fyg/sqrt(pow(fxg,2) + pow(fzg,2)))*180/PI);
+        return roll;
+    }
+
+    protected float alsoRightPitch(float x_accel, float y_accel, float z_accel){
+        float alpha = (float) 0.5;
+        float fxg = (float) (x_accel *alpha +(r_lastFx * (1.0-alpha)));
+        r_lastFx = fxg;
+        float fyg = (float) (y_accel *alpha +(r_lastFy * (1.0-alpha)));
+        r_lastFy = fyg;
+        float fzg = (float) (z_accel *alpha +(r_lastFz * (1.0-alpha)));
+        r_lastFz = fzg;
+
+        float pitch = (float) ((float) atan(fxg/sqrt(pow(fyg,2) + pow(fzg,2))) *180/PI);
         return pitch;
     }
 

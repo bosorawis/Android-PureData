@@ -1,3 +1,9 @@
+
+
+/**
+ * Created by turbo on 4/30/2016.
+ */
+
 package complexability.puremotionmusic.Helper;
 
 import android.content.Context;
@@ -16,42 +22,42 @@ import complexability.puremotionmusic.R;
 /**
  * Created by turbo on 4/28/2016.
  */
-public class DrawTheBall extends View {
-    private static final String TAG = "DrawTheBall";
-    Bitmap l_ball;
+public class DrawRightBall extends View {
+    private static final String TAG = "DrawRightBall";
+    Bitmap r_ball;
     int bmpWidth;
     int bmpHeight;
     int x = 0;
     int y = 0;
     int height = 1;
     int width = 1;
-    public DrawTheBall(Context context) {
+    public DrawRightBall(Context context) {
         super(context);
-        l_ball = BitmapFactory.decodeResource(getResources(), R.drawable.left_or_ball);
-        bmpHeight = l_ball.getHeight();
-        bmpWidth = l_ball.getWidth();
+        r_ball = BitmapFactory.decodeResource(getResources(), R.drawable.right_or_ball);
+        bmpHeight = r_ball.getHeight();
+        bmpWidth = r_ball.getWidth();
     }
 
-    public DrawTheBall(Context context, AttributeSet attrs) {
+    public DrawRightBall(Context context, AttributeSet attrs) {
         super(context, attrs);
-        l_ball = BitmapFactory.decodeResource(getResources(), R.drawable.left_or_ball);
-        bmpHeight = l_ball.getHeight();
-        bmpWidth = l_ball.getWidth();
+        r_ball = BitmapFactory.decodeResource(getResources(), R.drawable.right_or_ball);
+        bmpHeight = r_ball.getHeight();
+        bmpWidth = r_ball.getWidth();
     }
 
-    public DrawTheBall(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DrawRightBall(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        l_ball = BitmapFactory.decodeResource(getResources(), R.drawable.left_or_ball);
-        bmpHeight = l_ball.getHeight();
-        bmpWidth = l_ball.getWidth();
+        r_ball = BitmapFactory.decodeResource(getResources(), R.drawable.right_or_ball);
+        bmpHeight = r_ball.getHeight();
+        bmpWidth = r_ball.getWidth();
 
     }
 
-    public DrawTheBall(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public DrawRightBall(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        l_ball = BitmapFactory.decodeResource(getResources(), R.drawable.left_or_ball);
-        bmpHeight = l_ball.getHeight();
-        bmpWidth = l_ball.getWidth();
+        r_ball = BitmapFactory.decodeResource(getResources(), R.drawable.right_or_ball);
+        bmpHeight = r_ball.getHeight();
+        bmpWidth = r_ball.getWidth();
     }
 
     @Override
@@ -74,9 +80,9 @@ public class DrawTheBall extends View {
         black.setColor(Color.BLACK);
         canvas.drawRect(rectangle, black);
         canvas.drawRect(rectangle,white);
-        //Log.d(TAG, "Draw x: " + Integer.toString(x)+ "\t\ty: " + Integer.toString(y));
+        Log.d(TAG, "Draw x: " + Integer.toString(x)+ "\t\ty: " + Integer.toString(y));
 
-        canvas.drawBitmap(l_ball, x -bmpWidth/2, y-bmpHeight/2, new Paint());
+        canvas.drawBitmap(r_ball, x -bmpWidth/2, y-bmpHeight/2, new Paint());
         invalidate();
 
 
@@ -84,6 +90,6 @@ public class DrawTheBall extends View {
     public void updateValue(float rec_x, float rec_y){
         x = (int) (((rec_x+180.0)/360.0)*width);
         y = (int) (((rec_y+180.0)/360.0)*height);
-        Log.d(TAG, "x: " + Integer.toString((int) x)+ "\t\ty: " + Integer.toString((int) y));
+        //Log.d(TAG, "x: " + Integer.toString((int) x)+ "\t\ty: " + Integer.toString((int) y));
     }
 }

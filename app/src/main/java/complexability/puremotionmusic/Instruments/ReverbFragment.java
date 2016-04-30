@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import complexability.puremotionmusic.Helper.DrawRightBall;
 import complexability.puremotionmusic.Helper.DrawTheBall;
 import complexability.puremotionmusic.Helper.InstrumentBase;
 import complexability.puremotionmusic.Helper.Mapper;
@@ -89,7 +90,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     //*******************************************
 
     DrawTheBall drawTheLeftBall;
-    DrawTheBall drawTheRightBall;
+    DrawRightBall drawTheRightBall;
 
     BluetoothSPP bt;
     public ReverbFragment() {
@@ -177,7 +178,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         final View view = inflater.inflate(R.layout.fragment_rev_test, container, false);
 
         drawTheLeftBall = (DrawTheBall) view.findViewById(R.id.draw_the_left_ball) ;
-        drawTheRightBall = (DrawTheBall) view.findViewById(R.id.draw_the_right_ball) ;
+        drawTheRightBall = (DrawRightBall) view.findViewById(R.id.draw_the_right_ball) ;
 
         /*
         Value Initialization
@@ -476,8 +477,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
         //motionData[LEFT_PITCH]  = testLeftPitch(l_x_accel, l_y_accel, l_z_accel);
         //motionData[LEFT_ROLL]   = testLeftRoll(l_x_accel, l_y_accel, l_z_accel);
-        motionData[RIGHT_PITCH] = testRightPitch(r_x_accel, r_y_accel, r_z_accel);
-        motionData[RIGHT_ROLL]  = testRightRoll(r_x_accel, r_y_accel, r_z_accel);
+        motionData[RIGHT_PITCH] = alsoRightPitch(r_x_accel, r_y_accel, r_z_accel);
+        motionData[RIGHT_ROLL]  = alsoRightRoll(r_x_accel, r_y_accel, r_z_accel);
 
         PdBase.sendFloat("left_pitch",motionData[LEFT_PITCH]);
         PdBase.sendFloat("left_roll", motionData[LEFT_ROLL]);
@@ -485,8 +486,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         PdBase.sendFloat("right_roll", motionData[RIGHT_ROLL]);
 
         Log.d(TAG,"data x: " + Integer.toString((int)motionData[LEFT_PITCH]) + "\t y: "+Integer.toString((int)motionData[LEFT_ROLL]));
-        drawTheLeftBall.updateValue(motionData[LEFT_PITCH], motionData[LEFT_ROLL]);
-        drawTheRightBall.updateValue(motionData[RIGHT_PITCH], motionData[RIGHT_ROLL]);
+        drawTheLeftBall.updateValue( motionData[LEFT_ROLL], motionData[LEFT_PITCH]);
+        drawTheRightBall.updateValue(motionData[RIGHT_ROLL], motionData[RIGHT_PITCH]);
     }
     public void initText(){
         left_pitch_text.setText(AVAILABLE_EFFECT_NAME[0]);

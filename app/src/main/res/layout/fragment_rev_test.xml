@@ -226,7 +226,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3">
 
-                    <complexability.puremotionmusic.Helper.DrawTheBall
+                    <complexability.puremotionmusic.Helper.DrawRightBall
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/draw_the_right_ball" />
