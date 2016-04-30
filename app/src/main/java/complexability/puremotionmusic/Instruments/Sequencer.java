@@ -1,9 +1,6 @@
 package complexability.puremotionmusic.Instruments;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.media.effect.Effect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 
@@ -31,7 +27,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import complexability.puremotionmusic.Helper.Constants;
 import complexability.puremotionmusic.Helper.Effects;
 import complexability.puremotionmusic.MainActivity;
-import complexability.puremotionmusic.PureDataBaseFragment;
+import complexability.puremotionmusic.Helper.PureDataBaseFragment;
 import complexability.puremotionmusic.R;
 
 /**

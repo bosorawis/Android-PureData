@@ -367,10 +367,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onReverbFragmentInteraction(String string);
-    }
 
     /**
      * Initialize pd with a patch file
@@ -502,4 +498,9 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         selected[2] = 2;
         selected[3] = 3;
     }
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        public void onReverbFragmentInteraction(String string);
+    }
+
 }

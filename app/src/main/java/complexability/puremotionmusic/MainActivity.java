@@ -2,11 +2,8 @@ package complexability.puremotionmusic;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -19,14 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import junit.framework.Test;
-
-import org.puredata.android.service.PdService;
-import org.puredata.core.PdBase;
+import java.util.Objects;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
@@ -37,13 +30,11 @@ import complexability.puremotionmusic.Instruments.TestReverb;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Sequencer.OnFragmentInteractionListener,
-        ReverbFragment.OnFragmentInteractionListener{
+        ReverbFragment.OnFragmentInteractionListener, MainFragment.OnFragmentInteractionListener{
 
 
     private static final String TAG = "MainActivity";
     protected BluetoothSPP bt;
-    protected PdService pdService = null;
-    private final Object lock = new Object();
     ImageButton eightBit;
     Fragment currentFragment = null;
     @Override
@@ -53,18 +44,32 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        eightBit = (ImageButton) findViewById(R.id.imageButton);
-        eightBit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = null;
-                FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
-                fragment = new ReverbFragment();
-                fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
+        //eightBit = (ImageButton) findViewById(R.id.imageButton);
+        //eightBit.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        Fragment fragment = null;
+        //        FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
+        //        fragment = new ReverbFragment();
+        //        fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
+        //    }
+        //});
 
-            }
-        });
+        /*
+        Create a MainFragment
+         */
 
+        Fragment fragment = null;
+        FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
+        fragment = new MainFragment();
+        //fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.container,fragment).commit();
+        //transaction.addToBackStack(null);
+
+        /*
+        End creating Main Fragment
+         */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -201,8 +206,8 @@ public class MainActivity extends AppCompatActivity
         assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.container,fragment).commit();
         transaction.addToBackStack(null);
+        transaction.replace(R.id.container,fragment).commit();
         //fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
         currentFragment = fragment;
         return true;
@@ -244,12 +249,56 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-    public void onSequencerFragmentInteraction(String string){
-        Log.d("MainActivity", "onSequencerFragmentInteraction: " + string);
-    }
-    public void onReverbFragmentInteraction(String string){
-        Log.d("MainActivity", "onReverbFragmentInteraction: " + string);
+
+    /*
+    Fragment button pressed
+     */
+    public void onFragmentButtonPressed(String name){
+        Fragment fragment = null;
+        FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
+
+        if (Objects.equals(name, "Sequencer")) {
+            fragment = new Sequencer();
+            // Handle the camera action
+        }
+        else if (Objects.equals(name, "EightBit")) {
+            fragment = new ReverbFragment();
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        assert drawer != null;
+        drawer.closeDrawer(GravityCompat.START);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(R.id.container,fragment).commit();
+        //fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
+        currentFragment = fragment;
     }
 
+
+    public void onSequencerFragmentInteraction(String string){
+        Log.d(TAG, "onSequencerFragmentInteraction: " + string);
+    }
+    public void onReverbFragmentInteraction(String string){
+        Log.d(TAG, "onReverbFragmentInteraction: " + string);
+    }
+    @Override
+    public void sendNametoMainActivity(String string) {
+        moveToFragmentByName(string);
+    }
+    private void moveToFragmentByName(String string){
+        Fragment fragment = null;
+        FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
+        if (Objects.equals(string, "Sequencer")) {
+            fragment = new Sequencer();
+            // Handle the camera action
+        }
+        else if (Objects.equals(string, "EightBit")) {
+            fragment = new ReverbFragment();
+        }
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(R.id.container,fragment).commit();
+
+    }
 
 }
