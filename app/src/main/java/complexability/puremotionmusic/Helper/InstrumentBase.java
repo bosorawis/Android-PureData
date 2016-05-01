@@ -243,9 +243,6 @@ public class InstrumentBase extends Fragment {
         double roll  = atan2(y_accel, z_accel) * RAD_TO_DEG;
         double pitch = atan(-x_accel / sqrt(y_accel * y_accel + z_accel * z_accel)) * RAD_TO_DEG;
 
-        double nonres_roll  = atan(y_accel / sqrt(x_accel * x_accel + z_accel * z_accel)) * RAD_TO_DEG;
-        double nonres_pitch = atan2(-x_accel, z_accel) * RAD_TO_DEG;
-
         double gyroXrate = x_gyro; // Convert to deg/s
         double gyroYrate = y_gyro; // Convert to deg/s
 

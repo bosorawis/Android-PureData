@@ -92,4 +92,20 @@ public class DrawRightBall extends View {
         y = (int) (((rec_y+180.0)/360.0)*height);
         //Log.d(TAG, "x: " + Integer.toString((int) x)+ "\t\ty: " + Integer.toString((int) y));
     }
+
+    //@Override
+    //protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    //    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    //    final int width = getDefaultSize(getSuggestedMinimumWidth(),widthMeasureSpec);
+    //    final int height = getDefaultSize(getSuggestedMinimumHeight(),heightMeasureSpec);
+//
+    //    if (width > height){
+    //        setMeasuredDimension(height, height);
+//
+    //    }
+    //    else {
+    //        setMeasuredDimension(width, width);
+    //    }
+
+    //}
 }
