@@ -26,11 +26,12 @@ import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 import complexability.puremotionmusic.Instruments.ReverbFragment;
 import complexability.puremotionmusic.Instruments.Sequencer;
+import complexability.puremotionmusic.Instruments.SineWave;
 import complexability.puremotionmusic.Instruments.TestReverb;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Sequencer.OnFragmentInteractionListener,
-        ReverbFragment.OnFragmentInteractionListener, MainFragment.OnFragmentInteractionListener{
+        ReverbFragment.OnFragmentInteractionListener, MainFragment.OnFragmentInteractionListener, SineWave.OnFragmentInteractionListener{
 
 
     private static final String TAG = "MainActivity";
@@ -173,7 +174,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
 
         if (id == R.id.sequencer) {
-            fragment = new Sequencer();
+            fragment = new SineWave();
             // Handle the camera action
         } else if (id == R.id.nav_eight_bit_piano) {
             fragment = new ReverbFragment();
@@ -287,5 +288,10 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.addToBackStack(null);
         transaction.replace(R.id.container,fragment).commit();
+    }
+
+    @Override
+    public void onSineWaveFragmentInteraction(String string) {
+
     }
 }

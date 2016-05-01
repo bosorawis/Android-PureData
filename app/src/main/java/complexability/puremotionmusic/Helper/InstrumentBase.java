@@ -23,6 +23,10 @@ public class InstrumentBase extends Fragment {
     private static final float RAD_TO_DEG = (float) ((float) 180/PI);
     private static final float DT = (float) 0.01;
 
+    protected static final int ROLL =  0;
+    protected static final int PITCH = 1;
+
+
     protected static final int LEFT_ROLL = 1;
     protected static final int LEFT_PITCH = 0;
     protected static final int RIGHT_ROLL = 3;
@@ -57,7 +61,11 @@ public class InstrumentBase extends Fragment {
     public static final int RIGHT_Z_GYRO_HIGHBYTE   = 23;
 
 
+    protected static final double GYRO_TRUST =  0.93;
+    protected static final double ACCEL_TRUST = 0.07;
 
+
+    static float previousRoll;
 
     static float l_lastFx = 0;
     static float l_lastFy = 0;
@@ -80,6 +88,9 @@ public class InstrumentBase extends Fragment {
 
     Kalman kalmanX = new Kalman();
     Kalman kalmanY = new Kalman();
+
+    Kalman kalmanX_forPitch = new Kalman();
+    Kalman kalmanY_forPitch = new Kalman();
 
 
     protected String getStringFromId(int id){
@@ -240,14 +251,161 @@ public class InstrumentBase extends Fragment {
     }
     public float[] calculateRightKalmanPitchRoll(float x_accel, float y_accel, float z_accel, float x_gyro, float y_gyro, float z_gyro){
         float ret[] = new float[2];
-        double roll  = atan2(y_accel, z_accel) * RAD_TO_DEG;
-        double pitch = atan(-x_accel / sqrt(y_accel * y_accel + z_accel * z_accel)) * RAD_TO_DEG;
+        double roll;
+        double pitch;
 
         double gyroXrate = x_gyro; // Convert to deg/s
         double gyroYrate = y_gyro; // Convert to deg/s
 
         // This fixes the transition problem when the accelerometer angle jumps between -180 and 180 degrees
-        /*For 180deg roll */
+
+
+        if((x_accel) >= 0.98){
+             /*For 180deg roll */
+            ret[ROLL] = previousRoll;
+            ret[PITCH] = -90;
+        }
+        //else if(abs(x_accel) <= 1.00){
+        //}
+        else if (x_accel <= -0.98){
+            ret[ROLL] = previousRoll;
+            ret[PITCH] = 90;
+        }
+        else if(z_accel < 0.0 && x_accel < 0.02){
+            roll  = atan2(y_accel, z_accel) * RAD_TO_DEG;
+            pitch = atan(-x_accel / sqrt(y_accel * y_accel + z_accel * z_accel)) * RAD_TO_DEG;
+            if ((roll < -90 && r_kalAngleX > 90) || (roll > 90 && r_kalAngleX < -90)) {
+                kalmanX.setAngle((float) roll);
+                r_compAngleX = (float) roll;
+                r_kalAngleX = (float) roll;
+                r_gyroXangle = (float) roll;
+            } else
+                r_kalAngleX = kalmanX.getAngle(roll, gyroXrate, DT); // Calculate the angle using a Kalman filter
+
+
+            if (abs(r_kalAngleX) > 90)
+                gyroYrate = -gyroYrate; // Invert rate, so it fits the restriced accelerometer reading
+            r_kalAngleY = kalmanY.getAngle(pitch, gyroYrate, DT);
+            //************************************************************************************************/
+            r_gyroXangle += gyroXrate * DT; // Calculate gyro angle without any filter
+            r_gyroYangle += gyroYrate * DT;
+            //gyroXangle += kalmanX.getRate() * dt; // Calculate gyro angle using the unbiased rate
+            //gyroYangle += kalmanY.getRate() * dt;
+
+            r_compAngleX = (float) (GYRO_TRUST * (r_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
+            r_compAngleY = (float) (GYRO_TRUST * (r_compAngleY + gyroYrate * DT) + ACCEL_THRESHOLD * pitch);
+
+            // Reset the gyro angle when it has drifted too much
+            if (r_gyroXangle < -180 || r_gyroXangle > 180)
+                r_gyroXangle = r_kalAngleX;
+            if (r_gyroYangle < -180 || r_gyroYangle > 180)
+                r_gyroYangle = r_kalAngleY;
+
+            ret[0] = r_compAngleX;
+            ret[1] = 180 - r_compAngleY ;
+            previousRoll = ret[0];
+        }
+
+        else if(z_accel < 0.0 && x_accel >= 0.02){
+            roll  = atan2(y_accel, z_accel) * RAD_TO_DEG;
+            pitch = atan(-x_accel / sqrt(y_accel * y_accel + z_accel * z_accel)) * RAD_TO_DEG;
+            if ((roll < -90 && r_kalAngleX > 90) || (roll > 90 && r_kalAngleX < -90)) {
+                kalmanX.setAngle((float) roll);
+                r_compAngleX = (float) roll;
+                r_kalAngleX = (float) roll;
+                r_gyroXangle = (float) roll;
+            } else
+                r_kalAngleX = kalmanX.getAngle(roll, gyroXrate, DT); // Calculate the angle using a Kalman filter
+
+
+            if (abs(r_kalAngleX) > 90)
+                gyroYrate = -gyroYrate; // Invert rate, so it fits the restriced accelerometer reading
+            r_kalAngleY = kalmanY.getAngle(pitch, gyroYrate, DT);
+            //************************************************************************************************/
+            r_gyroXangle += gyroXrate * DT; // Calculate gyro angle without any filter
+            r_gyroYangle += gyroYrate * DT;
+            //gyroXangle += kalmanX.getRate() * dt; // Calculate gyro angle using the unbiased rate
+            //gyroYangle += kalmanY.getRate() * dt;
+
+            r_compAngleX = (float) (GYRO_TRUST * (r_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
+            r_compAngleY = (float) (GYRO_TRUST * (r_compAngleY + gyroYrate * DT) + ACCEL_TRUST * pitch);
+
+            // Reset the gyro angle when it has drifted too much
+            if (r_gyroXangle < -180 || r_gyroXangle > 180)
+                r_gyroXangle = r_kalAngleX;
+            if (r_gyroYangle < -180 || r_gyroYangle > 180)
+                r_gyroYangle = r_kalAngleY;
+
+            ret[0] = r_compAngleX;
+            ret[1] = -180 - r_compAngleY ;
+            previousRoll = ret[0];
+        }
+
+
+        else{
+            roll  = atan2(y_accel, z_accel) * RAD_TO_DEG;
+            pitch = atan(-x_accel / sqrt(y_accel * y_accel + z_accel * z_accel)) * RAD_TO_DEG;
+            if ((roll < -90 && r_kalAngleX > 90) || (roll > 90 && r_kalAngleX < -90)) {
+                kalmanX.setAngle((float) roll);
+                r_compAngleX = (float) roll;
+                r_kalAngleX = (float) roll;
+                r_gyroXangle = (float) roll;
+            } else
+                r_kalAngleX = kalmanX.getAngle(roll, gyroXrate, DT); // Calculate the angle using a Kalman filter
+
+
+            if (abs(r_kalAngleX) > 90)
+                gyroYrate = -gyroYrate; // Invert rate, so it fits the restriced accelerometer reading
+            r_kalAngleY = kalmanY.getAngle(pitch, gyroYrate, DT);
+            //************************************************************************************************/
+            r_gyroXangle += gyroXrate * DT; // Calculate gyro angle without any filter
+            r_gyroYangle += gyroYrate * DT;
+            //gyroXangle += kalmanX.getRate() * dt; // Calculate gyro angle using the unbiased rate
+            //gyroYangle += kalmanY.getRate() * dt;
+
+            r_compAngleX = (float) (GYRO_TRUST * (r_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
+            r_compAngleY = (float) (GYRO_TRUST * (r_compAngleY + gyroYrate * DT) + ACCEL_TRUST * pitch);
+
+            // Reset the gyro angle when it has drifted too much
+            if (r_gyroXangle < -180 || r_gyroXangle > 180)
+                r_gyroXangle = r_kalAngleX;
+            if (r_gyroYangle < -180 || r_gyroYangle > 180)
+                r_gyroYangle = r_kalAngleY;
+
+            ret[0] = r_compAngleX;
+            ret[1] = r_compAngleY;
+            previousRoll = ret[0];
+        }
+
+
+        /**
+         * if x_accel == 1
+         *      pitch = 90
+         * else if x_accel == -1
+         *      pitch = -90
+         * else if z>=0
+         *      skjdflashdfsa
+         * else if z<0
+         *
+         */
+        return ret;
+
+    }
+
+
+    public float calculateRightKalmanRoll(float x_accel, float y_accel, float z_accel, float x_gyro, float y_gyro, float z_gyro){
+        double roll;
+        double pitch;
+        float ret;
+        double gyroXrate = x_gyro; // Convert to deg/s
+        double gyroYrate = y_gyro; // Convert to deg/s
+
+        // This fixes the transition problem when the accelerometer angle jumps between -180 and 180 degrees
+
+
+
+        roll  = atan2(y_accel, z_accel) * RAD_TO_DEG;
+        pitch = atan(-x_accel / sqrt(y_accel * y_accel + z_accel * z_accel)) * RAD_TO_DEG;
         if ((roll < -90 && r_kalAngleX > 90) || (roll > 90 && r_kalAngleX < -90)) {
             kalmanX.setAngle((float) roll);
             r_compAngleX = (float) roll;
@@ -255,8 +413,6 @@ public class InstrumentBase extends Fragment {
             r_gyroXangle = (float) roll;
         } else
             r_kalAngleX = kalmanX.getAngle(roll, gyroXrate, DT); // Calculate the angle using a Kalman filter
-
-
         if (abs(r_kalAngleX) > 90)
             gyroYrate = -gyroYrate; // Invert rate, so it fits the restriced accelerometer reading
         r_kalAngleY = kalmanY.getAngle(pitch, gyroYrate, DT);
@@ -265,18 +421,58 @@ public class InstrumentBase extends Fragment {
         r_gyroYangle += gyroYrate * DT;
         //gyroXangle += kalmanX.getRate() * dt; // Calculate gyro angle using the unbiased rate
         //gyroYangle += kalmanY.getRate() * dt;
-
-        r_compAngleX = (float) (0.93 * (r_compAngleX + gyroXrate * DT) + 0.07 * roll); // Calculate the angle using a Complimentary filter
-        r_compAngleY = (float) (0.93 * (r_compAngleY + gyroYrate * DT) + 0.07 * pitch);
-
+        r_compAngleX = (float) (0.93 * (r_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
+        r_compAngleY = (float) (0.93 * (r_compAngleY + gyroYrate * DT) + ACCEL_TRUST * pitch);
         // Reset the gyro angle when it has drifted too much
         if (r_gyroXangle < -180 || r_gyroXangle > 180)
             r_gyroXangle = r_kalAngleX;
         if (r_gyroYangle < -180 || r_gyroYangle > 180)
             r_gyroYangle = r_kalAngleY;
+        ret = r_compAngleX;
+        previousRoll = ret;
 
-        ret[0] = r_compAngleX;
-        ret[1] = r_compAngleY;
+        return ret;
+    }
+    public float calculateRightKalmanPitch(float x_accel, float y_accel, float z_accel, float x_gyro, float y_gyro, float z_gyro){
+        float ret;
+        double gyroXrate = x_gyro; // Convert to deg/s
+        double gyroYrate = y_gyro; // Convert to deg/s
+
+        // This fixes the transition problem when the accelerometer angle jumps between -180 and 180 degrees
+
+        if(x_accel >=0.98){
+            return 0;
+        }
+
+        double roll  = atan(y_accel / sqrt(x_accel * x_accel + z_accel * z_accel)) * RAD_TO_DEG;
+        double pitch = atan2(-x_accel, z_accel) * RAD_TO_DEG;
+
+
+
+        if ((pitch < -90 && rp_kalAngleY > 90) || (pitch > 90 && rp_kalAngleY < -90)) {
+            kalmanY_forPitch.setAngle((float) pitch);
+            rp_compAngleY = (float) pitch;
+            rp_kalAngleY = (float) pitch;
+            rp_gyroYangle = (float) pitch;
+        } else
+            rp_kalAngleY = kalmanY_forPitch.getAngle(pitch, gyroYrate, DT); // Calculate the angle using a Kalman filter
+
+        if (abs(rp_kalAngleY) > 90)
+            gyroXrate = -gyroXrate; // Invert rate, so it fits the restriced accelerometer reading
+        rp_kalAngleX = kalmanX_forPitch.getAngle(roll, gyroXrate, DT); // Calculate the angle using a Kalman filter
+
+
+        rp_gyroXangle += gyroXrate * DT; // Calculate gyro angle without any filter
+        rp_gyroYangle += gyroYrate * DT;
+
+        rp_compAngleX = (float) (0.93 * (rp_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
+        rp_compAngleY = (float) (0.93 * (rp_compAngleY + gyroYrate * DT) + ACCEL_TRUST * pitch);
+
+        if (rp_gyroXangle < -180 || rp_gyroXangle > 180)
+            rp_gyroXangle = rp_kalAngleX;
+        if (rp_gyroYangle < -180 || rp_gyroYangle > 180)
+            rp_gyroYangle = rp_kalAngleY;
+        ret = rp_compAngleY;
         return ret;
     }
 
@@ -293,5 +489,8 @@ public class InstrumentBase extends Fragment {
         r_compAngleY = (float) pitch;
 
     }
-
+    //public interface OnFragmentInteractionListener {
+    //    // TODO: Update argument type and name
+    //    public void onReverbFragmentInteraction(String string);
+    //}
 }

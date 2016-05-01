@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Objects;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import complexability.puremotionmusic.Helper.DrawRightBall;
@@ -44,20 +42,10 @@ import complexability.puremotionmusic.Helper.Mapper;
 import complexability.puremotionmusic.MainActivity;
 import complexability.puremotionmusic.R;
 
-import static java.lang.StrictMath.PI;
-import static java.lang.StrictMath.floor;
-
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ReverbFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ReverbFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by turbo on 4/30/2016.
  */
-public class ReverbFragment extends InstrumentBase implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class SineWave extends InstrumentBase implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener{
     private static final int TOTAL_MOTION = 4;
     private static final int TOTAL_EFFECT = 3;
 
@@ -95,7 +83,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     DrawRightBall drawTheRightBall;
 
     BluetoothSPP bt;
-    public ReverbFragment() {
+    public SineWave() {
         // Required empty public constructor
     }
 
@@ -208,8 +196,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         Button right_roll_btn = (Button) view.findViewById(R.id.right_roll_button);
 
 
-        left_pitch_btn.setOnClickListener(this);
-        left_roll_btn.setOnClickListener(this);
+        left_pitch_btn.setOnClickListener( this);
+        left_roll_btn.setOnClickListener( this);
         right_pitch_btn.setOnClickListener(this);
         right_roll_btn.setOnClickListener(this);
 
@@ -248,7 +236,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
         AudioParameters.init(getActivity());
         PdPreferences.initPreferences(getActivity().getApplicationContext());
-        PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
+        PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).registerOnSharedPreferenceChangeListener((SharedPreferences.OnSharedPreferenceChangeListener) this);
         getActivity().bindService(new Intent(getActivity(), PdService.class), pdConnection, Context.BIND_AUTO_CREATE);
 
         return view;
@@ -385,8 +373,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
             PdBase.setReceiver(receiver);
             PdBase.subscribe("metro_bng");
             //PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.android_interface_basic_with_control);
-            patchFile = IoUtils.extractResource(in, "android_interface_basic_with_control.pd", getActivity().getCacheDir());
+            InputStream in = res.openRawResource(R.raw.android_inst_sinewave);
+            patchFile = IoUtils.extractResource(in, "android_inst_sinewave.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -516,7 +504,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     }
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onReverbFragmentInteraction(String string);
+        public void onSineWaveFragmentInteraction(String string);
     }
+
 
 }
