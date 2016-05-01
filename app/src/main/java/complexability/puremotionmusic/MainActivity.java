@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
     protected BluetoothSPP bt;
     ImageButton eightBit;
-    Fragment currentFragment = null;
+    String currentFragment = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
@@ -128,7 +128,18 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if(!Objects.equals(currentFragment, "MainFragment")) {
+                currentFragment = "MainFragment";
+                Fragment fragment = null;
+                fragment = new MainFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.addToBackStack(null);
+                transaction.replace(R.id.container, fragment).commit();
+            }
+            else{
+                super.onBackPressed();
+            }
         }
     }
 
@@ -175,13 +186,14 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.sequencer) {
             fragment = new SineWave();
+            currentFragment = "SineWaveFragment";
             // Handle the camera action
         } else if (id == R.id.nav_eight_bit_piano) {
             fragment = new ReverbFragment();
-
+            currentFragment = "ReverbFragment";
         } else if (id == R.id.nav_slideshow) {
-            Intent i = new Intent(getBaseContext(), TestReverb.class);
-            startActivity(i);
+            //Intent i = new Intent(getBaseContext(), TestReverb.class);
+            //startActivity(i);
             return true;
 
         } else if (id == R.id.nav_manage) {
@@ -199,7 +211,6 @@ public class MainActivity extends AppCompatActivity
         transaction.addToBackStack(null);
         transaction.replace(R.id.container,fragment).commit();
         //fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
-        currentFragment = fragment;
         return true;
     }
 
@@ -261,7 +272,7 @@ public class MainActivity extends AppCompatActivity
         transaction.addToBackStack(null);
         transaction.replace(R.id.container,fragment).commit();
         //fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
-        currentFragment = fragment;
+        currentFragment = name;
     }
 
 
@@ -294,4 +305,5 @@ public class MainActivity extends AppCompatActivity
     public void onSineWaveFragmentInteraction(String string) {
 
     }
+
 }

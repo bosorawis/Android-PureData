@@ -482,7 +482,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
 
         motionData[LEFT_PITCH] = calculatePitch(l_x_accel, l_y_accel, l_z_accel);
-        motionData[LEFT_ROLL] = calculateRoll(l_x_accel, l_y_accel, l_z_accel);
+        //motionData[LEFT_ROLL] = calculateRoll(l_x_accel, l_y_accel, l_z_accel);
         //motionData[RIGHT_PITCH] = calculatePitch(r_x_accel, r_y_accel, r_z_accel);
         //motionData[RIGHT_ROLL]  = calculateRoll(r_x_accel, r_y_accel, r_z_accel);
 
@@ -492,12 +492,12 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         motionData[RIGHT_ROLL]  = alsoRightRoll(r_x_accel, r_y_accel, r_z_accel);
 
         rightMotion = calculateRightKalmanPitchRoll(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
-        //rightMotion[0] = calculateRightKalmanRoll(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
-        //rightMotion[1] = calculateRightKalmanPitch(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
+        //rightMotion[ROLL] = calculateRightKalmanRoll(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
+        //rightMotion[PITCH] = calculateRightKalmanPitch(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
 
         PdBase.sendFloat("left_pitch",motionData[LEFT_PITCH]);
         PdBase.sendFloat("left_roll", motionData[LEFT_ROLL]);
-        PdBase.sendFloat("right_pitch", rightMotion[PITCH]);
+        PdBase.sendFloat("right_pitch", 2*rightMotion[PITCH]);
         PdBase.sendFloat("right_roll", -rightMotion[ROLL]);
 
         Log.d(TAG,"data x: " + Integer.toString((int)rightMotion[0]) + "\t y: "+Integer.toString((int)rightMotion[1]));
