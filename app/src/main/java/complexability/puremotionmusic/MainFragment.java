@@ -104,7 +104,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.eight_bit_button:
-                selectedFragment = "EightBit";
+                selectedFragment = "ReverbFragment";
                 break;
             default:
                 break;
