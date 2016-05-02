@@ -71,7 +71,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
     private static float[] rightMotion = new float[2];
 
-    private boolean firstRun = true;
     // TODO: Rename and change types of parameters
 
 
@@ -80,7 +79,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     private int[] selected = new int[TOTAL_MOTION];
     private String[] selectedString = new String[TOTAL_MOTION];
     private String[] choices;
-    //private int[] userOptons = new int[TOTAL_MOTION];
     float[] motionData = new float[10];
 
     private TextView left_pitch_text;
@@ -96,7 +94,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
     BluetoothSPP bt;
     public ReverbFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -382,9 +379,9 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         Log.d("PureDataFragment", "sample rate: " + Integer.toString(sampleRate));
         PdAudio.initAudio(sampleRate, 0, 2, 8, true);
         try {
-            PdBase.setReceiver(receiver);
-            PdBase.subscribe("metro_bng");
-            //PdBase.subscribe("android");
+            //PdBase.setReceiver(receiver);
+            //PdBase.subscribe("metro_bng");
+            ////PdBase.subscribe("android");
             InputStream in = res.openRawResource(R.raw.android_interface_basic_with_control);
             patchFile = IoUtils.extractResource(in, "android_interface_basic_with_control.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
@@ -458,22 +455,19 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     }
 
     public void dataProc(byte[] data){
-        //String Param[] = {"wet"};
-        //if(data.length <= 11){
-        //    return;
-        //}
-        float l_x_accel = concat(data[0], data[1]);
-        float l_y_accel = concat(data[2], data[3]);
-        float l_z_accel = concat(data[4], data[5]);
+
+        float l_x_accel = concat(data[LEFT_X_ACCEL_LOWBYTE], data[LEFT_X_ACCEL_HIGHBYTE]);
+        float l_y_accel = concat(data[LEFT_Y_ACCEL_LOWBYTE], data[LEFT_Y_ACCEL_HIGHBYTE]);
+        float l_z_accel = concat(data[LEFT_Z_ACCEL_LOWBYTE], data[LEFT_Z_ACCEL_HIGHBYTE]);
 
         float r_x_accel = concat(data[RIGHT_X_ACCEL_LOWBYTE], data[RIGHT_X_ACCEL_HIGHBYTE]);
         float r_y_accel = concat(data[RIGHT_Y_ACCEL_LOWBYTE], data[RIGHT_Y_ACCEL_HIGHBYTE]);
         float r_z_accel = concat(data[RIGHT_Z_ACCEL_LOWBYTE], data[RIGHT_Z_ACCEL_HIGHBYTE]);
 
 
-        float l_x_gyro = concat(data[0], data[1]);
-        float l_y_gyro = concat(data[2], data[3]);
-        float l_z_gyro = concat(data[4], data[5]);
+        float l_x_gyro = concat(data[LEFT_X_GYRO_LOWBYTE], data[LEFT_X_GYRO_HIGHBYTE]);
+        float l_y_gyro = concat(data[LEFT_Y_GYRO_LOWBYTE], data[LEFT_Y_GYRO_HIGHBYTE]);
+        float l_z_gyro = concat(data[LEFT_Z_GYRO_LOWBYTE], data[LEFT_Z_GYRO_HIGHBYTE]);
 
         float r_x_gyro = concat(data[RIGHT_X_GYRO_LOWBYTE], data[RIGHT_X_GYRO_HIGHBYTE]);
         float r_y_gyro = concat(data[RIGHT_Y_GYRO_LOWBYTE], data[RIGHT_Y_GYRO_HIGHBYTE]);
@@ -491,18 +485,19 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         motionData[RIGHT_PITCH] = alsoRightPitch(r_x_accel, r_y_accel, r_z_accel);
         motionData[RIGHT_ROLL]  = alsoRightRoll(r_x_accel, r_y_accel, r_z_accel);
 
-        rightMotion = calculateRightKalmanPitchRoll(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
+        //rightMotion = calculateRightKalmanPitchRoll(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
         //rightMotion[ROLL] = calculateRightKalmanRoll(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
         //rightMotion[PITCH] = calculateRightKalmanPitch(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
+        rightMotion = calculateKalmanPitchRollForCheckOff(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
 
         PdBase.sendFloat("left_pitch",motionData[LEFT_PITCH]);
         PdBase.sendFloat("left_roll", motionData[LEFT_ROLL]);
         PdBase.sendFloat("right_pitch", 2*rightMotion[PITCH]);
         PdBase.sendFloat("right_roll", -rightMotion[ROLL]);
-
-        Log.d(TAG,"data x: " + Integer.toString((int)rightMotion[0]) + "\t y: "+Integer.toString((int)rightMotion[1]));
+        Log.d(TAG,"data x: " + Float.toString((r_x_accel)) + "\t y: "+Float.toString( r_y_accel) +"\t z: "+Float.toString( r_z_accel));
+        Log.d(TAG,"data Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));
         drawTheLeftBall.updateValue( motionData[LEFT_ROLL], motionData[LEFT_PITCH]);
-        drawTheRightBall.updateValue(rightMotion[0], -rightMotion[1]);
+        drawTheRightBall.updateValue(rightMotion[ROLL], -rightMotion[PITCH]);
     }
     public void initText(){
         left_pitch_text.setText(AVAILABLE_EFFECT_NAME[0]);
