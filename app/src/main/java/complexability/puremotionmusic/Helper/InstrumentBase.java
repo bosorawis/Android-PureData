@@ -26,7 +26,7 @@ import static java.lang.StrictMath.floor;
 /**
  * Created by Sorawis on 4/7/2016.
  */
-public class InstrumentBase extends Fragment {
+public abstract class InstrumentBase extends Fragment {
     protected FragmentActivity myContext;
 
     private static final float GRAVITY = (float) 0.1;
@@ -72,13 +72,13 @@ public class InstrumentBase extends Fragment {
     public static final int RIGHT_Z_GYRO_HIGHBYTE = 23;
 
 
-    public static final int LEFTHAND_DOWN_TAP = 1001;
-    public static final int LEFTHAND_LEFT_TAP = 1002;
-    public static final int LEFTHAND_RIGHT_TAP = 1003;
+    public static final int LEFTHAND_DOWN_TAP_BIT = 1001;
+    public static final int LEFTHAND_LEFT_TAP_BIT = 1002;
+    public static final int LEFTHAND_RIGHT_TAP_BIT = 1003;
 
-    public static final int RIGHTHAND_DOWN_TAP = 2001;
-    public static final int RIGHTHAND_LEFT_TAP = 2002;
-    public static final int RIGHTHAND_RIGHT_TAP = 2003;
+    public static final int RIGHTHAND_DOWN_TAP_BIT = 2001;
+    public static final int RIGHTHAND_LEFT_TAP_BIT = 2002;
+    public static final int RIGHTHAND_RIGHT_TAP_BIT = 2003;
 
     protected static final double GYRO_TRUST = 0.90;
     protected static final double ACCEL_TRUST = 0.10;
@@ -721,33 +721,6 @@ public class InstrumentBase extends Fragment {
 
     }
 
-    public int getTap(byte data) {
-        if (data == 0) {
-            return 0;
-        }
-
-        if (getBit(data, 0)) {
-            return LEFTHAND_LEFT_TAP;
-        }
-        if (getBit(data, 1)) {
-            return LEFTHAND_RIGHT_TAP;
-        }
-        if (getBit(data, 2)) {
-            return LEFTHAND_DOWN_TAP;
-        }
-        if (getBit(data, 3)) {
-            return RIGHTHAND_LEFT_TAP;
-        }
-        if (getBit(data, 4)) {
-            return RIGHTHAND_RIGHT_TAP;
-        }
-        if (getBit(data, 5)) {
-            return RIGHTHAND_DOWN_TAP;
-        }
-        return 0;
-    }
-
-
     public float[] calculateRightHandKalmanPitchRollForCheckOff(float x_accel, float y_accel, float z_accel, float x_gyro, float y_gyro, float z_gyro) {
         float ret[] = new float[2];
         double roll;
@@ -1132,4 +1105,35 @@ public class InstrumentBase extends Fragment {
         ret[2] = (float) (sum[2]/10.0);
         return ret;
     }
+    private void tapDetection(byte status){
+        //Left hand left tap
+        if(getBit(status, 0)){
+
+        }
+        //Left Hand
+        if(getBit(status, 1)){
+
+        }
+        if(getBit(status, 2)){
+
+        }
+        if(getBit(status, 3)){
+
+        }
+        if(getBit(status, 4)){
+
+        }
+        if(getBit(status, 5)){
+
+        }
+        if(getBit(status, 6)){
+
+        }
+        if(getBit(status, 7)){
+
+        }
+
+    }
+
+    protected abstract void changeToNextInstrument();
 }

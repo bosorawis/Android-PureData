@@ -278,6 +278,11 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     }
 
     @Override
+    protected void changeToNextInstrument() {
+
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
