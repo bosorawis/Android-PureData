@@ -1136,4 +1136,9 @@ public abstract class InstrumentBase extends Fragment {
     }
 
     protected abstract void changeToNextInstrument();
+    protected abstract void changeToPrevInstrument();
+
+    protected abstract void startPlaying();
+    protected abstract void stopPlaying();
+
 }

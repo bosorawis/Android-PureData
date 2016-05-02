@@ -262,6 +262,27 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
     }
 
     @Override
+    protected void changeToNextInstrument() {
+        ((MainActivity) getActivity()).moveToFragmentByName("ReverbFragment");
+
+    }
+
+    @Override
+    protected void changeToPrevInstrument() {
+        ((MainActivity) getActivity()).moveToFragmentByName("Sequencer");
+    }
+
+    @Override
+    protected void startPlaying() {
+        startAudio();
+    }
+
+    @Override
+    protected void stopPlaying() {
+        stopAudio();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;

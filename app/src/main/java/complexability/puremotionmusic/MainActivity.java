@@ -286,15 +286,19 @@ public class MainActivity extends AppCompatActivity
     public void sendNametoMainActivity(String string) {
         moveToFragmentByName(string);
     }
-    private void moveToFragmentByName(String string){
+
+    public void moveToFragmentByName(String string){
         Fragment fragment = null;
         FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
         if (Objects.equals(string, "Sequencer")) {
             fragment = new Sequencer();
             // Handle the camera action
         }
-        else if (Objects.equals(string, "EightBit")) {
+        else if (Objects.equals(string, "ReverbFragment")) {
             fragment = new ReverbFragment();
+        }
+        else if (Objects.equals(string, "SineWave")) {
+            fragment = new SineWave();
         }
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.addToBackStack(null);
