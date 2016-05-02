@@ -85,15 +85,23 @@ public class InstrumentBase extends Fragment {
 
     protected static final double CHANGING_TOL = 0.20;
 
-
+    /* Variable handling rolling average*/
     static float[] right_rollingAverage_x_accel;
     static float[] right_rollingAverage_y_accel;
     static float[] right_rollingAverage_z_accel;
     static int right_current_new_item_index;
 
+    static float[] left_rollingAverage_x_accel;
+    static float[] left_rollingAverage_y_accel;
+    static float[] left_rollingAverage_z_accel;
+    static int     left_current_new_item_index;
+
     static float previousRoll;
     static float previous_right_roll;
     static float previous_right_pitch;
+
+    static float previous_left_roll;
+    static float previous_left_pitch;
 
     static float l_lastFx = 0;
     static float l_lastFy = 0;
@@ -106,6 +114,17 @@ public class InstrumentBase extends Fragment {
     static float r_gyroX, r_gyroY, r_gyroZ;
 
     static float[] previous_right_accel = {0, 0 ,0};
+    static float[] previous_left_accel = {0, 0 ,0};
+
+
+    static float l_gyroXangle, l_gyroYangle; // Angle calculate using the gyro only
+    static float l_compAngleX, l_compAngleY; // Calculated angle using a complementary filter
+    static float l_kalAngleX,  l_kalAngleY; // Calculated angle using a Kalman filter
+
+
+    static float lp_gyroXangle, lp_gyroYangle; // Angle calculate using the gyro only
+    static float lp_compAngleX, lp_compAngleY; // Calculated angle using a complementary filter
+    static float lp_kalAngleX,  lp_kalAngleY; // Calculated angle using a Kalman filter
 
     static float r_gyroXangle, r_gyroYangle; // Angle calculate using the gyro only
     static float r_compAngleX, r_compAngleY; // Calculated angle using a complementary filter
@@ -128,11 +147,17 @@ public class InstrumentBase extends Fragment {
         right_rollingAverage_x_accel = new float[10];
         right_rollingAverage_y_accel = new float[10];
         right_rollingAverage_z_accel = new float[10];
-
+        left_rollingAverage_x_accel = new float[10];
+        left_rollingAverage_y_accel = new float[10];
+        left_rollingAverage_z_accel = new float[10];
         for(int i = 0 ; i < 10 ; i++){
             right_rollingAverage_x_accel[i] = 0;
             right_rollingAverage_y_accel[i] = 0;
             right_rollingAverage_z_accel[i] = 0;
+
+            left_rollingAverage_x_accel[i] = 0;
+            left_rollingAverage_y_accel[i] = 0;
+            left_rollingAverage_z_accel[i] = 0;
         }
     }
     protected String getStringFromId(int id) {
@@ -723,17 +748,17 @@ public class InstrumentBase extends Fragment {
     }
 
 
-    public float[] calculateKalmanPitchRollForCheckOff(float x_accel, float y_accel, float z_accel, float x_gyro, float y_gyro, float z_gyro) {
+    public float[] calculateRightHandKalmanPitchRollForCheckOff(float x_accel, float y_accel, float z_accel, float x_gyro, float y_gyro, float z_gyro) {
         float ret[] = new float[2];
         double roll;
         double pitch;
 
         double gyroXrate = x_gyro; // Convert to deg/s
         double gyroYrate = y_gyro; // Convert to deg/s
-        float[] accelData = getRollingAveragedAccel(x_accel,y_accel,z_accel);
+        float[] accelData = getRightRollingAveragedAccel(x_accel,y_accel,z_accel);
 
-        boolean[] isItGoingUp = isAccelIncreasing(x_accel, y_accel, z_accel);
-        boolean[] isItChanging = isAccelChanging(accelData[0], accelData[1], accelData[2]);
+        boolean[] isItGoingUp = isRightAccelIncreasing(x_accel, y_accel, z_accel);
+        boolean[] isItChanging = isRightAccelChanging(accelData[0], accelData[1], accelData[2]);
 
         //if (isItGoingUp[0] && !isItChanging[1] && !isItGoingUp[2]) { //Pitch up ==> x increase, y stay, z decrease
 
@@ -855,8 +880,140 @@ public class InstrumentBase extends Fragment {
         previous_right_pitch = ret[1];
         return ret;
     }
+    public float[] calculateLeftHandKalmanPitchRollForCheckOff(float x_accel, float y_accel, float z_accel, float x_gyro, float y_gyro, float z_gyro) {
+        float ret[] = new float[2];
+        double roll;
+        double pitch;
 
-    public boolean[] isAccelIncreasing(float cur_x_accel, float cur_y_accel, float cur_z_accel){
+        double gyroXrate = x_gyro; // Convert to deg/s
+        double gyroYrate = y_gyro; // Convert to deg/s
+        float[] accelData = getLeftRollingAveragedAccel(x_accel,y_accel,z_accel);
+
+        boolean[] isItGoingUp = isLeftAccelIncreasing(x_accel, y_accel, z_accel);
+        boolean[] isItChanging = isLeftAccelChanging(accelData[0], accelData[1], accelData[2]);
+
+        //if (isItGoingUp[0] && !isItChanging[1] && !isItGoingUp[2]) { //Pitch up ==> x increase, y stay, z decrease
+
+
+
+        if(!isItChanging[0] && !isItChanging[1] && abs(1+accelData[2])<0.05){
+            ret[ROLL] = (float) 180.0;
+            ret[PITCH] = 0;
+        }
+        //Pitch upward
+        else if(accelData[0] < 0.01 && (!isItChanging[1]) && accelData[2] < 0.01 ){ //x negative, y not changing, z negative
+            //roll = atan(y_accel / sqrt(x_accel * x_accel + z_accel * z_acel)) * RAD_TO_DEG;
+            //pitch = atan2(-x_accel, z_accel) * RAD_TO_DEG;
+            roll = atan(accelData[1] / sqrt(accelData[0] * accelData[0] + accelData[2] * accelData[2])) * RAD_TO_DEG;
+            pitch = atan2(-accelData[0], accelData[2]) * RAD_TO_DEG;
+
+
+            if ((pitch < -90 && lp_kalAngleY > 90) || (pitch > 90 && lp_kalAngleY < -90)) {
+                kalmanY_forPitch.setAngle((float) pitch);
+                lp_compAngleY = (float) pitch;
+                lp_kalAngleY = (float) pitch;
+                lp_gyroYangle = (float) pitch;
+            } else {
+                lp_kalAngleY = kalmanY_forPitch.getAngle(pitch, gyroYrate, DT); // Calculate the angle using a Kalman filter
+            }
+            if (abs(lp_kalAngleY) > 90) {
+                gyroXrate = -gyroXrate; // Invert rate, so it fits the restriced accelerometer reading
+            }
+
+            lp_kalAngleX = kalmanX_forPitch.getAngle(roll, gyroXrate, DT); // Calculate the angle using a Kalman filter
+
+
+            lp_gyroXangle += gyroXrate * DT; // Calculate gyro angle without any filter
+            lp_gyroYangle += gyroYrate * DT;
+
+            lp_compAngleX = (float) (GYRO_TRUST * (lp_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
+            lp_compAngleY = (float) (GYRO_TRUST * (lp_compAngleY + gyroYrate * DT) + ACCEL_TRUST * pitch);
+
+            if (lp_gyroXangle < -180 || lp_gyroXangle > 180) {
+                lp_gyroXangle = lp_kalAngleX;
+            }
+            if (lp_gyroYangle < -180 || lp_gyroYangle > 180) {
+                lp_gyroYangle = lp_kalAngleY;
+            }
+            ret[0] = lp_compAngleX;
+            ret[1] = lp_compAngleY;
+        }
+        //pitch downward
+        else if(accelData[0] >= 0.01 && (!isItChanging[1]) && accelData[2] <0.01 ){ //x negative, y not changing, z negative
+
+            roll = atan(accelData[1] / sqrt(accelData[0] * accelData[0] + accelData[2] * accelData[2])) * RAD_TO_DEG;
+            pitch = atan2(-accelData[0], accelData[2]) * RAD_TO_DEG;
+
+
+            if ((pitch < -90 && lp_kalAngleY > 90) || (pitch > 90 && lp_kalAngleY < -90)) {
+                kalmanY_forPitch.setAngle((float) pitch);
+                lp_compAngleY = (float) pitch;
+                lp_kalAngleY = (float) pitch;
+                lp_gyroYangle = (float) pitch;
+            } else
+                lp_kalAngleY = kalmanY_forPitch.getAngle(pitch, gyroYrate, DT); // Calculate the angle using a Kalman filter
+
+            if (abs(rp_kalAngleY) > 90)
+                gyroXrate = -gyroXrate; // Invert rate, so it fits the restriced accelerometer reading
+            lp_kalAngleX = kalmanX_forPitch.getAngle(roll, gyroXrate, DT); // Calculate the angle using a Kalman filter
+
+
+            lp_gyroXangle += gyroXrate * DT; // Calculate gyro angle without any filter
+            lp_gyroYangle += gyroYrate * DT;
+
+            lp_compAngleX = (float) (GYRO_TRUST * (lp_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
+            lp_compAngleY = (float) (GYRO_TRUST * (lp_compAngleY + gyroYrate * DT) + ACCEL_TRUST * pitch);
+
+            if (lp_gyroXangle < -180 || lp_gyroXangle > 180)
+                lp_gyroXangle = lp_kalAngleX;
+            if (lp_gyroYangle < -180 || lp_gyroYangle > 180)
+                lp_gyroYangle = lp_kalAngleY;
+            ret[0] = lp_compAngleX;
+            ret[1] = lp_compAngleY;
+        }
+        //Roll L-R
+        else {
+            roll = atan2(accelData[1], accelData[2]) * RAD_TO_DEG;
+            pitch = atan(-accelData[0] / sqrt(accelData[1] * accelData[1] + accelData[2] * accelData[2])) * RAD_TO_DEG;
+            if ((roll < -90 && l_kalAngleX > 90) || (roll > 90 && l_kalAngleX < -90)) {
+                kalmanX.setAngle((float) roll);
+                l_compAngleX = (float) roll;
+                l_kalAngleX = (float) roll;
+                l_gyroXangle = (float) roll;
+            } else {
+                l_kalAngleX = kalmanX.getAngle(roll, gyroXrate, DT); // Calculate the angle using a Kalman filter
+            }
+            if (abs(l_kalAngleX) > 90)
+                gyroYrate = -gyroYrate; // Invert rate, so it fits the restriced accelerometer reading
+            l_kalAngleY = kalmanY.getAngle(pitch, gyroYrate, DT);
+            //************************************************************************************************/
+            l_gyroXangle += gyroXrate * DT; // Calculate gyro angle without any filter
+            l_gyroYangle += gyroYrate * DT;
+            //gyroXangle += kalmanX.getRate() * dt; // Calculate gyro angle using the unbiased rate
+            //gyroYangle += kalmanY.getRate() * dt;
+            l_compAngleX = (float) (GYRO_TRUST * (l_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
+            l_compAngleY = (float) (GYRO_TRUST * (l_compAngleY + gyroYrate * DT) + ACCEL_TRUST * pitch);
+            // Reset the gyro angle when it has drifted too much
+            if (l_gyroXangle < -180 || l_gyroXangle > 180)
+                l_gyroXangle = l_kalAngleX;
+            if (l_gyroYangle < -180 || l_gyroYangle > 180)
+                l_gyroYangle = l_kalAngleY;
+            ret[0] = l_compAngleX;
+            ret[1] = l_compAngleY;
+        }
+        if(abs(previous_left_pitch - ret[PITCH]) >= 40){
+            ret[PITCH] = (float) ((previous_left_pitch + ret[PITCH])/2.0);
+        }
+        if(abs(previous_left_roll - ret[ROLL]) >= 40){
+            ret[ROLL] = (float) ((previous_left_roll+ret[ROLL])/2.0);
+        }
+
+        previous_left_roll = ret[0];
+        previous_left_pitch = ret[1];
+        return ret;
+    }
+
+    public boolean[] isRightAccelIncreasing(float cur_x_accel, float cur_y_accel, float cur_z_accel){
         boolean[] ret = new boolean[3];
         ret[0] = false;
         ret[1] = false;
@@ -872,7 +1029,7 @@ public class InstrumentBase extends Fragment {
         }
         return ret;
     }
-    public boolean[] isAccelChanging(float cur_x_accel, float cur_y_accel, float cur_z_accel){
+    public boolean[] isRightAccelChanging(float cur_x_accel, float cur_y_accel, float cur_z_accel){
         boolean[] ret = new boolean[3];
         ret[0] = false;
         ret[1] = false;
@@ -889,7 +1046,7 @@ public class InstrumentBase extends Fragment {
         return ret;
     }
 
-    private float[] getRollingAveragedAccel(float new_x_accel, float new_y_accel, float new_z_accel){
+    private float[] getRightRollingAveragedAccel(float new_x_accel, float new_y_accel, float new_z_accel){
         right_rollingAverage_x_accel[right_current_new_item_index] = new_x_accel;
         right_rollingAverage_y_accel[right_current_new_item_index] = new_y_accel;
         right_rollingAverage_z_accel[right_current_new_item_index] = new_z_accel;
@@ -907,6 +1064,66 @@ public class InstrumentBase extends Fragment {
             sum[0] = right_rollingAverage_x_accel[i]+sum[0];
             sum[1] = right_rollingAverage_y_accel[i]+sum[1];
             sum[2] = right_rollingAverage_z_accel[i]+sum[2];
+
+        }
+
+        ret[0] = (float) (sum[0]/10.0);
+        ret[1] = (float) (sum[1]/10.0);
+        ret[2] = (float) (sum[2]/10.0);
+        return ret;
+    }
+
+    public boolean[] isLeftAccelIncreasing(float cur_x_accel, float cur_y_accel, float cur_z_accel){
+        boolean[] ret = new boolean[3];
+        ret[0] = false;
+        ret[1] = false;
+        ret[2] = false;
+        if(previous_left_accel[0] - cur_x_accel < previous_left_accel[0]){
+            ret[0] = true;
+        }
+        if(previous_left_accel[1] - cur_y_accel < previous_left_accel[1]){
+            ret[1] = true;
+        }
+        if(previous_left_accel[2] - cur_z_accel < previous_left_accel[2]){
+            ret[2] = true;
+        }
+        return ret;
+    }
+    public boolean[] isLeftAccelChanging(float cur_x_accel, float cur_y_accel, float cur_z_accel){
+        boolean[] ret = new boolean[3];
+        ret[0] = false;
+        ret[1] = false;
+        ret[2] = false;
+        if(abs(previous_left_accel[0] - cur_x_accel) >= CHANGING_TOL){
+            ret[0] = true;
+        }
+        if(abs(previous_left_accel[1] - cur_y_accel) >=CHANGING_TOL){
+            ret[1] = true;
+        }
+        if(abs(previous_left_accel[2] - cur_z_accel) >=CHANGING_TOL){
+            ret[2] = true;
+        }
+        return ret;
+    }
+
+    private float[] getLeftRollingAveragedAccel(float new_x_accel, float new_y_accel, float new_z_accel){
+        left_rollingAverage_x_accel[left_current_new_item_index] = new_x_accel;
+        left_rollingAverage_y_accel[left_current_new_item_index] = new_y_accel;
+        left_rollingAverage_z_accel[left_current_new_item_index] = new_z_accel;
+        float[] ret = new float[3];
+        float[] sum = new float[3];
+        sum[0] = 0;
+        sum[1] = 0;
+        sum[2] = 0;
+        left_current_new_item_index++;
+        if(left_current_new_item_index == 10){
+            left_current_new_item_index = 0;
+        }
+
+        for(int i = 0 ; i < 10 ; i++){
+            sum[0] = left_rollingAverage_x_accel[i]+sum[0];
+            sum[1] = left_rollingAverage_y_accel[i]+sum[1];
+            sum[2] = left_rollingAverage_z_accel[i]+sum[2];
 
         }
 

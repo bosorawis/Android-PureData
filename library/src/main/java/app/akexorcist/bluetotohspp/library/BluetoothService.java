@@ -358,7 +358,7 @@ public class BluetoothService {
                     if(data == 0x0A) {
                         //Log.d("Data", "Begin Package");
                     } else if(data == 0x0D) {
-                        //Log.d("Data","End Package");
+                        Log.d("Bluetooth","data receive");
                         //arr_byte.add(data);
                         buffer = new byte[arr_byte.size()];
                         for(int i = 0 ; i < arr_byte.size() ; i++) {
