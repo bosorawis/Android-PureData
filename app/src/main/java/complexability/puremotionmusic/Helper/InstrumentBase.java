@@ -1105,20 +1105,19 @@ public abstract class InstrumentBase extends Fragment {
         ret[2] = (float) (sum[2]/10.0);
         return ret;
     }
-    private void tapDetection(byte status){
+    protected void tapDetection(byte status){
         //Left hand left tap
         if(getBit(status, 0)){
 
         }
         //Left Hand
         if(getBit(status, 1)){
-
         }
         if(getBit(status, 2)){
 
         }
         if(getBit(status, 3)){
-
+            togglePlaying();
         }
         if(getBit(status, 4)){
 
@@ -1127,10 +1126,10 @@ public abstract class InstrumentBase extends Fragment {
 
         }
         if(getBit(status, 6)){
-
+            togglePlaying();
         }
+        //Left hand left tap
         if(getBit(status, 7)){
-
         }
 
     }
@@ -1140,5 +1139,6 @@ public abstract class InstrumentBase extends Fragment {
 
     protected abstract void startPlaying();
     protected abstract void stopPlaying();
+    protected abstract void togglePlaying();
 
 }

@@ -283,6 +283,11 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
     }
 
     @Override
+    protected void togglePlaying() {
+
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;

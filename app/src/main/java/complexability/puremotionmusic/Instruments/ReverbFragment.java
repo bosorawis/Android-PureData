@@ -299,6 +299,17 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     }
 
     @Override
+    protected void togglePlaying() {
+        if(pdService.isRunning()){
+            stopAudio();
+        }
+        else{
+            startAudio();
+
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -483,6 +494,9 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     }
 
     public void dataProc(byte[] data){
+        if(data[24] != 0){
+            tapDetection(data[24]);
+        }
 
         float l_x_accel = concat(data[LEFT_X_ACCEL_LOWBYTE], data[LEFT_X_ACCEL_HIGHBYTE]);
         float l_y_accel = concat(data[LEFT_Y_ACCEL_LOWBYTE], data[LEFT_Y_ACCEL_HIGHBYTE]);
