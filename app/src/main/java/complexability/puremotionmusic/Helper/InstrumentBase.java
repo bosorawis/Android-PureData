@@ -80,8 +80,10 @@ public class InstrumentBase extends Fragment {
     public static final int RIGHTHAND_LEFT_TAP = 2002;
     public static final int RIGHTHAND_RIGHT_TAP = 2003;
 
-    protected static final double GYRO_TRUST = 0.93;
-    protected static final double ACCEL_TRUST = 0.07;
+    protected static final double GYRO_TRUST = 0.90;
+    protected static final double ACCEL_TRUST = 0.10;
+
+    protected static final double CHANGING_TOL = 0.20;
 
 
     static float[] right_rollingAverage_x_accel;
@@ -728,13 +730,21 @@ public class InstrumentBase extends Fragment {
 
         double gyroXrate = x_gyro; // Convert to deg/s
         double gyroYrate = y_gyro; // Convert to deg/s
+        float[] accelData = getRollingAveragedAccel(x_accel,y_accel,z_accel);
 
         boolean[] isItGoingUp = isAccelIncreasing(x_accel, y_accel, z_accel);
-        boolean[] isItChanging = isAccelChanging(x_accel, y_accel, z_accel);
+        boolean[] isItChanging = isAccelChanging(accelData[0], accelData[1], accelData[2]);
 
-        float[] accelData = getRollingAveragedAccel(x_accel,y_accel,z_accel);
         //if (isItGoingUp[0] && !isItChanging[1] && !isItGoingUp[2]) { //Pitch up ==> x increase, y stay, z decrease
-        if(accelData[0] <= 0.01 && accelData[2] <= 0.01 && abs((abs(accelData[1])-1))>=0.9){
+
+
+
+       if(!isItChanging[0] && !isItChanging[1] && abs(1+accelData[2])<0.05){
+           ret[ROLL] = (float) 180.0;
+           ret[PITCH] = 0;
+       }
+        //Pitch upward
+      else if(accelData[0] < 0.01 && (!isItChanging[1]) && accelData[2] < 0.01 ){ //x negative, y not changing, z negative
             //roll = atan(y_accel / sqrt(x_accel * x_accel + z_accel * z_acel)) * RAD_TO_DEG;
             //pitch = atan2(-x_accel, z_accel) * RAD_TO_DEG;
             roll = atan(accelData[1] / sqrt(accelData[0] * accelData[0] + accelData[2] * accelData[2])) * RAD_TO_DEG;
@@ -759,8 +769,8 @@ public class InstrumentBase extends Fragment {
             rp_gyroXangle += gyroXrate * DT; // Calculate gyro angle without any filter
             rp_gyroYangle += gyroYrate * DT;
 
-            rp_compAngleX = (float) (0.93 * (rp_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
-            rp_compAngleY = (float) (0.93 * (rp_compAngleY + gyroYrate * DT) + ACCEL_TRUST * pitch);
+            rp_compAngleX = (float) (GYRO_TRUST * (rp_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
+            rp_compAngleY = (float) (GYRO_TRUST * (rp_compAngleY + gyroYrate * DT) + ACCEL_TRUST * pitch);
 
             if (rp_gyroXangle < -180 || rp_gyroXangle > 180) {
                 rp_gyroXangle = rp_kalAngleX;
@@ -771,8 +781,8 @@ public class InstrumentBase extends Fragment {
             ret[0] = rp_compAngleX;
             ret[1] = rp_compAngleY;
         }
-
-        else if (isItGoingUp[0] && !isItChanging[1] && !isItGoingUp[2]) { //Pitch up ==> x increase, y stay, z decrease
+        //pitch downward
+        else if(accelData[0] >= 0.01 && (!isItChanging[1]) && accelData[2] <0.01 ){ //x negative, y not changing, z negative
 
             roll = atan(accelData[1] / sqrt(accelData[0] * accelData[0] + accelData[2] * accelData[2])) * RAD_TO_DEG;
             pitch = atan2(-accelData[0], accelData[2]) * RAD_TO_DEG;
@@ -794,8 +804,8 @@ public class InstrumentBase extends Fragment {
             rp_gyroXangle += gyroXrate * DT; // Calculate gyro angle without any filter
             rp_gyroYangle += gyroYrate * DT;
 
-            rp_compAngleX = (float) (0.93 * (rp_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
-            rp_compAngleY = (float) (0.93 * (rp_compAngleY + gyroYrate * DT) + ACCEL_TRUST * pitch);
+            rp_compAngleX = (float) (GYRO_TRUST * (rp_compAngleX + gyroXrate * DT) + ACCEL_TRUST * roll); // Calculate the angle using a Complimentary filter
+            rp_compAngleY = (float) (GYRO_TRUST * (rp_compAngleY + gyroYrate * DT) + ACCEL_TRUST * pitch);
 
             if (rp_gyroXangle < -180 || rp_gyroXangle > 180)
                 rp_gyroXangle = rp_kalAngleX;
@@ -804,8 +814,7 @@ public class InstrumentBase extends Fragment {
             ret[0] = rp_compAngleX;
             ret[1] = rp_compAngleY;
         }
-
-
+        //Roll L-R
         else {
             roll = atan2(accelData[1], accelData[2]) * RAD_TO_DEG;
             pitch = atan(-accelData[0] / sqrt(accelData[1] * accelData[1] + accelData[2] * accelData[2])) * RAD_TO_DEG;
@@ -868,13 +877,13 @@ public class InstrumentBase extends Fragment {
         ret[0] = false;
         ret[1] = false;
         ret[2] = false;
-        if(previous_right_accel[0] - cur_x_accel >= 0.1){
+        if(abs(previous_right_accel[0] - cur_x_accel) >= CHANGING_TOL){
             ret[0] = true;
         }
-        if(previous_right_accel[1] - cur_y_accel >=0.1){
+        if(abs(previous_right_accel[1] - cur_y_accel) >=CHANGING_TOL){
             ret[1] = true;
         }
-        if(previous_right_accel[2] - cur_z_accel >=0.1){
+        if(abs(previous_right_accel[2] - cur_z_accel) >=CHANGING_TOL){
             ret[2] = true;
         }
         return ret;
