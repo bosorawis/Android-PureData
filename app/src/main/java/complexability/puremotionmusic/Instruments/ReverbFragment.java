@@ -226,6 +226,12 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
                 float val = (isChecked) ? 1.0f : 0.0f;
                 startAudio();
                 PdBase.sendFloat("init_vars", val);
+
+                PdBase.sendFloat("left_pitch_sel",selected[LEFT_PITCH]);
+                PdBase.sendFloat("right_pitch_sel", selected[RIGHT_PITCH]);
+                PdBase.sendFloat("left_roll_sel", selected[LEFT_ROLL]);
+                PdBase.sendFloat("right_roll_sel", selected[RIGHT_ROLL]);
+
                 PdBase.sendFloat("onOff", val);
             }
         });
