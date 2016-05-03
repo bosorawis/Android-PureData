@@ -276,7 +276,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
 
     @Override
     protected void changeToPrevInstrument() {
-        ((MainActivity) getActivity()).moveToFragmentByName("Sequencer");
+        ((MainActivity) getActivity()).moveToFragmentByName("ReverbFragment");
     }
 
     @Override
@@ -474,6 +474,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
     @Override
     public void onPause() {
         super.onPause();
+        if(pdService != null);
         if(pdService.isRunning()) {
             stopAudio();
         }

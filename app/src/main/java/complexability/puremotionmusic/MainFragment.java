@@ -29,6 +29,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private String mParam1;
     private String mParam2;
     ImageButton eightBit;
+    ImageButton sineWave;
 
     private OnFragmentInteractionListener mListener;
     private String selectedFragment;
@@ -69,7 +70,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
         eightBit = (ImageButton) view.findViewById(R.id.eight_bit_button);
+        sineWave = (ImageButton) view.findViewById(R.id.sineWaveButton);
         eightBit.setOnClickListener(this);
+        sineWave.setOnClickListener(this);
 
 
         return view;
@@ -105,6 +108,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.eight_bit_button:
                 selectedFragment = "ReverbFragment";
+                break;
+            case R.id.sineWaveButton:
+                selectedFragment = "SineWave";
                 break;
             default:
                 break;

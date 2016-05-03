@@ -292,7 +292,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
     @Override
     protected void changeToPrevInstrument() {
-        ((MainActivity) getActivity()).moveToFragmentByName("Sequencer");
+        ((MainActivity) getActivity()).moveToFragmentByName("SineWave");
 
     }
 

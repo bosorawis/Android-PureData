@@ -158,10 +158,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        else if (id == R.id.action_bluetooth){
+        if (id == R.id.action_bluetooth){
             Log.d("MainActivity", "Bluetooth Select");
             if (bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
                 bt.disconnect();
@@ -183,24 +180,25 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         Fragment fragment = null;
         FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
-
+        String moveTo = null;
         if (id == R.id.sequencer) {
             fragment = new SineWave();
-            currentFragment = "SineWaveFragment";
+            moveTo = "SineWaveFragment";
             // Handle the camera action
         } else if (id == R.id.nav_eight_bit_piano) {
             fragment = new ReverbFragment();
-            currentFragment = "ReverbFragment";
+            moveTo = "ReverbFragment";
         }
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.container,fragment).commit();
+        //FragmentTransaction transaction = fragmentManager.beginTransaction();
+        //transaction.addToBackStack(null);
+        //transaction.replace(R.id.container,fragment).commit();
         //fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
+        moveToFragmentByName(moveTo);
         return true;
     }
 
@@ -281,7 +279,7 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
         if (Objects.equals(string, "Sequencer")) {
-            fragment = new Sequencer();
+            fragment = new SineWave();
             // Handle the camera action
         }
         else if (Objects.equals(string, "ReverbFragment")) {
@@ -291,6 +289,7 @@ public class MainActivity extends AppCompatActivity
             fragment = new SineWave();
         }
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
         transaction.addToBackStack(null);
         transaction.replace(R.id.container,fragment).commit();
     }
