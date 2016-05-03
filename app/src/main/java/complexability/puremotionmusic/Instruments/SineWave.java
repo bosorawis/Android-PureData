@@ -438,7 +438,9 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
      */
     private void startAudio() {
         String name = getResources().getString(R.string.app_name);
-
+        if(pdService==null){
+            return;
+        }
         try {
             pdService.initAudio(-1, -1, -1, -1);   // negative values will be replaced with defaults/preferences
             pdService.startAudio(new Intent(getActivity(), ReverbFragment.class), R.drawable.icon, name, "Return to " + name + ".");

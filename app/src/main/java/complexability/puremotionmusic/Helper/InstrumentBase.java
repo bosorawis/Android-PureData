@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.Button;
 
 import complexability.puremotionmusic.Instrument;
 import complexability.puremotionmusic.Instruments.ReverbFragment;
@@ -1110,6 +1111,7 @@ public abstract class InstrumentBase extends Fragment {
     }
     protected void tapDetection(byte status){
         //Left hand left tap
+        Log.d(TAG, "status:" + Byte.toString(status));
         if(getBit(status, 0)){
 
         }
@@ -1121,31 +1123,42 @@ public abstract class InstrumentBase extends Fragment {
         if(getBit(status, 2)){
             Log.d("InstrumentBase", "Right hand right tap");
             changeToNextInstrument();
+            return;
         }
         //Right hand Down tap
         if(getBit(status, 3)){
             togglePlaying();
             Log.d("InstrumentBase", "Right hand Down tap");
+            return;
+
         }
         //Right hand left tap
         if(getBit(status, 4)){
             Log.d("InstrumentBase", "Right hand left tap");
             changeToPrevInstrument();
+            return;
+
         }
         //Left hand right tap
         if(getBit(status, 5)){
             Log.d("InstrumentBase", "Left hand right tap");
             changeToNextInstrument();
+            return;
+
         }
         //Left hand down tap
         if(getBit(status, 6)){
             Log.d("InstrumentBase", "Left hand down tap");
             togglePlaying();
+            return;
+
         }
         //Left hand left tap
         if(getBit(status, 7)){
             Log.d("InstrumentBase", "Left hand left tap");
             changeToPrevInstrument();
+            return;
+
         }
 
     }

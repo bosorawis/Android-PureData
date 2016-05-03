@@ -455,7 +455,9 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
      */
     private void startAudio() {
         String name = getResources().getString(R.string.app_name);
-
+        if(pdService==null){
+            return;
+        }
         try {
             pdService.initAudio(-1, -1, -1, -1);   // negative values will be replaced with defaults/preferences
             pdService.startAudio(new Intent(getActivity(), ReverbFragment.class), R.drawable.icon, name, "Return to " + name + ".");
@@ -495,9 +497,12 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     public void onDestroyView() {
         super.onDestroyView();
         Log.d(TAG, "onDestroyView");
-        if(pdService.isRunning()){
-            stopAudio();
+        if(pdService!=null){
+            if(pdService.isRunning()){
+                stopAudio();
+            }
         }
+
         cleanup();
         bt.resetOnDataReceivedListener();
     }
