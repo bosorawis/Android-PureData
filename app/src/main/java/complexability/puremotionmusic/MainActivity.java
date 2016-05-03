@@ -191,18 +191,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_eight_bit_piano) {
             fragment = new ReverbFragment();
             currentFragment = "ReverbFragment";
-        } else if (id == R.id.nav_slideshow) {
-            //Intent i = new Intent(getBaseContext(), TestReverb.class);
-            //startActivity(i);
-            return true;
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;

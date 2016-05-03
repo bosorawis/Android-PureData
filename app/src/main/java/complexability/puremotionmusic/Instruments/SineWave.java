@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -55,20 +57,14 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
 
 
 
-    private static Mapper[] mapper = new Mapper[TOTAL_EFFECT];
 
     private static float[] rightMotion = new float[2];
-
-    private boolean firstRun = true;
-    // TODO: Rename and change types of parameters
-
 
     private OnFragmentInteractionListener mListener;
     private PdService pdService = null;
     private int[] selected = new int[TOTAL_MOTION];
     private String[] selectedString = new String[TOTAL_MOTION];
     private String[] choices;
-    //private int[] userOptons = new int[TOTAL_MOTION];
     float[] motionData = new float[10];
 
     private TextView left_pitch_text;
@@ -167,6 +163,13 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         //final View view = inflater.inflate(R.layout.fragment_reverb, container, false);
         final View view = inflater.inflate(R.layout.fragment_rev_test, container, false);
 
+        TextView instrumentName  = (TextView) view.findViewById(R.id.instrumentName);
+        RelativeLayout mainLayout = (RelativeLayout) view.findViewById(R.id.mainLayout);
+        ImageView imageView = (ImageView) view.findViewById(R.id.instrumentImage);
+        instrumentName.setText("Sine Wave Generator");
+
+        imageView.setImageResource(R.drawable.sinewave);
+
         drawTheLeftBall = (DrawTheBall) view.findViewById(R.id.draw_the_left_ball) ;
         drawTheRightBall = (DrawRightBall) view.findViewById(R.id.draw_the_right_ball) ;
 
@@ -216,6 +219,10 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 float val = (isChecked) ? 1.0f : 0.0f;
                 startAudio();
+                PdBase.sendFloat("left_pitch_sel",selected[LEFT_PITCH]);
+                PdBase.sendFloat("right_pitch_sel", selected[RIGHT_PITCH]);
+                PdBase.sendFloat("left_roll_sel", selected[LEFT_ROLL]);
+                PdBase.sendFloat("right_roll_sel", selected[RIGHT_ROLL]);
                 PdBase.sendFloat("init_vars", val);
                 PdBase.sendFloat("onOff", val);
             }
@@ -372,8 +379,14 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
             default:
                 break;
         }
+        resendConfig();
     }
-
+    private void resendConfig() {
+        PdBase.sendFloat("left_pitch_sel", selected[LEFT_PITCH]);
+        PdBase.sendFloat("right_pitch_sel", selected[RIGHT_PITCH]);
+        PdBase.sendFloat("left_roll_sel", selected[LEFT_ROLL]);
+        PdBase.sendFloat("right_roll_sel", selected[RIGHT_ROLL]);
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -472,51 +485,42 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
     }
 
     public void dataProc(byte[] data){
-        //String Param[] = {"wet"};
-        //if(data.length <= 11){
-        //    return;
-        //}
-        float l_x_accel = concat(data[0], data[1]);
-        float l_y_accel = concat(data[2], data[3]);
-        float l_z_accel = concat(data[4], data[5]);
+        if(data[24] != 0){
+            tapDetection(data[24]);
+        }
+
+        float l_x_accel = concat(data[LEFT_X_ACCEL_LOWBYTE], data[LEFT_X_ACCEL_HIGHBYTE]);
+        float l_y_accel = concat(data[LEFT_Y_ACCEL_LOWBYTE], data[LEFT_Y_ACCEL_HIGHBYTE]);
+        float l_z_accel = concat(data[LEFT_Z_ACCEL_LOWBYTE], data[LEFT_Z_ACCEL_HIGHBYTE]);
 
         float r_x_accel = concat(data[RIGHT_X_ACCEL_LOWBYTE], data[RIGHT_X_ACCEL_HIGHBYTE]);
         float r_y_accel = concat(data[RIGHT_Y_ACCEL_LOWBYTE], data[RIGHT_Y_ACCEL_HIGHBYTE]);
         float r_z_accel = concat(data[RIGHT_Z_ACCEL_LOWBYTE], data[RIGHT_Z_ACCEL_HIGHBYTE]);
 
 
-        float l_x_gyro = concat(data[0], data[1]);
-        float l_y_gyro = concat(data[2], data[3]);
-        float l_z_gyro = concat(data[4], data[5]);
+        float l_x_gyro = concat(data[LEFT_X_GYRO_LOWBYTE], data[LEFT_X_GYRO_HIGHBYTE]);
+        float l_y_gyro = concat(data[LEFT_Y_GYRO_LOWBYTE], data[LEFT_Y_GYRO_HIGHBYTE]);
+        float l_z_gyro = concat(data[LEFT_Z_GYRO_LOWBYTE], data[LEFT_Z_GYRO_HIGHBYTE]);
 
         float r_x_gyro = concat(data[RIGHT_X_GYRO_LOWBYTE], data[RIGHT_X_GYRO_HIGHBYTE]);
         float r_y_gyro = concat(data[RIGHT_Y_GYRO_LOWBYTE], data[RIGHT_Y_GYRO_HIGHBYTE]);
         float r_z_gyro = concat(data[RIGHT_Z_GYRO_LOWBYTE], data[RIGHT_Z_GYRO_HIGHBYTE]);
 
 
-
-        motionData[LEFT_PITCH] = calculatePitch(l_x_accel, l_y_accel, l_z_accel);
-        motionData[LEFT_ROLL] = calculateRoll(l_x_accel, l_y_accel, l_z_accel);
-        //motionData[RIGHT_PITCH] = calculatePitch(r_x_accel, r_y_accel, r_z_accel);
-        //motionData[RIGHT_ROLL]  = calculateRoll(r_x_accel, r_y_accel, r_z_accel);
-
-        //motionData[LEFT_PITCH]  = testLeftPitch(l_x_accel, l_y_accel, l_z_accel);
-        //motionData[LEFT_ROLL]   = testLeftRoll(l_x_accel, l_y_accel, l_z_accel);
-        motionData[RIGHT_PITCH] = alsoRightPitch(r_x_accel, r_y_accel, r_z_accel);
-        motionData[RIGHT_ROLL]  = alsoRightRoll(r_x_accel, r_y_accel, r_z_accel);
-
-        rightMotion = calculateRightKalmanPitchRoll(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
-        //rightMotion[0] = calculateRightKalmanRoll(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
-        //rightMotion[1] = calculateRightKalmanPitch(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
-
-        PdBase.sendFloat("left_pitch",motionData[LEFT_PITCH]);
-        PdBase.sendFloat("left_roll", motionData[LEFT_ROLL]);
-        PdBase.sendFloat("right_pitch", rightMotion[PITCH]);
+        rightMotion = calculateRightHandKalmanPitchRollForCheckOff(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
+        leftMotion  = calculateLeftHandKalmanPitchRollForCheckOff(l_x_accel, l_y_accel, l_z_accel, l_x_gyro, l_y_gyro, l_z_gyro);
+        PdBase.sendFloat("left_pitch",2*leftMotion[PITCH]);
+        PdBase.sendFloat("left_roll", -leftMotion[ROLL]);
+        PdBase.sendFloat("right_pitch", 2*rightMotion[PITCH]);
         PdBase.sendFloat("right_roll", -rightMotion[ROLL]);
+        Log.d(TAG,"RIGHTHAND ACCEL x: " + Float.toString((r_x_accel)) + "\t y: "+Float.toString( r_y_accel) +"\t z: "+Float.toString( r_z_accel));
+        Log.d(TAG,"RIGHTHAND ORIEN Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));
 
-        Log.d(TAG,"data x: " + Integer.toString((int)rightMotion[0]) + "\t y: "+Integer.toString((int)rightMotion[1]));
-        drawTheLeftBall.updateValue( motionData[LEFT_ROLL], motionData[LEFT_PITCH]);
-        drawTheRightBall.updateValue(rightMotion[0], -rightMotion[1]);
+        Log.d(TAG,"LEFTHAND ACCEL x: " + Float.toString((l_x_accel)) + "\t y: "+Float.toString(l_y_accel) +"\t z: "+Float.toString(l_z_accel));
+        Log.d(TAG,"LEFTHAND ORIEN Roll: " + Integer.toString((int)leftMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)leftMotion[PITCH]));
+
+        drawTheLeftBall.updateValue( leftMotion[ROLL], -leftMotion[PITCH]);
+        drawTheRightBall.updateValue(rightMotion[ROLL], -rightMotion[PITCH]);
     }
     public void initText(){
         left_pitch_text.setText(AVAILABLE_EFFECT_NAME[0]);
@@ -532,6 +536,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         // TODO: Update argument type and name
         public void onSineWaveFragmentInteraction(String string);
     }
+
 
 
 }

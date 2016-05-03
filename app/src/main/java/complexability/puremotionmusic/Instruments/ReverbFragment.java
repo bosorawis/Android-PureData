@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -69,8 +71,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
     private static Mapper[] mapper = new Mapper[TOTAL_EFFECT];
 
-    private static float[] rightMotion = new float[2];
-    private static float[] leftMotion = new float[2];
+    ToggleButton onOffButton;
 
     // TODO: Rename and change types of parameters
 
@@ -180,6 +181,13 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         drawTheLeftBall = (DrawTheBall) view.findViewById(R.id.draw_the_left_ball) ;
         drawTheRightBall = (DrawRightBall) view.findViewById(R.id.draw_the_right_ball) ;
 
+
+        TextView instrumentName  = (TextView) view.findViewById(R.id.instrumentName);
+        RelativeLayout mainLayout = (RelativeLayout) view.findViewById(R.id.mainLayout);
+        ImageView imageView = (ImageView) view.findViewById(R.id.instrumentImage);
+        instrumentName.setText("8-bit Piano");
+        imageView.setImageResource(R.drawable.eightbit_instr);
+
         /*
         Value Initialization
          */
@@ -196,7 +204,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         GUI Initialization
          */
 
-        ToggleButton onOffButton = (ToggleButton) view.findViewById(R.id.toggleButton);
+         onOffButton = (ToggleButton) view.findViewById(R.id.toggleButton);
         /*
         Button
          */
@@ -300,13 +308,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
     @Override
     protected void togglePlaying() {
-        if(pdService.isRunning()){
-            stopAudio();
-        }
-        else{
-            startAudio();
-
-        }
+        onOffButton.toggle();
     }
 
     @Override
@@ -394,6 +396,13 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
             default:
                 break;
         }
+        resendConfig();
+    }
+    private void resendConfig() {
+        PdBase.sendFloat("left_pitch_sel", selected[LEFT_PITCH]);
+        PdBase.sendFloat("right_pitch_sel", selected[RIGHT_PITCH]);
+        PdBase.sendFloat("left_roll_sel", selected[LEFT_ROLL]);
+        PdBase.sendFloat("right_roll_sel", selected[RIGHT_ROLL]);
     }
 
     /**
@@ -517,19 +526,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
 
 
-        motionData[LEFT_PITCH] = calculatePitch(l_x_accel, l_y_accel, l_z_accel);
-        //motionData[LEFT_ROLL] = calculateRoll(l_x_accel, l_y_accel, l_z_accel);
-        //motionData[RIGHT_PITCH] = calculatePitch(r_x_accel, r_y_accel, r_z_accel);
-        //motionData[RIGHT_ROLL]  = calculateRoll(r_x_accel, r_y_accel, r_z_accel);
-
-        //motionData[LEFT_PITCH]  = testLeftPitch(l_x_accel, l_y_accel, l_z_accel);
-        //motionData[LEFT_ROLL]   = testLeftRoll(l_x_accel, l_y_accel, l_z_accel);
-        motionData[RIGHT_PITCH] = alsoRightPitch(r_x_accel, r_y_accel, r_z_accel);
-        motionData[RIGHT_ROLL]  = alsoRightRoll(r_x_accel, r_y_accel, r_z_accel);
-
-        //rightMotion = calculateRightKalmanPitchRoll(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
-        //rightMotion[ROLL] = calculateRightKalmanRoll(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
-        //rightMotion[PITCH] = calculateRightKalmanPitch(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
         rightMotion = calculateRightHandKalmanPitchRollForCheckOff(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
         leftMotion  = calculateLeftHandKalmanPitchRollForCheckOff(l_x_accel, l_y_accel, l_z_accel, l_x_gyro, l_y_gyro, l_z_gyro);
         PdBase.sendFloat("left_pitch",2*leftMotion[PITCH]);

@@ -9,7 +9,8 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_gravity="right|top">
+        android:layout_gravity="right|top"
+        android:id="@+id/mainLayout">
 
         <ToggleButton
             android:layout_width="wrap_content"
@@ -30,7 +31,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_toStartOf="@+id/toggleButton"
-            android:weightSum="2">
+            android:weightSum="2"
+            android:id="@+id/linearLayout">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -236,6 +238,24 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="8-Bit Piano"
+            android:id="@+id/instrumentName"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/instrumentImage"
+            android:layout_below="@+id/instrumentName"
+            android:layout_above="@+id/toggleButton"
+            android:layout_alignEnd="@+id/toggleButton"
+            android:layout_toEndOf="@+id/linearLayout" />
 
     </RelativeLayout>
 
