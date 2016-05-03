@@ -16,9 +16,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/eight_bit_button"
+            android:src="@drawable/bit_piano"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:src="@drawable/bit_piano" />
+            android:layout_toEndOf="@+id/sineWaveButton" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -26,6 +26,6 @@
             android:id="@+id/sineWaveButton"
             android:src="@drawable/sinewave_ic"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/eight_bit_button" />
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
 </FrameLayout>

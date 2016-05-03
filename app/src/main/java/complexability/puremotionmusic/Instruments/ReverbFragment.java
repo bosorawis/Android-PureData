@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 
 import org.puredata.android.io.AudioParameters;
 import org.puredata.android.io.PdAudio;
@@ -313,8 +314,18 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
     @Override
     public void onDetach() {
+        Log.d(TAG,"onDetach");
         super.onDetach();
         mListener = null;
+        if(pdService.isRunning()){
+            stopAudio();
+        }
+        cleanup();
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -327,23 +338,18 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     @Override
     public void onClick(View v) {
         int motion = 0;
-        TextView cur = null;
         switch(v.getId()){
             case R.id.left_pitch_button:
                 motion = LEFT_PITCH;
-                cur = left_pitch_text;
                 break;
             case R.id.left_roll_button:
                 motion = LEFT_ROLL;
-                cur = left_roll_text;
                 break;
             case R.id.right_pitch_button:
                 motion = RIGHT_PITCH;
-                cur = right_pitch_text;
                 break;
             case R.id.right_roll_button:
                 motion = RIGHT_ROLL;
-                cur = right_roll_text;
                 break;
         }
         final int finalMotion = motion;
@@ -351,6 +357,9 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         new MaterialDialog.Builder(myContext)
                 .title(R.string.title)
                 .items(R.array.reverb_effect_name)
+                .content("Please do not select any effect that has already been selected for other motions")
+                .theme(Theme.DARK)
+                .dividerColorRes(R.color.dividerDialog)
                 .itemsCallbackSingleChoice(selected[motion], new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -464,6 +473,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
             // already unbound
             pdService = null;
         }
+        PdBase.release();
     }
     @Override
     public void onDestroy() {
@@ -475,14 +485,17 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         bt.setOnDataReceivedListener(null);
         ((MainActivity) getActivity()).cleanUpBluetoothListener();
 
-
+        if(pdService.isRunning()){
+            stopAudio();
+        }
+        cleanup();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         Log.d(TAG, "onDestroyView");
-        if(pdService.isRunning()) {
+        if(pdService.isRunning()){
             stopAudio();
         }
         cleanup();

@@ -194,10 +194,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
-        //FragmentTransaction transaction = fragmentManager.beginTransaction();
-        //transaction.addToBackStack(null);
-        //transaction.replace(R.id.container,fragment).commit();
-        //fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
         moveToFragmentByName(moveTo);
         return true;
     }

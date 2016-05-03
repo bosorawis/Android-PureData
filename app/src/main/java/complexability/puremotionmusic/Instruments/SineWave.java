@@ -244,7 +244,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         AudioParameters.init(getActivity());
         PdPreferences.initPreferences(getActivity().getApplicationContext());
         PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).registerOnSharedPreferenceChangeListener((SharedPreferences.OnSharedPreferenceChangeListener) this);
-        getActivity().bindService(new Intent(getActivity(), PdService.class), pdConnection, Context.BIND_AUTO_CREATE);
+        //getActivity().bindService(new Intent(getActivity(), PdService.class), pdConnection, Context.BIND_AUTO_CREATE);
 
         return view;
     }
@@ -259,6 +259,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        getActivity().bindService(new Intent(getActivity(), PdService.class), pdConnection, Context.BIND_AUTO_CREATE);
 
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
@@ -298,6 +299,15 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        if(pdService.isRunning()){
+            stopAudio();
+        }
+        cleanup();
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -446,6 +456,8 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
             // already unbound
             pdService = null;
         }
+        PdBase.release();
+
     }
     @Override
     public void onDestroy() {
@@ -456,8 +468,11 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         }
         bt.setOnDataReceivedListener(null);
         ((MainActivity) getActivity()).cleanUpBluetoothListener();
-
-
+        cleanup();
+        if(pdService.isRunning()){
+            stopAudio();
+        }
+        cleanup();
     }
 
     @Override
@@ -469,15 +484,16 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         }
         cleanup();
         bt.resetOnDataReceivedListener();
+        if(pdService.isRunning()){
+            stopAudio();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if(pdService != null) {
-            if (pdService.isRunning()) {
-                stopAudio();
-            }
+        if (pdService.isRunning()) {
+            stopAudio();
         }
     }
 
