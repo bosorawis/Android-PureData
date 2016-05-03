@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity
         String moveTo = null;
         if (id == R.id.sequencer) {
             fragment = new SineWave();
-            moveTo = "SineWaveFragment";
+            moveTo = "SineWave";
             // Handle the camera action
         } else if (id == R.id.nav_eight_bit_piano) {
             fragment = new ReverbFragment();
