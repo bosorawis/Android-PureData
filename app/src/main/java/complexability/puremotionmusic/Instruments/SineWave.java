@@ -74,7 +74,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
     private TextView right_pitch_text;
     private TextView right_roll_text;
     //*******************************************
-
+    ToggleButton onOffButton;
     DrawTheBall drawTheLeftBall;
     DrawRightBall drawTheRightBall;
 
@@ -189,7 +189,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         GUI Initialization
          */
 
-        ToggleButton onOffButton = (ToggleButton) view.findViewById(R.id.toggleButton);
+        onOffButton = (ToggleButton) view.findViewById(R.id.toggleButton);
         /*
         Button
          */
@@ -291,7 +291,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
 
     @Override
     protected void togglePlaying() {
-
+        onOffButton.toggle();
     }
 
     @Override
@@ -474,9 +474,10 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
     @Override
     public void onPause() {
         super.onPause();
-        if(pdService != null);
-        if(pdService.isRunning()) {
-            stopAudio();
+        if(pdService != null) {
+            if (pdService.isRunning()) {
+                stopAudio();
+            }
         }
     }
 

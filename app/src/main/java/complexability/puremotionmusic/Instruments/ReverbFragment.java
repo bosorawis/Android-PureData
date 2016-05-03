@@ -492,8 +492,10 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     @Override
     public void onPause() {
         super.onPause();
-        if(pdService.isRunning()) {
-            stopAudio();
+        if(pdService != null) {
+            if (pdService.isRunning()) {
+                stopAudio();
+            }
         }
     }
 
