@@ -34,7 +34,7 @@ public abstract class InstrumentBase extends Fragment {
     private static final float GRAVITY = (float) 0.1;
     private static final float ACCEL_THRESHOLD = (float) 0.1;
     private static final float RAD_TO_DEG = (float) ((float) 180 / PI);
-    private static final float DT = (float) 0.01;
+    private static final float DT = (float) 0.02;
 
     protected static final int ROLL = 0;
     protected static final int PITCH = 1;

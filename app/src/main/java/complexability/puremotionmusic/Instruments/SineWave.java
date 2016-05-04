@@ -369,25 +369,29 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
     private void sendChange(int finalMotion, int which) {
         Log.d(TAG,"final:" + Integer.toString(finalMotion) +"\t\t   which:" + Integer.toString(which));
         switch (finalMotion){
-
             case LEFT_PITCH:
                 left_pitch_text.setText(AVAILABLE_EFFECT_NAME[which]);
                 PdBase.sendFloat("left_pitch_sel",which);
+                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Left hand pitch");
                 break;
             case RIGHT_PITCH:
                 right_pitch_text.setText(AVAILABLE_EFFECT_NAME[which]);
                 PdBase.sendFloat("right_pitch_sel", which);
+                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Right hand pitch");
                 break;
             case LEFT_ROLL:
                 left_roll_text.setText(AVAILABLE_EFFECT_NAME[which]);
                 PdBase.sendFloat("left_roll_sel", which);
+                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Left hand roll");
                 break;
             case RIGHT_ROLL:
                 right_roll_text.setText(AVAILABLE_EFFECT_NAME[which]);
                 PdBase.sendFloat("right_roll_sel", which);
+                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Right hand roll");
                 break;
             default:
                 break;
+
         }
         resendConfig();
     }
@@ -422,8 +426,8 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
             PdBase.setReceiver(receiver);
             PdBase.subscribe("metro_bng");
             //PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.android_inst_sinewave);
-            patchFile = IoUtils.extractResource(in, "android_inst_sinewave.pd", getActivity().getCacheDir());
+            InputStream in = res.openRawResource(R.raw.continuous_test);
+            patchFile = IoUtils.extractResource(in, "continuous_test.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
         } catch (IOException e) {
             Log.e(TAG, e.toString());

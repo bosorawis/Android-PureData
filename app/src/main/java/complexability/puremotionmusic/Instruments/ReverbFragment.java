@@ -385,22 +385,25 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     private void sendChange(int finalMotion, int which) {
         Log.d(TAG,"final:" + Integer.toString(finalMotion) +"\t\t   which:" + Integer.toString(which));
         switch (finalMotion){
-
             case LEFT_PITCH:
                 left_pitch_text.setText(AVAILABLE_EFFECT_NAME[which]);
                 PdBase.sendFloat("left_pitch_sel",which);
+                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Left hand pitch");
                 break;
             case RIGHT_PITCH:
                 right_pitch_text.setText(AVAILABLE_EFFECT_NAME[which]);
                 PdBase.sendFloat("right_pitch_sel", which);
+                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Right hand pitch");
                 break;
             case LEFT_ROLL:
                 left_roll_text.setText(AVAILABLE_EFFECT_NAME[which]);
                 PdBase.sendFloat("left_roll_sel", which);
+                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Left hand roll");
                 break;
             case RIGHT_ROLL:
                 right_roll_text.setText(AVAILABLE_EFFECT_NAME[which]);
                 PdBase.sendFloat("right_roll_sel", which);
+                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Right hand roll");
                 break;
             default:
                 break;
@@ -413,17 +416,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         PdBase.sendFloat("left_roll_sel", selected[LEFT_ROLL]);
         PdBase.sendFloat("right_roll_sel", selected[RIGHT_ROLL]);
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
     /**
      * Initialize pd with a patch file
