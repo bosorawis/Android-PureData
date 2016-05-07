@@ -528,13 +528,13 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         float r_z_accel = concat(data[RIGHT_Z_ACCEL_LOWBYTE], data[RIGHT_Z_ACCEL_HIGHBYTE]);
 
 
-        float l_x_gyro = concat(data[LEFT_X_GYRO_LOWBYTE], data[LEFT_X_GYRO_HIGHBYTE]);
-        float l_y_gyro = concat(data[LEFT_Y_GYRO_LOWBYTE], data[LEFT_Y_GYRO_HIGHBYTE]);
-        float l_z_gyro = concat(data[LEFT_Z_GYRO_LOWBYTE], data[LEFT_Z_GYRO_HIGHBYTE]);
+        float l_x_gyro = concatGyro(data[LEFT_X_GYRO_LOWBYTE], data[LEFT_X_GYRO_HIGHBYTE]);
+        float l_y_gyro = concatGyro(data[LEFT_Y_GYRO_LOWBYTE], data[LEFT_Y_GYRO_HIGHBYTE]);
+        float l_z_gyro = concatGyro(data[LEFT_Z_GYRO_LOWBYTE], data[LEFT_Z_GYRO_HIGHBYTE]);
 
-        float r_x_gyro = concat(data[RIGHT_X_GYRO_LOWBYTE], data[RIGHT_X_GYRO_HIGHBYTE]);
-        float r_y_gyro = concat(data[RIGHT_Y_GYRO_LOWBYTE], data[RIGHT_Y_GYRO_HIGHBYTE]);
-        float r_z_gyro = concat(data[RIGHT_Z_GYRO_LOWBYTE], data[RIGHT_Z_GYRO_HIGHBYTE]);
+        float r_x_gyro = concatGyro(data[RIGHT_X_GYRO_LOWBYTE], data[RIGHT_X_GYRO_HIGHBYTE]);
+        float r_y_gyro = concatGyro(data[RIGHT_Y_GYRO_LOWBYTE], data[RIGHT_Y_GYRO_HIGHBYTE]);
+        float r_z_gyro = concatGyro(data[RIGHT_Z_GYRO_LOWBYTE], data[RIGHT_Z_GYRO_HIGHBYTE]);
 
 
 

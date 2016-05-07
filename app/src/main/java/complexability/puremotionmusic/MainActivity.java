@@ -3,6 +3,7 @@ package complexability.puremotionmusic;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +25,7 @@ import java.util.Objects;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
+import complexability.puremotionmusic.Instruments.LightSaberFragment;
 import complexability.puremotionmusic.Instruments.ReverbFragment;
 import complexability.puremotionmusic.Instruments.Sequencer;
 import complexability.puremotionmusic.Instruments.SineWave;
@@ -31,7 +33,8 @@ import complexability.puremotionmusic.Instruments.TestReverb;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Sequencer.OnFragmentInteractionListener,
-        ReverbFragment.OnFragmentInteractionListener, MainFragment.OnFragmentInteractionListener, SineWave.OnFragmentInteractionListener{
+        ReverbFragment.OnFragmentInteractionListener, MainFragment.OnFragmentInteractionListener,
+        SineWave.OnFragmentInteractionListener, LightSaberFragment.OnFragmentInteractionListener{
 
 
     private static final String TAG = "MainActivity";
@@ -276,13 +279,15 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
         if (Objects.equals(string, "Sequencer")) {
             fragment = new SineWave();
-            // Handle the camera action
         }
         else if (Objects.equals(string, "ReverbFragment")) {
             fragment = new ReverbFragment();
         }
         else if (Objects.equals(string, "SineWave")) {
             fragment = new SineWave();
+        }
+        else if (Objects.equals(string, "LightSaber")){
+            fragment = new LightSaberFragment();
         }
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -295,4 +300,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }
