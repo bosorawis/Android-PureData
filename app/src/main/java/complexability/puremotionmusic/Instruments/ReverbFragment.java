@@ -208,6 +208,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         /*
         Button
          */
+        onOffButton = (ToggleButton) view.findViewById(R.id.toggleButton);
         Button left_pitch_btn = (Button) view.findViewById(R.id.left_pitch_button);
         Button left_roll_btn = (Button) view.findViewById(R.id.left_roll_button);
         Button right_pitch_btn = (Button) view.findViewById(R.id.right_pitch_button);
@@ -218,7 +219,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         left_roll_btn.setOnClickListener(this);
         right_pitch_btn.setOnClickListener(this);
         right_roll_btn.setOnClickListener(this);
-
         /*
         Text boxes
          */

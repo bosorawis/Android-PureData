@@ -162,6 +162,49 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
                     + " must implement OnFragmentInteractionListener");
         }
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy");
+        if(pdService.isRunning()) {
+            stopAudio();
+        }
+        bt.setOnDataReceivedListener(null);
+        ((MainActivity) getActivity()).cleanUpBluetoothListener();
+
+        if(pdService.isRunning()){
+            stopAudio();
+        }
+        cleanup();
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView");
+        if(pdService!=null){
+            if(pdService.isRunning()){
+                stopAudio();
+            }
+        }
+
+        cleanup();
+        bt.resetOnDataReceivedListener();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(pdService != null) {
+            if (pdService.isRunning()) {
+                stopAudio();
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public void onDetach() {

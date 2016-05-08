@@ -133,6 +133,44 @@ public class PeterGriffinFragment extends InstrumentBase implements SharedPrefer
                     + " must implement OnFragmentInteractionListener");
         }
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy");
+        if(pdService.isRunning()) {
+            stopAudio();
+        }
+        bt.setOnDataReceivedListener(null);
+        ((MainActivity) getActivity()).cleanUpBluetoothListener();
+
+        if(pdService.isRunning()){
+            stopAudio();
+        }
+        cleanup();
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView");
+        if(pdService!=null){
+            if(pdService.isRunning()){
+                stopAudio();
+            }
+        }
+
+        cleanup();
+        bt.resetOnDataReceivedListener();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(pdService != null) {
+            if (pdService.isRunning()) {
+                stopAudio();
+            }
+        }
+    }
 
     @Override
     protected void changeToNextInstrument() {
@@ -190,7 +228,7 @@ public class PeterGriffinFragment extends InstrumentBase implements SharedPrefer
         Log.d(TAG,"RIGHTHAND ORIEN Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));
 
 
-        PdBase.sendFloat("audio_speed", -rightMotion[ROLL]);
+        PdBase.sendFloat("audio_speed", (float) -((-rightMotion[ROLL]+180.0)/360.0));
         drawTheRightBall.updateValue(rightMotion[ROLL], -rightMotion[PITCH]);
 
     }
