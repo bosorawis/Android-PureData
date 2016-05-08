@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="complexability.puremotionmusic.Instruments.LightSaberFragment">
+    tools:context="complexability.puremotionmusic.Instruments.PeterGriffinFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -10,31 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/light_saber_bg">
+        android:background="@drawable/peter_griffin_bg">
 
         <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Play"
+            android:text="New ToggleButton"
             android:id="@+id/onOffButton"
-            android:checked="false"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:checked="false" />
 
-        <Button
+        <complexability.puremotionmusic.Helper.DrawRightBall
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Click Me!"
-            android:id="@+id/button"
-            android:layout_above="@+id/onOffButton"
-            android:layout_centerHorizontal="true" />
+            android:id="@+id/draw_the_right_ball"
+            android:layout_gravity="right|bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="slash"
-            android:id="@+id/button2"
-            android:layout_above="@+id/button"
-            android:layout_centerHorizontal="true" />
     </RelativeLayout>
+
 </FrameLayout>

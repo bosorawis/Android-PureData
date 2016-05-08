@@ -31,7 +31,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     ImageButton eightBit;
     ImageButton sineWave;
     ImageButton lightSaber;
-
+    ImageButton peterGriffin;
     private OnFragmentInteractionListener mListener;
     private String selectedFragment;
     public MainFragment() {
@@ -73,10 +73,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         eightBit = (ImageButton) view.findViewById(R.id.eight_bit_button);
         sineWave = (ImageButton) view.findViewById(R.id.sineWaveButton);
         lightSaber = (ImageButton) view.findViewById(R.id.lightSaberButton);
+        peterGriffin = (ImageButton) view.findViewById(R.id.peterButton);
+
         eightBit.setOnClickListener(this);
         sineWave.setOnClickListener(this);
         lightSaber.setOnClickListener(this);
-
+        peterGriffin.setOnClickListener(this);
         return view;
     }
 
@@ -117,6 +119,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             case R.id.lightSaberButton:
                 selectedFragment = "LightSaber";
                 break;
+            case R.id.peterButton:
+                selectedFragment = "PeterGriffin";
+                break;
+
             default:
                 break;
         }

@@ -48,7 +48,7 @@ public class PureDataBaseFragment extends Fragment {
 
     protected void initPD() throws IOException {
         int sampleRate = AudioParameters.suggestSampleRate();
-        Log.d("PureDataFragment", "sample rate: " + Integer.toString(sampleRate));
+        //Log.d("PureDataFragment", "sample rate: " + Integer.toString(sampleRate));
         PdAudio.initAudio(sampleRate, 0, 2, 8, true);
 
         //dispatcher = new PdUiDispatcher();

@@ -25,6 +25,7 @@ import java.util.Arrays;
 import complexability.puremotionmusic.R;
 
 import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 /**
  * Created by turbo on 5/7/2016.
@@ -32,6 +33,32 @@ import static java.lang.Math.pow;
 public abstract class AccelBaseInstrument extends Fragment {
     //protected PdService pdService = null;
     private static final String TAG = "AccelBaseInstrument";
+    public static final int LEFT_X_ACCEL_LOWBYTE = 0;
+    public static final int LEFT_X_ACCEL_HIGHBYTE = 1;
+    public static final int LEFT_Y_ACCEL_LOWBYTE = 2;
+    public static final int LEFT_Y_ACCEL_HIGHBYTE = 3;
+    public static final int LEFT_Z_ACCEL_LOWBYTE = 4;
+    public static final int LEFT_Z_ACCEL_HIGHBYTE = 5;
+    public static final int LEFT_X_GYRO_LOWBYTE = 6;
+    public static final int LEFT_X_GYRO_HIGHBYTE = 7;
+    public static final int LEFT_Y_GYRO_LOWBYTE = 8;
+    public static final int LEFT_Y_GYRO_HIGHBYTE = 9;
+    public static final int LEFT_Z_GYRO_LOWBYTE = 10;
+    public static final int LEFT_Z_GYRO_HIGHBYTE = 11;
+
+    public static final int RIGHT_X_ACCEL_LOWBYTE = 12;
+    public static final int RIGHT_X_ACCEL_HIGHBYTE = 13;
+    public static final int RIGHT_Y_ACCEL_LOWBYTE = 14;
+    public static final int RIGHT_Y_ACCEL_HIGHBYTE = 15;
+    public static final int RIGHT_Z_ACCEL_LOWBYTE = 16;
+    public static final int RIGHT_Z_ACCEL_HIGHBYTE = 17;
+    public static final int RIGHT_X_GYRO_LOWBYTE = 18;
+    public static final int RIGHT_X_GYRO_HIGHBYTE = 19;
+    public static final int RIGHT_Y_GYRO_LOWBYTE = 20;
+    public static final int RIGHT_Y_GYRO_HIGHBYTE = 21;
+    public static final int RIGHT_Z_GYRO_LOWBYTE = 22;
+    public static final int RIGHT_Z_GYRO_HIGHBYTE = 23;
+
 
     protected float concat(byte lowByte, byte highByte) {
         //Log.d(TAG, "concat: " + Integer.toString((highByte << 8) | lowByte));(highByte << 8) | lowByte;
@@ -56,6 +83,9 @@ public abstract class AccelBaseInstrument extends Fragment {
 
     }
 
+    protected float findMagnitude(float x, float y, float z){
+        return (float) sqrt(x*x+y*y+z*z);
+    }
 
     protected abstract void changeToNextInstrument();
     protected abstract void changeToPrevInstrument();
@@ -63,5 +93,6 @@ public abstract class AccelBaseInstrument extends Fragment {
     protected abstract void startPlaying();
     protected abstract void stopPlaying();
     protected abstract void togglePlaying();
-    public abstract void dataProc();
+
+    public abstract void dataProc(byte[] data);
 }

@@ -4,18 +4,23 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
 import org.puredata.android.io.AudioParameters;
 import org.puredata.android.io.PdAudio;
+import org.puredata.android.service.PdPreferences;
 import org.puredata.android.service.PdService;
 import org.puredata.core.PdBase;
 import org.puredata.core.PdReceiver;
@@ -26,7 +31,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import complexability.puremotionmusic.Helper.DrawRightBall;
 import complexability.puremotionmusic.Helper.InstrumentBase;
+import complexability.puremotionmusic.MainActivity;
 import complexability.puremotionmusic.R;
 
 /**
@@ -37,12 +45,14 @@ import complexability.puremotionmusic.R;
  * Use the {@link PeterGriffinFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PeterGriffinFragment extends InstrumentBase {
+public class PeterGriffinFragment extends InstrumentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private OnFragmentInteractionListener mListener;
+    DrawRightBall drawTheRightBall;
 
-    private static final String TAG = "ReverbFragment";
+    private static final String TAG = "PeterGriffinFragment";
     private PdService pdService = null;
-
+    ToggleButton onOffButton;
+    BluetoothSPP bt;
     public PeterGriffinFragment() {
         // Required empty public constructor
     }
@@ -56,42 +66,6 @@ public class PeterGriffinFragment extends InstrumentBase {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-    private PdReceiver receiver = new PdReceiver() {
-
-        private void pdPost(String msg) {
-            Log.d(TAG, msg);
-        }
-
-        @Override
-        public void print(String s) {
-            Log.d(TAG, s);
-        }
-
-        @Override
-        public void receiveBang(String source) {
-        }
-
-        @Override
-        public void receiveFloat(String source, float x) {
-            pdPost("float: " + x);
-        }
-
-        @Override
-        public void receiveList(String source, Object... args) {
-            pdPost("list: " + Arrays.toString(args));
-        }
-
-        @Override
-        public void receiveMessage(String source, String symbol, Object... args) {
-            pdPost("message: " + Arrays.toString(args));
-        }
-
-        @Override
-        public void receiveSymbol(String source, String symbol) {
-            pdPost("symbol: " + symbol);
-        }
-    };
-
     private final ServiceConnection pdConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -113,6 +87,32 @@ public class PeterGriffinFragment extends InstrumentBase {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_peter_griffin, container, false);
+        drawTheRightBall = (DrawRightBall) view.findViewById(R.id.draw_the_right_ball) ;
+
+        onOffButton = (ToggleButton) view.findViewById(R.id.onOffButton);
+        onOffButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                float val = (isChecked) ? 1.0f : 0.0f;
+                startAudio();
+                PdBase.sendFloat("onOff", val);
+            }
+        });
+
+        bt = ((MainActivity) getActivity()).getBt();
+        bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
+            public void onDataReceived(byte[] data, String message) {
+                if (data.length >=24) {
+                    dataProc(data);
+                }
+            }
+        });
+
+        AudioParameters.init(getActivity());
+        PdPreferences.initPreferences(getActivity().getApplicationContext());
+        PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
+        getActivity().bindService(new Intent(getActivity(), PdService.class), pdConnection, Context.BIND_AUTO_CREATE);
+
         return view;
     }
 
@@ -164,7 +164,36 @@ public class PeterGriffinFragment extends InstrumentBase {
         super.onDetach();
         mListener = null;
     }
+    protected void dataProc(byte[] data){
+        if(data[24] != 0){
+            tapDetection(data[24]);
+        }
+        float l_x_accel = concat(data[LEFT_X_ACCEL_LOWBYTE], data[LEFT_X_ACCEL_HIGHBYTE]);
+        float l_y_accel = concat(data[LEFT_Y_ACCEL_LOWBYTE], data[LEFT_Y_ACCEL_HIGHBYTE]);
+        float l_z_accel = concat(data[LEFT_Z_ACCEL_LOWBYTE], data[LEFT_Z_ACCEL_HIGHBYTE]);
 
+        float r_x_accel = concat(data[RIGHT_X_ACCEL_LOWBYTE], data[RIGHT_X_ACCEL_HIGHBYTE]);
+        float r_y_accel = concat(data[RIGHT_Y_ACCEL_LOWBYTE], data[RIGHT_Y_ACCEL_HIGHBYTE]);
+        float r_z_accel = concat(data[RIGHT_Z_ACCEL_LOWBYTE], data[RIGHT_Z_ACCEL_HIGHBYTE]);
+
+
+        float l_x_gyro = concatGyro(data[LEFT_X_GYRO_LOWBYTE], data[LEFT_X_GYRO_HIGHBYTE]);
+        float l_y_gyro = concatGyro(data[LEFT_Y_GYRO_LOWBYTE], data[LEFT_Y_GYRO_HIGHBYTE]);
+        float l_z_gyro = concatGyro(data[LEFT_Z_GYRO_LOWBYTE], data[LEFT_Z_GYRO_HIGHBYTE]);
+
+        float r_x_gyro = concatGyro(data[RIGHT_X_GYRO_LOWBYTE], data[RIGHT_X_GYRO_HIGHBYTE]);
+        float r_y_gyro = concatGyro(data[RIGHT_Y_GYRO_LOWBYTE], data[RIGHT_Y_GYRO_HIGHBYTE]);
+        float r_z_gyro = concatGyro(data[RIGHT_Z_GYRO_LOWBYTE], data[RIGHT_Z_GYRO_HIGHBYTE]);
+        rightMotion = calculateRightHandKalmanPitchRollForCheckOff(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
+        leftMotion  = calculateLeftHandKalmanPitchRollForCheckOff(l_x_accel, l_y_accel, l_z_accel, l_x_gyro, l_y_gyro, l_z_gyro);
+
+        Log.d(TAG,"RIGHTHAND ORIEN Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));
+
+
+        PdBase.sendFloat("audio_speed", -rightMotion[ROLL]);
+        drawTheRightBall.updateValue(rightMotion[ROLL], -rightMotion[PITCH]);
+
+    }
     /**
      * Initialize pd with a patch file
      *
@@ -176,12 +205,10 @@ public class PeterGriffinFragment extends InstrumentBase {
         Log.d(TAG, "sample rate: " + Integer.toString(sampleRate));
         PdAudio.initAudio(sampleRate, 0, 2, 8, true);
         try {
-            //PdBase.setReceiver(receiver);
-            //PdBase.subscribe("metro_bng");
-            ////PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.android_interface_basic_with_control);
-            patchFile = IoUtils.extractResource(in, "android_interface_basic_with_control.pd", getActivity().getCacheDir());
-            PdBase.openPatch(patchFile);
+            File dir = getActivity().getApplicationContext().getFilesDir();
+            IoUtils.extractZipResource(getResources().openRawResource(R.raw.peter_griffin),dir,true);
+            File pdPatch = new File(dir, "peter_test.pd");
+            PdBase.openPatch(pdPatch);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
             //finish();
@@ -216,6 +243,11 @@ public class PeterGriffinFragment extends InstrumentBase {
             pdService = null;
         }
         PdBase.release();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
     }
 
 

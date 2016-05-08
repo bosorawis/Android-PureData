@@ -35,5 +35,13 @@
             android:src="@drawable/light_saber_image"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/eight_bit_button" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/peterButton"
+            android:src="@drawable/peter_griffin_sixtyfour"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/lightSaberButton" />
     </RelativeLayout>
 </FrameLayout>

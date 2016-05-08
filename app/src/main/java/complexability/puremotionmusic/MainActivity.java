@@ -26,6 +26,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 import complexability.puremotionmusic.Instruments.LightSaberFragment;
+import complexability.puremotionmusic.Instruments.PeterGriffinFragment;
 import complexability.puremotionmusic.Instruments.ReverbFragment;
 import complexability.puremotionmusic.Instruments.Sequencer;
 import complexability.puremotionmusic.Instruments.SineWave;
@@ -34,7 +35,8 @@ import complexability.puremotionmusic.Instruments.TestReverb;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Sequencer.OnFragmentInteractionListener,
         ReverbFragment.OnFragmentInteractionListener, MainFragment.OnFragmentInteractionListener,
-        SineWave.OnFragmentInteractionListener, LightSaberFragment.OnFragmentInteractionListener{
+        SineWave.OnFragmentInteractionListener, LightSaberFragment.OnFragmentInteractionListener,
+        PeterGriffinFragment.OnFragmentInteractionListener{
 
 
     private static final String TAG = "MainActivity";
@@ -181,18 +183,16 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        Fragment fragment = null;
-        FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
         String moveTo = null;
         if (id == R.id.sequencer) {
-            fragment = new SineWave();
             moveTo = "SineWave";
             // Handle the camera action
         } else if (id == R.id.nav_eight_bit_piano) {
-            fragment = new ReverbFragment();
             moveTo = "ReverbFragment";
         }
-
+        else if (id == R.id.light_saber){
+            moveTo = "LightSaber";
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;
@@ -288,6 +288,9 @@ public class MainActivity extends AppCompatActivity
         }
         else if (Objects.equals(string, "LightSaber")){
             fragment = new LightSaberFragment();
+        }
+        else if (Objects.equals(string, "PeterGriffin")){
+            fragment = new PeterGriffinFragment();
         }
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter, R.anim.exit);

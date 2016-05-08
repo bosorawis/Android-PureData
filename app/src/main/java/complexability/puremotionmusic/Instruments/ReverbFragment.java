@@ -205,7 +205,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         GUI Initialization
          */
 
-         onOffButton = (ToggleButton) view.findViewById(R.id.toggleButton);
         /*
         Button
          */
@@ -425,7 +424,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         Resources res = getResources();
         File patchFile = null;
         int sampleRate = AudioParameters.suggestSampleRate();
-        Log.d("PureDataFragment", "sample rate: " + Integer.toString(sampleRate));
+        Log.d(TAG, "sample rate: " + Integer.toString(sampleRate));
         PdAudio.initAudio(sampleRate, 0, 2, 8, true);
         try {
             //PdBase.setReceiver(receiver);

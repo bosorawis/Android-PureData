@@ -420,7 +420,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         Resources res = getResources();
         File patchFile = null;
         int sampleRate = AudioParameters.suggestSampleRate();
-        Log.d("PureDataFragment", "sample rate: " + Integer.toString(sampleRate));
+        Log.d(TAG, "sample rate: " + Integer.toString(sampleRate));
         PdAudio.initAudio(sampleRate, 0, 2, 8, true);
         try {
             PdBase.setReceiver(receiver);

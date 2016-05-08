@@ -73,7 +73,7 @@ public class DrawRightBall extends View {
 
         Paint white = new Paint();
         Paint black = new Paint();
-        white.setColor(Color.WHITE);
+        white.setColor(Color.TRANSPARENT);
         white.setStyle(Paint.Style.FILL);
 
         black.setStyle(Paint.Style.STROKE);
