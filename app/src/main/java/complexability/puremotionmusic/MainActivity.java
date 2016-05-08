@@ -193,6 +193,9 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.light_saber){
             moveTo = "LightSaber";
         }
+        else if (id == R.id.peter_griffin){
+            moveTo = "PeterGriffin";
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;

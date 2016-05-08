@@ -98,8 +98,10 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 float val = (isChecked) ? 1.0f : 0.0f;
                 startAudio();
-                PdBase.sendFloat("init_vars", val);
+                //PdBase.sendFloat("init_vars", val);
+                //PdBase.sendFloat("bpm", (float) 70.0);
                 PdBase.sendFloat("onOff", val);
+                PdBase.sendFloat("init_vars", val);
             }
         });
         button.setOnClickListener(new View.OnClickListener() {
@@ -136,13 +138,14 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
         Resources res = getResources();
         Log.d(TAG, "initpd");
         File patchFile = null;
-        int sampleRate = AudioParameters.suggestSampleRate();
+        //int sampleRate = AudioParameters.suggestSampleRate();
+        int sampleRate = 22050;
         Log.d(this.TAG, "sample rate: " + Integer.toString(sampleRate));
         PdAudio.initAudio(sampleRate, 0, 2, 8, true);
         try {
             File dir = getActivity().getApplicationContext().getFilesDir();
-            IoUtils.extractZipResource(getResources().openRawResource(R.raw.lightsaber_test),dir,true);
-            File pdPatch = new File(dir, "lightsaber_test/saber.pd");
+            IoUtils.extractZipResource(getResources().openRawResource(R.raw.saber3),dir,true);
+            File pdPatch = new File(dir, "saber3.pd");
             PdBase.openPatch(pdPatch);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -249,11 +252,11 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
         float left_mag = findMagnitude(l_x_accel, l_y_accel, l_z_accel);
         float right_mag = findMagnitude(r_x_accel, r_y_accel, r_z_accel);
 
-        if(left_mag > 1.5 || right_mag > 1.5){
+        if(left_mag > 1.5 || right_mag > 2.5){
             PdBase.sendFloat("slash", (float) 1.0);
         }
         else{
-            PdBase.sendFloat("hum", (float) 1.3);
+            //PdBase.sendFloat("slash", (float) 0.0);
         }
     }
     private void startAudio() {
