@@ -25,13 +25,12 @@ import java.util.Objects;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
-import complexability.puremotionmusic.Helper.ThirdInstrumentFragment;
+import complexability.puremotionmusic.Instruments.ThirdInstrumentFragment;
 import complexability.puremotionmusic.Instruments.LightSaberFragment;
 import complexability.puremotionmusic.Instruments.PeterGriffinFragment;
 import complexability.puremotionmusic.Instruments.ReverbFragment;
 import complexability.puremotionmusic.Instruments.Sequencer;
 import complexability.puremotionmusic.Instruments.SineWave;
-import complexability.puremotionmusic.Instruments.TestReverb;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Sequencer.OnFragmentInteractionListener,

@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="complexability.puremotionmusic.Helper.ThirdInstrumentFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Instruments.ThirdInstrumentFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -97,6 +98,76 @@
                     android:layout_alignEnd="@+id/left_roll_text"
                     android:layout_toEndOf="@+id/left_pitch_button" />
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="set bpm"
+                    android:id="@+id/button3"
+                    android:layout_below="@+id/keyButton"
+                    android:layout_toStartOf="@+id/left_pitch_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="120"
+                    android:id="@+id/bpmText"
+                    android:layout_toEndOf="@+id/button3"
+                    android:layout_alignBottom="@+id/button3"
+                    android:layout_alignTop="@+id/button3"
+                    android:gravity="center" />
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reverb"
+                    android:id="@+id/switch1"
+                    android:checked="false"
+                    android:layout_below="@+id/noteValueButton"
+                    android:layout_alignEnd="@+id/textView2"
+                    android:layout_alignStart="@+id/noteValueButton"
+                    android:layout_alignParentBottom="true" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Note Value"
+                    android:id="@+id/noteValueButton"
+                    android:layout_below="@+id/button3"
+                    android:layout_toStartOf="@+id/bpmText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="1/4"
+                    android:id="@+id/textView2"
+                    android:gravity="center"
+                    android:layout_above="@+id/switch1"
+                    android:layout_alignEnd="@+id/keyText"
+                    android:layout_below="@+id/bpmText"
+                    android:layout_toEndOf="@+id/noteValueButton" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Key"
+                    android:id="@+id/keyButton"
+                    android:layout_below="@+id/left_pitch_button"
+                    android:layout_alignStart="@+id/button3"
+                    android:layout_marginTop="47dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="C"
+                    android:id="@+id/keyText"
+                    android:layout_alignTop="@+id/keyButton"
+                    android:layout_alignBottom="@+id/keyButton"
+                    android:gravity="center"
+                    android:layout_alignEnd="@+id/bpmText" />
+
             </RelativeLayout>
 
             <LinearLayout
@@ -184,6 +255,204 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignBottom="@+id/right_pitch_button"
                     android:layout_toStartOf="@+id/right_pitch_button" />
+                <!-- This library requires pair of the VerticalSeekBar and VerticalSeekBarWrapper classes -->
+
+                <requestFocus
+                    android:layout_below="@+id/right_pitch_button"
+                    android:layout_toStartOf="@+id/right_pitch_button"
+                    android:layout_marginTop="79dp" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/right_pitch_button">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:weightSum="4">
+
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:weightSum="10">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="Sine"
+                                    android:id="@+id/textView4"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentStart="true"
+                                    android:gravity="center"
+                                    android:layout_weight="1" />
+                                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="150dp"
+                                    android:layout_weight="8"
+                                    android:layout_gravity="center">
+                                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                                        android:id="@+id/sinewaveSeekBar"
+                                        android:layout_width="0dp"
+                                        android:layout_height="0dp"
+                                        app:seekBarRotation="CW270"
+                                        android:max="100"
+                                        android:progress="30"
+                                        android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
+                                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                                <TextView
+                                    android:layout_width="104dp"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="30"
+                                    android:id="@+id/sineWaveText"
+                                    android:layout_weight="1"
+                                    android:gravity="top|center" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:weightSum="10">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="Sawtooth"
+                                    android:id="@+id/textView5"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:gravity="center"
+                                    android:layout_weight="1" />
+                                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="150dp"
+                                    android:layout_weight="8"
+                                    android:layout_gravity="center">
+                                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                                        android:id="@+id/sawToothSeekBar"
+                                        android:layout_width="0dp"
+                                        android:layout_height="0dp"
+                                        app:seekBarRotation="CW270"
+                                        android:max="100"
+                                        android:progress="30"
+                                        android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
+                                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                                <TextView
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="30"
+                                    android:id="@+id/sawToothText"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="left|center"
+                                    android:gravity="top|center" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:weightSum="10">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="PWM"
+                                    android:id="@+id/textView6"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_toStartOf="@+id/textView11"
+                                    android:gravity="center"
+                                    android:layout_weight="1" />
+                                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="150dp"
+                                    android:layout_weight="8"
+                                    android:layout_gravity="center">
+                                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                                        android:id="@+id/pwmSeekBar"
+                                        android:layout_width="0dp"
+                                        android:layout_height="0dp"
+                                        app:seekBarRotation="CW270"
+                                        android:max="100"
+                                        android:progress="30"
+                                        android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
+                                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="30"
+                                    android:id="@+id/pwmText"
+                                    android:gravity="top|center"
+                                    android:layout_weight="1" />
+
+                                <!-- This library requires pair of the VerticalSeekBar and VerticalSeekBarWrapper classes -->
+                            </LinearLayout>
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:weightSum="10">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="Duty Cycle"
+                                    android:id="@+id/textView11"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:gravity="center"
+                                    android:layout_weight="1" />
+                                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="150dp"
+                                    android:layout_weight="8"
+                                    android:layout_gravity="center">
+                                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                                        android:id="@+id/dutyCycleSeekBar"
+                                        android:layout_width="0dp"
+                                        android:layout_height="0dp"
+                                        app:seekBarRotation="CW270"
+                                        android:max="100"
+                                        android:progress="30"
+                                        android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
+                                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="30"
+                                    android:id="@+id/dutyCycleText"
+                                    android:gravity="top|center"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+                        <!-- This library requires pair of the VerticalSeekBar and VerticalSeekBarWrapper classes -->
+                    </RelativeLayout>
+                </LinearLayout>
+
             </RelativeLayout>
 
             <LinearLayout

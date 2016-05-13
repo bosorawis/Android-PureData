@@ -1,4 +1,4 @@
-package complexability.puremotionmusic.Helper;
+package complexability.puremotionmusic.Instruments;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -17,8 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -39,6 +39,9 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import complexability.puremotionmusic.Helper.DrawRightBall;
+import complexability.puremotionmusic.Helper.DrawTheBall;
+import complexability.puremotionmusic.Helper.InstrumentBase;
 import complexability.puremotionmusic.MainActivity;
 import complexability.puremotionmusic.R;
 
@@ -74,6 +77,16 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
 
     DrawTheBall drawTheLeftBall;
     DrawRightBall drawTheRightBall;
+
+    SeekBar sineWaveSeekBar;
+    SeekBar sawToothSeekBar;
+    SeekBar pwmSeekBar;
+    SeekBar dutyCyleSeekBar;
+
+    TextView sineWaveText;
+    TextView sawToothText;
+    TextView pwmText;
+    TextView dutyCycleText;
 
     ToggleButton onOffButton;
     BluetoothSPP bt;
@@ -165,6 +178,80 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         /*
         Value Initialization
          */
+
+        sineWaveText = (TextView) view.findViewById(R.id.sineWaveText);
+        sawToothText = (TextView) view.findViewById(R.id.sawToothText);
+        pwmText = (TextView) view.findViewById(R.id.pwmText);
+        dutyCycleText = (TextView) view.findViewById(R.id.dutyCycleText);
+        sineWaveSeekBar = (SeekBar) view.findViewById(R.id.sinewaveSeekBar);
+        sawToothSeekBar = (SeekBar) view.findViewById(R.id.sawToothSeekBar);
+        pwmSeekBar      = (SeekBar) view.findViewById(R.id.pwmSeekBar);
+        dutyCyleSeekBar = (SeekBar) view.findViewById(R.id.dutyCycleSeekBar);
+
+        sineWaveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                sineWaveText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        sawToothSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                sawToothText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        pwmSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                pwmText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        dutyCyleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                dutyCycleText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
         choices =  getActivity().getResources().getStringArray(R.array.reverb_effect_name);
         for (int i = 0 ; i < selectedString.length ; i++){
             //TODO Initializing
