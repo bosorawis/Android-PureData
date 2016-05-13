@@ -2,15 +2,19 @@ package complexability.puremotionmusic.Instruments;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +43,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 import complexability.puremotionmusic.Helper.DrawRightBall;
 import complexability.puremotionmusic.Helper.DrawTheBall;
 import complexability.puremotionmusic.Helper.InstrumentBase;
@@ -81,15 +86,26 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     SeekBar sineWaveSeekBar;
     SeekBar sawToothSeekBar;
     SeekBar pwmSeekBar;
-    SeekBar dutyCyleSeekBar;
+    SeekBar dutyCycleSeekBar;
 
     TextView sineWaveText;
     TextView sawToothText;
     TextView pwmText;
     TextView dutyCycleText;
 
+    Button keyButton;
+    Button bpmButton;
+    Button noteLengthButton;
+
+    TextView bpmText;
     ToggleButton onOffButton;
     BluetoothSPP bt;
+
+    /*
+    Build Material number picker
+     */
+
+
     public ThirdInstrumentFragment() {
         // Required empty public constructor
     }
@@ -186,8 +202,60 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         sineWaveSeekBar = (SeekBar) view.findViewById(R.id.sinewaveSeekBar);
         sawToothSeekBar = (SeekBar) view.findViewById(R.id.sawToothSeekBar);
         pwmSeekBar      = (SeekBar) view.findViewById(R.id.pwmSeekBar);
-        dutyCyleSeekBar = (SeekBar) view.findViewById(R.id.dutyCycleSeekBar);
+        dutyCycleSeekBar = (SeekBar) view.findViewById(R.id.dutyCycleSeekBar);
 
+        keyButton = (Button) view.findViewById(R.id.keyButton);
+        bpmButton = (Button) view.findViewById(R.id.setBpmButton);
+        noteLengthButton = (Button) view.findViewById(R.id.noteValueButton);
+
+        bpmText = (TextView) view.findViewById(R.id.bpmText);
+
+        keyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        bpmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final MaterialNumberPicker bpmPicker = new MaterialNumberPicker.Builder(myContext)
+                        .minValue(40)
+                        .maxValue(300)
+                        .defaultValue(120)
+                        .backgroundColor(Color.WHITE)
+                        .separatorColor(Color.TRANSPARENT)
+                        .textColor(Color.BLACK)
+                        .textSize(20)
+                        .enableFocusability(false)
+                        .wrapSelectorWheel(true)
+                        .build();
+
+                new AlertDialog.Builder(myContext)
+                        .setTitle("Select BPM")
+                        .setView(bpmPicker)
+                        .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Snackbar.make(view.findViewById(R.id.container), "You picked : " + bpmPicker.getValue(), Snackbar.LENGTH_LONG).show();
+                                bpmText.setText(String.valueOf(bpmPicker.getValue()));
+                                PdBase.sendFloat("bpm", (float) bpmPicker.getValue());
+                            }
+                        })
+                        .show();
+
+            }
+        });
+        noteLengthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        /*
+        SeekBar Handler
+         */
         sineWaveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -236,7 +304,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
 
             }
         });
-        dutyCyleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        dutyCycleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 dutyCycleText.setText(String.valueOf(progress));

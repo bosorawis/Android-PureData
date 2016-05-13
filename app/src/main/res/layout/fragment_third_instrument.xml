@@ -102,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="set bpm"
-                    android:id="@+id/button3"
+                    android:id="@+id/setBpmButton"
                     android:layout_below="@+id/keyButton"
                     android:layout_toStartOf="@+id/left_pitch_text" />
 
@@ -112,9 +112,9 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="120"
                     android:id="@+id/bpmText"
-                    android:layout_toEndOf="@+id/button3"
-                    android:layout_alignBottom="@+id/button3"
-                    android:layout_alignTop="@+id/button3"
+                    android:layout_toEndOf="@+id/setBpmButton"
+                    android:layout_alignBottom="@+id/setBpmButton"
+                    android:layout_alignTop="@+id/setBpmButton"
                     android:gravity="center" />
 
                 <Switch
@@ -124,7 +124,7 @@
                     android:id="@+id/switch1"
                     android:checked="false"
                     android:layout_below="@+id/noteValueButton"
-                    android:layout_alignEnd="@+id/textView2"
+                    android:layout_alignEnd="@+id/noteValueText"
                     android:layout_alignStart="@+id/noteValueButton"
                     android:layout_alignParentBottom="true" />
 
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:text="Note Value"
                     android:id="@+id/noteValueButton"
-                    android:layout_below="@+id/button3"
+                    android:layout_below="@+id/setBpmButton"
                     android:layout_toStartOf="@+id/bpmText" />
 
                 <TextView
@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="1/4"
-                    android:id="@+id/textView2"
+                    android:id="@+id/noteValueText"
                     android:gravity="center"
                     android:layout_above="@+id/switch1"
                     android:layout_alignEnd="@+id/keyText"
@@ -154,7 +154,7 @@
                     android:text="Key"
                     android:id="@+id/keyButton"
                     android:layout_below="@+id/left_pitch_button"
-                    android:layout_alignStart="@+id/button3"
+                    android:layout_alignStart="@+id/setBpmButton"
                     android:layout_marginTop="47dp" />
 
                 <TextView
