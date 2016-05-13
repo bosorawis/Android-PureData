@@ -17,7 +17,7 @@
         <item
             android:id="@+id/peter_griffin"
             android:icon="@drawable/bit_piano"
-            android:title="Light Saber" />
+            android:title="Peter" />
 
 
     </group>

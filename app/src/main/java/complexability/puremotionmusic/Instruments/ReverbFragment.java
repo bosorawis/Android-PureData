@@ -537,11 +537,11 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
 
 
 
-        rightMotion = calculateRightHandKalmanPitchRollForCheckOff(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
-        leftMotion  = calculateLeftHandKalmanPitchRollForCheckOff(l_x_accel, l_y_accel, l_z_accel, l_x_gyro, l_y_gyro, l_z_gyro);
-        PdBase.sendFloat("left_pitch",2*leftMotion[PITCH]);
+        rightMotion = calculateRightHandKalmanPitchRollForCheckOffTest(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
+        leftMotion  = calculateLeftHandKalmanPitchRollForCheckOffTest(l_x_accel, l_y_accel, l_z_accel, l_x_gyro, l_y_gyro, l_z_gyro);
+        PdBase.sendFloat("left_pitch",leftMotion[PITCH]);
         PdBase.sendFloat("left_roll", -leftMotion[ROLL]);
-        PdBase.sendFloat("right_pitch", 2*rightMotion[PITCH]);
+        PdBase.sendFloat("right_pitch", rightMotion[PITCH]);
         PdBase.sendFloat("right_roll", -rightMotion[ROLL]);
         Log.d(TAG,"RIGHTHAND ACCEL x: " + Float.toString((r_x_accel)) + "\t y: "+Float.toString( r_y_accel) +"\t z: "+Float.toString( r_z_accel));
         Log.d(TAG,"RIGHTHAND ORIEN Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));

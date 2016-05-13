@@ -80,7 +80,7 @@ public class DrawRightBall extends View {
         black.setColor(Color.BLACK);
         canvas.drawRect(rectangle, black);
         canvas.drawRect(rectangle,white);
-        Log.d(TAG, "Draw x: " + Integer.toString(x)+ "\t\ty: " + Integer.toString(y));
+        //Log.d(TAG, "Draw x: " + Integer.toString(x)+ "\t\ty: " + Integer.toString(y));
 
         canvas.drawBitmap(r_ball, x -bmpWidth/2, y-bmpHeight/2, new Paint());
         invalidate();
