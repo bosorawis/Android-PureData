@@ -1,4 +1,4 @@
-package complexability.puremotionmusic.Instruments;
+package complexability.puremotionmusic.Helper;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -37,46 +37,26 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Objects;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
-import complexability.puremotionmusic.Helper.DrawRightBall;
-import complexability.puremotionmusic.Helper.DrawTheBall;
-import complexability.puremotionmusic.Helper.InstrumentBase;
-import complexability.puremotionmusic.Helper.Mapper;
 import complexability.puremotionmusic.MainActivity;
 import complexability.puremotionmusic.R;
-
-import static java.lang.StrictMath.PI;
-import static java.lang.StrictMath.floor;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ReverbFragment.OnFragmentInteractionListener} interface
+ * {@link ThirdInstrumentFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ReverbFragment#newInstance} factory method to
+ * Use the {@link ThirdInstrumentFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReverbFragment extends InstrumentBase implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class ThirdInstrumentFragment extends InstrumentBase implements View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final int TOTAL_MOTION = 4;
     private static final int TOTAL_EFFECT = 3;
 
     private static final String TAG = "ReverbFragment";
     private static final int[] AVAILABLE_EFFECT = new int[]{0, 1, 2};
     private static final String[] AVAILABLE_EFFECT_NAME  = {"Chord","Note","Band Pass","Compressor", "Reverb", "Volume", "Rhythm", "BPM"};
-
-
-
-    private static Mapper[] mapper = new Mapper[TOTAL_EFFECT];
-
-    ToggleButton onOffButton;
-
-    // TODO: Rename and change types of parameters
-
-
     private OnFragmentInteractionListener mListener;
     private PdService pdService = null;
     private int[] selected = new int[TOTAL_MOTION];
@@ -95,21 +75,14 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     DrawTheBall drawTheLeftBall;
     DrawRightBall drawTheRightBall;
 
+    ToggleButton onOffButton;
     BluetoothSPP bt;
-    public ReverbFragment() {
+    public ThirdInstrumentFragment() {
+        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReverbFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ReverbFragment newInstance(String param1, String param2) {
-        ReverbFragment fragment = new ReverbFragment();
+    public static ThirdInstrumentFragment newInstance(String param1, String param2) {
+        ThirdInstrumentFragment fragment = new ThirdInstrumentFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -118,6 +91,8 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+        }
     }
     private PdReceiver receiver = new PdReceiver() {
 
@@ -171,23 +146,21 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
             // this method will never be called
         }
     };
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        //final View view = inflater.inflate(R.layout.fragment_reverb, container, false);
-        final View view = inflater.inflate(R.layout.fragment_rev_test, container, false);
+        final View view = inflater.inflate(R.layout.fragment_third_instrument, container, false);
 
         drawTheLeftBall = (DrawTheBall) view.findViewById(R.id.draw_the_left_ball) ;
         drawTheRightBall = (DrawRightBall) view.findViewById(R.id.draw_the_right_ball) ;
 
 
-        TextView instrumentName  = (TextView) view.findViewById(R.id.instrumentName);
+        //TextView instrumentName  = (TextView) view.findViewById(R.id.instrumentName);
         RelativeLayout mainLayout = (RelativeLayout) view.findViewById(R.id.mainLayout);
-        ImageView imageView = (ImageView) view.findViewById(R.id.instrumentImage);
-        instrumentName.setText("8-bit Piano");
-        imageView.setImageResource(R.drawable.eightbit_instr);
+        //ImageView imageView = (ImageView) view.findViewById(R.id.instrumentImage);
+        //instrumentName.setText("8-bit Piano");
+        //imageView.setImageResource(R.drawable.eightbit_instr);
 
         /*
         Value Initialization
@@ -208,7 +181,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         /*
         Button
          */
-        onOffButton = (ToggleButton) view.findViewById(R.id.toggleButton);
+        onOffButton = (ToggleButton) view.findViewById(R.id.onOffButton);
         Button left_pitch_btn = (Button) view.findViewById(R.id.left_pitch_button);
         Button left_roll_btn = (Button) view.findViewById(R.id.left_roll_button);
         Button right_pitch_btn = (Button) view.findViewById(R.id.right_pitch_button);
@@ -263,20 +236,18 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
         getActivity().bindService(new Intent(getActivity(), PdService.class), pdConnection, Context.BIND_AUTO_CREATE);
 
-        return view;
-    }
+        return view;    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            //mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -284,48 +255,19 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
-    @Override
-    protected void changeToNextInstrument() {
-        ((MainActivity) getActivity()).moveToFragmentByName("SineWave");
-    }
-
-    @Override
-    protected void changeToPrevInstrument() {
-        ((MainActivity) getActivity()).moveToFragmentByName("SineWave");
-
-    }
-
-    @Override
-    protected void startPlaying() {
-        startAudio();
-    }
-
-    @Override
-    protected void stopPlaying() {
-        stopAudio();
-    }
-
-    @Override
-    protected void togglePlaying() {
-        onOffButton.toggle();
-    }
-
     @Override
     public void onDetach() {
         Log.d(TAG,"onDetach");
         super.onDetach();
         mListener = null;
-        if(pdService != null) {
-            if (pdService.isRunning()) {
-                stopAudio();
-            }
-            cleanup();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if(pdService.isRunning()){
+            stopAudio();
+        }
+        cleanup();
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -335,7 +277,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
             startAudio();
         }
     }
-
     @Override
     public void onClick(View v) {
         int motion = 0;
@@ -453,7 +394,7 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         }
         try {
             pdService.initAudio(-1, -1, -1, -1);   // negative values will be replaced with defaults/preferences
-            pdService.startAudio(new Intent(getActivity(), ReverbFragment.class), R.drawable.icon, name, "Return to " + name + ".");
+            pdService.startAudio(new Intent(getActivity(), ThirdInstrumentFragment.class), R.drawable.icon, name, "Return to " + name + ".");
         } catch (IOException e) {
             Log.d(TAG, String.valueOf(e));
         }
@@ -509,10 +450,30 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
             }
         }
     }
+    @Override
+    protected void changeToNextInstrument() {
+        ((MainActivity) getActivity()).moveToFragmentByName("SineWave");
+    }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    protected void changeToPrevInstrument() {
+        ((MainActivity) getActivity()).moveToFragmentByName("SineWave");
+
+    }
+
+    @Override
+    protected void startPlaying() {
+        startAudio();
+    }
+
+    @Override
+    protected void stopPlaying() {
+        stopAudio();
+    }
+
+    @Override
+    protected void togglePlaying() {
+        onOffButton.toggle();
     }
 
     public void dataProc(byte[] data){
@@ -566,7 +527,6 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
     }
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onReverbFragmentInteraction(String string);
+        void onFragmentInteraction(Uri uri);
     }
-
 }

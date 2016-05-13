@@ -25,6 +25,7 @@ import java.util.Objects;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
+import complexability.puremotionmusic.Helper.ThirdInstrumentFragment;
 import complexability.puremotionmusic.Instruments.LightSaberFragment;
 import complexability.puremotionmusic.Instruments.PeterGriffinFragment;
 import complexability.puremotionmusic.Instruments.ReverbFragment;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Sequencer.OnFragmentInteractionListener,
         ReverbFragment.OnFragmentInteractionListener, MainFragment.OnFragmentInteractionListener,
         SineWave.OnFragmentInteractionListener, LightSaberFragment.OnFragmentInteractionListener,
-        PeterGriffinFragment.OnFragmentInteractionListener{
+        PeterGriffinFragment.OnFragmentInteractionListener, ThirdInstrumentFragment.OnFragmentInteractionListener{
 
 
     private static final String TAG = "MainActivity";
@@ -279,6 +280,7 @@ public class MainActivity extends AppCompatActivity
 
     public void moveToFragmentByName(String string){
         Fragment fragment = null;
+        Log.d(TAG, string);
         FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
         if (Objects.equals(string, "Sequencer")) {
             fragment = new SineWave();
@@ -295,6 +297,11 @@ public class MainActivity extends AppCompatActivity
         else if (Objects.equals(string, "PeterGriffin")){
             fragment = new PeterGriffinFragment();
         }
+        else if (Objects.equals(string, "ThirdInstrument")){
+            Log.d(TAG, "hello sir");
+            fragment = new ThirdInstrumentFragment();
+        }
+
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
         transaction.addToBackStack(null);

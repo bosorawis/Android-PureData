@@ -1,0 +1,222 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="complexability.puremotionmusic.Helper.ThirdInstrumentFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal|bottom">
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New ToggleButton"
+            android:id="@+id/onOffButton"
+            android:layout_gravity="center_horizontal|top"
+            android:checked="false"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentStart="false" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/onOffButton"
+            android:weightSum="10">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Roll"
+                    android:id="@+id/left_roll_button"
+                    android:drawableStart="@drawable/ic_rot_left"
+                    android:drawableEnd="@drawable/ic_rot_right"
+                    android:layout_below="@+id/textView9"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Large Text"
+                    android:id="@+id/left_roll_text"
+                    android:layout_alignParentEnd="true"
+                    android:layout_toEndOf="@+id/left_roll_button"
+                    android:layout_alignBottom="@+id/left_roll_button"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:layout_below="@+id/textView9" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="pitch"
+                    android:id="@+id/left_pitch_button"
+                    android:drawableStart="@drawable/ic_pitch_forward"
+                    android:drawableEnd="@drawable/ic_pitch_backward"
+                    android:layout_below="@+id/left_roll_button"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/left_roll_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Left Hand"
+                    android:id="@+id/textView9"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignEnd="@+id/left_roll_text"
+                    android:layout_alignParentStart="true"
+                    android:textAlignment="center"
+                    android:drawableStart="@drawable/ic_left_hand"
+                    android:drawableEnd="@drawable/ic_left_hand"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Large Text"
+                    android:id="@+id/left_pitch_text"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:layout_below="@+id/left_roll_text"
+                    android:layout_alignBottom="@+id/left_pitch_button"
+                    android:layout_alignEnd="@+id/left_roll_text"
+                    android:layout_toEndOf="@+id/left_pitch_button" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="7">
+
+                <complexability.puremotionmusic.Helper.DrawTheBall
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/drawTheBall" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/instrumentText"
+            android:layout_alignParentTop="true"
+            android:weightSum="10">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Right Hand"
+                    android:id="@+id/textView10"
+                    android:textAlignment="center"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:drawableStart="@drawable/ic_right_hand"
+                    android:drawableEnd="@drawable/ic_right_hand"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Roll"
+                    android:id="@+id/right_roll_button"
+                    android:layout_below="@+id/textView10"
+                    android:layout_alignParentEnd="true"
+                    android:drawableStart="@drawable/ic_rot_left"
+                    android:drawableEnd="@drawable/ic_rot_right"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pitch"
+                    android:id="@+id/right_pitch_button"
+                    android:layout_below="@+id/right_roll_button"
+                    android:layout_alignParentEnd="true"
+                    android:drawableStart="@drawable/ic_pitch_forward"
+                    android:drawableEnd="@drawable/ic_pitch_backward"
+                    android:layout_toEndOf="@+id/right_roll_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Large Text"
+                    android:id="@+id/right_roll_text"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:layout_alignTop="@+id/right_roll_button"
+                    android:layout_alignParentStart="true"
+                    android:layout_above="@+id/right_pitch_button"
+                    android:layout_toStartOf="@+id/right_roll_button" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Large Text"
+                    android:id="@+id/right_pitch_text"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:layout_below="@+id/right_roll_text"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignBottom="@+id/right_pitch_button"
+                    android:layout_toStartOf="@+id/right_pitch_button" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="7">
+
+                <complexability.puremotionmusic.Helper.DrawRightBall
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/drawTheRightBall" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="8-Bit Piano"
+            android:id="@+id/instrumentText"
+            android:layout_above="@+id/instrumentImage"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/instrumentImage"
+            android:src="@drawable/bit_piano"
+            android:layout_above="@+id/onOffButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="34dp" />
+
+    </RelativeLayout>
+
+</FrameLayout>

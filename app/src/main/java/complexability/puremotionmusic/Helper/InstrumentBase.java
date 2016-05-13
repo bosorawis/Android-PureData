@@ -1233,7 +1233,13 @@ public abstract class InstrumentBase extends Fragment {
         //if (isItGoingUp[0] && !isItChanging[1] && !isItGoingUp[2]) { //Pitch up ==> x increase, y stay, z decrease
         //accelData[2] = abs(accelData[2]);
 
+
+        //if(abs(accelData[1]) <= 0.025 && abs(accelData[2]) <= 0.525){
+        //    roll = 90;
+        //}
+        //else {
         roll = atan2(accelData[1], abs(accelData[2])) * RAD_TO_DEG;
+
         pitch = atan(-accelData[0] / sqrt(accelData[1] * accelData[1] + accelData[2] * accelData[2])) * RAD_TO_DEG;
         if ((roll < -90 && l_kalAngleX > 90) || (roll > 90 && l_kalAngleX < -90)) {
             kalmanX.setAngle((float) roll);
