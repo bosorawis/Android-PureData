@@ -65,8 +65,6 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     private static final int TOTAL_EFFECT = 3;
 
     private static final String TAG = "ThirdInstrumentFragment";
-    private static final int[] AVAILABLE_EFFECT = new int[]{0, 1, 2};
-    private static final String[] AVAILABLE_EFFECT_NAME  = {"Chord","Triad","Lead","Bass", "Volume", "Band Pass"};
 
     private OnFragmentInteractionListener mListener;
     private PdService pdService = null;
@@ -120,7 +118,18 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     Switch reverbSwitch;
 
     BluetoothSPP bt;
+    String availableEffects[];
 
+    int currentBpm = 120;
+
+    int  leadSineWavetVal = 60;
+    int  leadSawToothVal = 42;
+    int  leadPwmVal = 15;
+    int  leadDutyCycleVal = 34;
+    int  bassleadSineWaveVal = 47;
+    int  bassSawToothVal = 43;
+    int  bassPwmVal = 53;
+    int  bassDutyCycleVal = 58;
     /*
     Build Material number picker
      */
@@ -204,6 +213,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         drawTheLeftBall = (DrawTheBall) view.findViewById(R.id.drawTheLeftBall) ;
         drawTheRightBall = (DrawRightBall) view.findViewById(R.id.drawTheRightBall) ;
 
+        availableEffects = getActivity().getResources().getStringArray(R.array.reverb_effect_name);
 
         //TextView instrumentName  = (TextView) view.findViewById(R.id.instrumentName);
         RelativeLayout mainLayout = (RelativeLayout) view.findViewById(R.id.mainLayout);
@@ -211,14 +221,13 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         //instrumentName.setText("8-bit Piano");
         //imageView.setImageResource(R.drawable.eightbit_instr);
 
-        /*
-        Value Initialization
-         */
+
 
         sineWaveText = (TextView) view.findViewById(R.id.sineWaveText);
         sawToothText = (TextView) view.findViewById(R.id.sawToothText);
         pwmText = (TextView) view.findViewById(R.id.pwmText);
         dutyCycleText = (TextView) view.findViewById(R.id.dutyCycleText);
+
         sineWaveSeekBar = (SeekBar) view.findViewById(R.id.sinewaveSeekBar);
         sawToothSeekBar = (SeekBar) view.findViewById(R.id.sawToothSeekBar);
         pwmSeekBar      = (SeekBar) view.findViewById(R.id.pwmSeekBar);
@@ -228,6 +237,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         bassSawToothText = (TextView) view.findViewById(R.id.bassSawtoothText);
         bassPwmText = (TextView) view.findViewById(R.id.bassPwmText);
         bassDutyCycleText = (TextView) view.findViewById(R.id.bassDutyCycleText);
+
         bassSineWaveSeekBar = (SeekBar) view.findViewById(R.id.bassSineWaveSeekbar);
         bassSawToothSeekBar = (SeekBar) view.findViewById(R.id.bassSawToothSeekbar);
         bassPwmSeekBar      = (SeekBar) view.findViewById(R.id.bassPwmSeekBar);
@@ -246,7 +256,25 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         keyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String[] keys = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "Bb", "B"};
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(myContext);
+                builderSingle.setTitle("Select Note Value:");
 
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        myContext,
+                        android.R.layout.simple_list_item_1);
+                for(int i = 0 ; i < keys.length ; i ++){
+                    arrayAdapter.add(keys[i]);
+                }
+                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        keyText.setText(arrayAdapter.getItem(which));
+                        PdBase.sendFloat("key", which);
+                        Log.d("Item", Integer.toString(which));
+                    }
+                });
+                builderSingle.show();
             }
         });
         bpmButton.setOnClickListener(new View.OnClickListener() {
@@ -255,7 +283,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
                 final MaterialNumberPicker bpmPicker = new MaterialNumberPicker.Builder(myContext)
                         .minValue(40)
                         .maxValue(300)
-                        .defaultValue(120)
+                        .defaultValue(currentBpm)
                         .backgroundColor(Color.WHITE)
                         .separatorColor(Color.TRANSPARENT)
                         .textColor(Color.BLACK)
@@ -273,6 +301,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
                                 //Snackbar.make(view.findViewById(R.id.container), "You picked : " + bpmPicker.getValue(), Snackbar.LENGTH_LONG).show();
                                 bpmText.setText(String.valueOf(bpmPicker.getValue()));
                                 PdBase.sendFloat("bpm", (float) bpmPicker.getValue());
+                                currentBpm = bpmPicker.getValue();
                             }
                         })
                         .show();
@@ -297,27 +326,12 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                         myContext,
                         android.R.layout.simple_list_item_1);
-                arrayAdapter.add("1/32");
                 arrayAdapter.add("1/16");
                 arrayAdapter.add("1/8");
                 arrayAdapter.add("1/4");
+                arrayAdapter.add("1/2");
                 arrayAdapter.add("1");
 
-
-                //builderSingle.setNegativeButton(
-                //        "cancel",
-                //        new DialogInterface.OnClickListener() {
-                //            @Override
-                //            public void onClick(DialogInterface dialog, int which) {
-                //                dialog.dismiss();
-                //            }
-                //        });
-                //builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                //    @Override
-                //    public void onClick(DialogInterface dialog, int which) {
-                //            Log.d(TAG,"dialog: "+ Integer.toString(which));
-                //    }
-                //});
                 builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -326,29 +340,6 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
                         Log.d("Item", Integer.toString(which));
                     }
                 });
-                //builderSingle.setAdapter(
-                //        arrayAdapter,
-                //        new DialogInterface.OnClickListener() {
-                //            @Override
-                //            public void onClick(DialogInterface dialog, int which) {
-                //                String strName = arrayAdapter.getItem(which);
-                //                AlertDialog.Builder builderInner = new AlertDialog.Builder(
-                //                        myContext);
-                //                builderInner.setMessage(strName);
-                //                builderInner.setTitle("Your Selected Item is");
-                //                builderInner.setPositiveButton(
-                //                        "Ok",
-                //                        new DialogInterface.OnClickListener() {
-                //                            @Override
-                //                            public void onClick(
-                //                                    DialogInterface dialog,
-                //                                    int which) {
-                //                                dialog.dismiss();
-                //                            }
-                //                        });
-                //                builderInner.show();
-                //            }
-                //        });
                 builderSingle.show();
             }
         });
@@ -379,9 +370,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 sawToothText.setText(String.valueOf(progress));
                 PdBase.sendFloat("sawtooth_osc1_level", (float) (progress/100.));
-
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 
@@ -423,7 +412,6 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
@@ -641,8 +629,8 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
                         //selectedString[finalMotion] = (String) text;
                         //finalCur.setText(AVAILABLE_EFFECT_NAME[finalMotion]);
                         sendChange(finalMotion,which);
-                        if(which < AVAILABLE_EFFECT.length && which >= 0) {
-                            Log.d(TAG, choices[which]);
+                        if(which < availableEffects.length && which >= 0) {
+                            Log.d(TAG, availableEffects[which]);
                             //userSelected(finalMotion, choices[which]);
                         }
                         return true;
@@ -656,24 +644,24 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         Log.d(TAG,"final:" + Integer.toString(finalMotion) +"\t\t   which:" + Integer.toString(which));
         switch (finalMotion){
             case LEFT_PITCH:
-                left_pitch_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                left_pitch_text.setText(availableEffects[which]);
                 PdBase.sendFloat("left_pitch_sel",which);
-                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Left hand pitch");
+                Log.d(TAG,"SENDING \"" + availableEffects[which] + "\" for Left hand pitch");
                 break;
             case RIGHT_PITCH:
-                right_pitch_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                right_pitch_text.setText(availableEffects[which]);
                 PdBase.sendFloat("right_pitch_sel", which);
-                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Right hand pitch");
+                Log.d(TAG,"SENDING \"" + availableEffects[which] + "\" for Right hand pitch");
                 break;
             case LEFT_ROLL:
-                left_roll_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                left_roll_text.setText(availableEffects[which]);
                 PdBase.sendFloat("left_roll_sel", which);
-                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Left hand roll");
+                Log.d(TAG,"SENDING \"" + availableEffects[which] + "\" for Left hand roll");
                 break;
             case RIGHT_ROLL:
-                right_roll_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                right_roll_text.setText(availableEffects[which]);
                 PdBase.sendFloat("right_roll_sel", which);
-                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Right hand roll");
+                Log.d(TAG,"SENDING \"" + availableEffects[which] + "\" for Right hand roll");
                 break;
             default:
                 break;
@@ -831,9 +819,9 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         rightMotion = calculateRightHandKalmanPitchRollForCheckOffTest(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
         leftMotion  = calculateLeftHandKalmanPitchRollForCheckOffTest(l_x_accel, l_y_accel, l_z_accel, l_x_gyro, l_y_gyro, l_z_gyro);
         PdBase.sendFloat("left_pitch",leftMotion[PITCH]);
-        PdBase.sendFloat("left_roll", -leftMotion[ROLL]);
+        PdBase.sendFloat("left_roll", leftMotion[ROLL]);
         PdBase.sendFloat("right_pitch", rightMotion[PITCH]);
-        PdBase.sendFloat("right_roll", -rightMotion[ROLL]);
+        PdBase.sendFloat("right_roll", rightMotion[ROLL]);
         //Log.d(TAG,"RIGHTHAND ACCEL x: " + Float.toString((r_x_accel)) + "\t y: "+Float.toString( r_y_accel) +"\t z: "+Float.toString( r_z_accel));
         //Log.d(TAG,"RIGHTHAND ORIEN Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));
 
@@ -844,14 +832,14 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         drawTheRightBall.updateValue(rightMotion[ROLL], -rightMotion[PITCH]);
     }
     public void initText(){
-        left_pitch_text.setText(AVAILABLE_EFFECT_NAME[0]);
-        left_roll_text.setText(AVAILABLE_EFFECT_NAME[1]);
-        right_pitch_text.setText(AVAILABLE_EFFECT_NAME[2]);
-        right_roll_text.setText(AVAILABLE_EFFECT_NAME[3]);
-        selected[0] = 0;
-        selected[1] = 1;
-        selected[2] = 2;
-        selected[3] = 3;
+        left_pitch_text.setText(availableEffects[3]);
+        left_roll_text.setText(availableEffects[0]);
+        right_pitch_text.setText(availableEffects[2]);
+        right_roll_text.setText(availableEffects[1]);
+        selected[LEFT_PITCH] = 3;
+        selected[LEFT_ROLL] = 0;
+        selected[RIGHT_PITCH] = 2;
+        selected[RIGHT_ROLL] = 1;
     }
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
