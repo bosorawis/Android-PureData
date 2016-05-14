@@ -179,7 +179,7 @@
                 <complexability.puremotionmusic.Helper.DrawTheBall
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/drawTheBall" />
+                    android:id="@+id/drawTheLeftBall" />
             </LinearLayout>
         </LinearLayout>
 

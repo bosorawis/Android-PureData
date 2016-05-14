@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -62,9 +63,10 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     private static final int TOTAL_MOTION = 4;
     private static final int TOTAL_EFFECT = 3;
 
-    private static final String TAG = "ReverbFragment";
+    private static final String TAG = "ThirdInstrumentFragment";
     private static final int[] AVAILABLE_EFFECT = new int[]{0, 1, 2};
-    private static final String[] AVAILABLE_EFFECT_NAME  = {"Chord","Note","Band Pass","Compressor", "Reverb", "Volume", "Rhythm", "BPM"};
+    private static final String[] AVAILABLE_EFFECT_NAME  = {"Chord","Triad","Lead","Bass", "Volume", "Band Pass"};
+
     private OnFragmentInteractionListener mListener;
     private PdService pdService = null;
     private int[] selected = new int[TOTAL_MOTION];
@@ -79,6 +81,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     private TextView right_pitch_text;
     private TextView right_roll_text;
     //*******************************************
+    private String[] keys = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "Bb", "B"};
 
     DrawTheBall drawTheLeftBall;
     DrawRightBall drawTheRightBall;
@@ -98,6 +101,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     Button noteLengthButton;
 
     TextView bpmText;
+    TextView keyText;
     ToggleButton onOffButton;
     BluetoothSPP bt;
 
@@ -181,8 +185,8 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_third_instrument, container, false);
 
-        drawTheLeftBall = (DrawTheBall) view.findViewById(R.id.draw_the_left_ball) ;
-        drawTheRightBall = (DrawRightBall) view.findViewById(R.id.draw_the_right_ball) ;
+        drawTheLeftBall = (DrawTheBall) view.findViewById(R.id.drawTheLeftBall) ;
+        drawTheRightBall = (DrawRightBall) view.findViewById(R.id.drawTheRightBall) ;
 
 
         //TextView instrumentName  = (TextView) view.findViewById(R.id.instrumentName);
@@ -205,6 +209,8 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         dutyCycleSeekBar = (SeekBar) view.findViewById(R.id.dutyCycleSeekBar);
 
         keyButton = (Button) view.findViewById(R.id.keyButton);
+        keyText = (TextView) view.findViewById(R.id.keyText);
+
         bpmButton = (Button) view.findViewById(R.id.setBpmButton);
         noteLengthButton = (Button) view.findViewById(R.id.noteValueButton);
 
