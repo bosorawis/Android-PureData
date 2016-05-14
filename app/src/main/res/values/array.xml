@@ -16,13 +16,10 @@
 
     <string-array name="reverb_effect_name">
         <item>Chord</item>
-        <item>Note</item>
-        <item>Band pass</item>
-        <item>Compressor</item>
-        <item>Reverb</item>
+        <item>Lead Note</item>
+        <item>Bass Note</item>
         <item>Volume</item>
-        <item>Rhythm</item>
-        <item>BPM</item>
+        <item>Band Pass</item>
 
     </string-array>
 

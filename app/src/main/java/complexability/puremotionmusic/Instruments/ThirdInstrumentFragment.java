@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -82,6 +83,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     private TextView right_roll_text;
     //*******************************************
     private String[] keys = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "Bb", "B"};
+    private String[] noteValue = {"1/4","1/8","1/16"};
 
     DrawTheBall drawTheLeftBall;
     DrawRightBall drawTheRightBall;
@@ -96,13 +98,27 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     TextView pwmText;
     TextView dutyCycleText;
 
+    SeekBar bassSineWaveSeekBar;
+    SeekBar bassSawToothSeekBar;
+    SeekBar bassPwmSeekBar;
+    SeekBar bassDutyCycleSeekBar;
+    TextView bassSineWaveText;
+    TextView bassSawToothText;
+    TextView bassPwmText;
+    TextView bassDutyCycleText;
+
     Button keyButton;
     Button bpmButton;
     Button noteLengthButton;
 
     TextView bpmText;
     TextView keyText;
+    TextView noteValueText;
+
     ToggleButton onOffButton;
+
+    Switch reverbSwitch;
+
     BluetoothSPP bt;
 
     /*
@@ -208,12 +224,23 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         pwmSeekBar      = (SeekBar) view.findViewById(R.id.pwmSeekBar);
         dutyCycleSeekBar = (SeekBar) view.findViewById(R.id.dutyCycleSeekBar);
 
+        bassSineWaveText = (TextView) view.findViewById(R.id.bassSineWaveText);
+        bassSawToothText = (TextView) view.findViewById(R.id.bassSawtoothText);
+        bassPwmText = (TextView) view.findViewById(R.id.bassPwmText);
+        bassDutyCycleText = (TextView) view.findViewById(R.id.bassDutyCycleText);
+        bassSineWaveSeekBar = (SeekBar) view.findViewById(R.id.bassSineWaveSeekbar);
+        bassSawToothSeekBar = (SeekBar) view.findViewById(R.id.bassSawToothSeekbar);
+        bassPwmSeekBar      = (SeekBar) view.findViewById(R.id.bassPwmSeekBar);
+        bassDutyCycleSeekBar = (SeekBar) view.findViewById(R.id.bassDutyCycleSeekbar);
+
+        reverbSwitch = (Switch) view.findViewById(R.id.reverbSwitch);
+
         keyButton = (Button) view.findViewById(R.id.keyButton);
         keyText = (TextView) view.findViewById(R.id.keyText);
 
         bpmButton = (Button) view.findViewById(R.id.setBpmButton);
         noteLengthButton = (Button) view.findViewById(R.id.noteValueButton);
-
+        noteValueText = (TextView) view.findViewById(R.id.noteValueText);
         bpmText = (TextView) view.findViewById(R.id.bpmText);
 
         keyButton.setOnClickListener(new View.OnClickListener() {
@@ -252,20 +279,89 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
 
             }
         });
+
+        reverbSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                float val = (isChecked) ? 1.0f : 0.0f;
+                PdBase.sendFloat("reverb_state", val);
+            }
+        });
+
         noteLengthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(myContext);
+                builderSingle.setTitle("Select Note Value:");
 
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        myContext,
+                        android.R.layout.simple_list_item_1);
+                arrayAdapter.add("1/32");
+                arrayAdapter.add("1/16");
+                arrayAdapter.add("1/8");
+                arrayAdapter.add("1/4");
+                arrayAdapter.add("1");
+
+
+                //builderSingle.setNegativeButton(
+                //        "cancel",
+                //        new DialogInterface.OnClickListener() {
+                //            @Override
+                //            public void onClick(DialogInterface dialog, int which) {
+                //                dialog.dismiss();
+                //            }
+                //        });
+                //builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                //    @Override
+                //    public void onClick(DialogInterface dialog, int which) {
+                //            Log.d(TAG,"dialog: "+ Integer.toString(which));
+                //    }
+                //});
+                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        noteValueText.setText(arrayAdapter.getItem(which));
+                        PdBase.sendFloat("note_length", which);
+                        Log.d("Item", Integer.toString(which));
+                    }
+                });
+                //builderSingle.setAdapter(
+                //        arrayAdapter,
+                //        new DialogInterface.OnClickListener() {
+                //            @Override
+                //            public void onClick(DialogInterface dialog, int which) {
+                //                String strName = arrayAdapter.getItem(which);
+                //                AlertDialog.Builder builderInner = new AlertDialog.Builder(
+                //                        myContext);
+                //                builderInner.setMessage(strName);
+                //                builderInner.setTitle("Your Selected Item is");
+                //                builderInner.setPositiveButton(
+                //                        "Ok",
+                //                        new DialogInterface.OnClickListener() {
+                //                            @Override
+                //                            public void onClick(
+                //                                    DialogInterface dialog,
+                //                                    int which) {
+                //                                dialog.dismiss();
+                //                            }
+                //                        });
+                //                builderInner.show();
+                //            }
+                //        });
+                builderSingle.show();
             }
         });
 
         /*
         SeekBar Handler
          */
+
         sineWaveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 sineWaveText.setText(String.valueOf(progress));
+                PdBase.sendFloat("sine_osc1_level", (float) (progress/100.));
             }
 
             @Override
@@ -282,6 +378,8 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 sawToothText.setText(String.valueOf(progress));
+                PdBase.sendFloat("sawtooth_osc1_level", (float) (progress/100.));
+
             }
 
             @Override
@@ -298,6 +396,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 pwmText.setText(String.valueOf(progress));
+                PdBase.sendFloat("pwm_osc1_level", (float) (progress/100.));
             }
 
             @Override
@@ -314,6 +413,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 dutyCycleText.setText(String.valueOf(progress));
+                PdBase.sendFloat("pwm_duty_cycle1", (float) (progress/100.));
             }
 
             @Override
@@ -326,12 +426,79 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
 
             }
         });
-        choices =  getActivity().getResources().getStringArray(R.array.reverb_effect_name);
-        for (int i = 0 ; i < selectedString.length ; i++){
-            //TODO Initializing
-            selected[i] = -1;
-            selectedString[i] = getStringFromId(selected[i]);
-        }
+
+        /* for bass*/
+        bassSineWaveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                bassSineWaveText.setText(String.valueOf(progress));
+                PdBase.sendFloat("sine_osc2_level", (float) (progress/100.));
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        bassSawToothSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                bassSawToothText.setText(String.valueOf(progress));
+                PdBase.sendFloat("sawtooth_osc2_level", (float) (progress/100.));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        bassPwmSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                bassPwmText.setText(String.valueOf(progress));
+                Log.d(TAG, Float.toString((float) (progress/100.0)));
+                PdBase.sendFloat("pwm_osc2_level", (float) (progress/100.));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        bassDutyCycleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                bassDutyCycleText.setText(String.valueOf(progress));
+                PdBase.sendFloat("pwm_duty_cycle2", (float) (progress/100.));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
         /*
         Initializa Mapper for mapping motions
          */
@@ -534,8 +701,8 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             //PdBase.setReceiver(receiver);
             //PdBase.subscribe("metro_bng");
             ////PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.android_interface_basic_with_control);
-            patchFile = IoUtils.extractResource(in, "android_interface_basic_with_control.pd", getActivity().getCacheDir());
+            InputStream in = res.openRawResource(R.raw.instrument_1);
+            patchFile = IoUtils.extractResource(in, "instrument_1.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -667,11 +834,11 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         PdBase.sendFloat("left_roll", -leftMotion[ROLL]);
         PdBase.sendFloat("right_pitch", rightMotion[PITCH]);
         PdBase.sendFloat("right_roll", -rightMotion[ROLL]);
-        Log.d(TAG,"RIGHTHAND ACCEL x: " + Float.toString((r_x_accel)) + "\t y: "+Float.toString( r_y_accel) +"\t z: "+Float.toString( r_z_accel));
-        Log.d(TAG,"RIGHTHAND ORIEN Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));
+        //Log.d(TAG,"RIGHTHAND ACCEL x: " + Float.toString((r_x_accel)) + "\t y: "+Float.toString( r_y_accel) +"\t z: "+Float.toString( r_z_accel));
+        //Log.d(TAG,"RIGHTHAND ORIEN Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));
 
-        Log.d(TAG,"LEFTHAND ACCEL x: " + Float.toString((l_x_accel)) + "\t\t y: "+Float.toString(l_y_accel) +"\t\t z: "+Float.toString(l_z_accel));
-        Log.d(TAG,"LEFTHAND ORIEN Roll: " + Integer.toString((int)leftMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)leftMotion[PITCH]));
+        //Log.d(TAG,"LEFTHAND ACCEL x: " + Float.toString((l_x_accel)) + "\t\t y: "+Float.toString(l_y_accel) +"\t\t z: "+Float.toString(l_z_accel));
+        //Log.d(TAG,"LEFTHAND ORIEN Roll: " + Integer.toString((int)leftMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)leftMotion[PITCH]));
 
         drawTheLeftBall.updateValue( leftMotion[ROLL], -leftMotion[PITCH]);
         drawTheRightBall.updateValue(rightMotion[ROLL], -rightMotion[PITCH]);
