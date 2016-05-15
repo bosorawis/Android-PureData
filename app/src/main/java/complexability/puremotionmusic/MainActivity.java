@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity
             moveTo = "SineWave";
             // Handle the camera action
         } else if (id == R.id.nav_eight_bit_piano) {
-            moveTo = "ReverbFragment";
+            moveTo = "ThirdInstrument";
         }
         else if (id == R.id.light_saber){
             moveTo = "LightSaber";
@@ -297,7 +297,6 @@ public class MainActivity extends AppCompatActivity
             fragment = new PeterGriffinFragment();
         }
         else if (Objects.equals(string, "ThirdInstrument")){
-            Log.d(TAG, "hello sir");
             fragment = new ThirdInstrumentFragment();
         }
 

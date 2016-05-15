@@ -12,44 +12,108 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal|top">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/eight_bit_button"
-            android:src="@drawable/bit_piano"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/sineWaveButton" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="4">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/sineWaveButton"
-            android:src="@drawable/sinewave_ic"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lightSaberButton"
-            android:src="@drawable/light_saber_image"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/eight_bit_button" />
+                <ImageButton
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/eight_bit_button"
+                    android:src="@drawable/bit_piano"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/sineWaveButton"
+                    android:layout_gravity="center_horizontal" />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/peterButton"
-            android:src="@drawable/peter_griffin_sixtyfour"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/lightSaberButton" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Instrument Mode"
+                    android:id="@+id/textView16"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/thirdInstrumentButton"
-            android:src="@drawable/eightbit_instr"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/peterButton" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sineWaveButton"
+                    android:src="@drawable/sinewave_ic"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Wave Generator"
+                    android:id="@+id/textView17"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lightSaberButton"
+                    android:src="@drawable/light_saber_image"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/eight_bit_button"
+                    android:layout_gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Sound Effect"
+                    android:id="@+id/textView18"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/peterButton"
+                    android:src="@drawable/peter_griffin_sixtyfour"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/lightSaberButton"
+                    android:layout_gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="DJ mode"
+                    android:id="@+id/textView19"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+        </LinearLayout>
+
     </RelativeLayout>
 </FrameLayout>

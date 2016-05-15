@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#A070FF</color>
+    <color name="colorPrimary">#a070ff</color>
     <color name="colorPrimaryDark">#330066</color>
     <color name="colorAccent">#DE9800</color>
     <color name="dividerDialog">#FFC640</color>

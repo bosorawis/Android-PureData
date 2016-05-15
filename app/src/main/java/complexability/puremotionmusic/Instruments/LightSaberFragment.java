@@ -29,6 +29,7 @@ import org.puredata.core.utils.IoUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import complexability.puremotionmusic.Helper.AccelBaseInstrument;
@@ -50,7 +51,6 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
     private static final String TAG = "LightSaberFragment";
     private PdService pdService = null;
     ToggleButton onOffButton;
-    Button button, button2;
     BluetoothSPP bt;
 
     public LightSaberFragment() {
@@ -90,8 +90,6 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_light_saber, container, false);
         onOffButton = (ToggleButton) view.findViewById(R.id.onOffButton);
-        button = (Button) view.findViewById(R.id.button);
-        button2 = (Button) view.findViewById(R.id.button2);
 
         onOffButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -104,18 +102,6 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
                 PdBase.sendFloat("init_vars", val);
             }
         });
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PdBase.sendFloat("hum",301);
-            }
-        });
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PdBase.sendFloat("slash",301);
-            }
-        });
         bt = ((MainActivity) getActivity()).getBt();
         bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             public void onDataReceived(byte[] data, String message) {
@@ -124,8 +110,6 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
                 }
             }
         });
-
-
 
         AudioParameters.init(getActivity());
         PdPreferences.initPreferences(getActivity().getApplicationContext());
@@ -139,13 +123,13 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
         Log.d(TAG, "initpd");
         File patchFile = null;
         //int sampleRate = AudioParameters.suggestSampleRate();
-        int sampleRate = 22050;
+        int sampleRate = 44100;
         Log.d(this.TAG, "sample rate: " + Integer.toString(sampleRate));
         PdAudio.initAudio(sampleRate, 0, 2, 8, true);
         try {
             File dir = getActivity().getApplicationContext().getFilesDir();
-            IoUtils.extractZipResource(getResources().openRawResource(R.raw.saber3),dir,true);
-            File pdPatch = new File(dir, "saber3.pd");
+            IoUtils.extractZipResource(getResources().openRawResource(R.raw.lightsaber),dir,true);
+            File pdPatch = new File(dir, "lightsaber.pd");
             PdBase.openPatch(pdPatch);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -251,9 +235,16 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
 
         float left_mag = findMagnitude(l_x_accel, l_y_accel, l_z_accel);
         float right_mag = findMagnitude(r_x_accel, r_y_accel, r_z_accel);
+        if(data[24]!= 0){
+            final Random num = new Random();
+            int val = num.nextInt(3)+1;
+            PdBase.sendFloat("clash", (float) val);
+            return;
+        }
 
-        if(left_mag > 1.5 || right_mag > 2.5){
+        if(left_mag > 1.75 || right_mag > 1.75){
             PdBase.sendFloat("slash", (float) 1.0);
+            return;
         }
         else{
             //PdBase.sendFloat("slash", (float) 0.0);

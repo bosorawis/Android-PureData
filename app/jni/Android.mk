@@ -56,3 +56,19 @@ LOCAL_SHARED_LIBRARIES = pd
 include $(BUILD_SHARED_LIBRARY)
 
 #---------------------------------------------------------------
+include $(CLEAR_VARS)
+LOCAL_MODULE := gt_tilde
+LOCAL_CFLAGS := -DPD
+LOCAL_SRC_FILES := 0x3e0x7e.c
+LOCAL_SHARED_LIBRARIES = pd
+include $(BUILD_SHARED_LIBRARY)
+
+#---------------------------------------------------------------
+include $(CLEAR_VARS)
+LOCAL_MODULE := lt_tilde
+LOCAL_CFLAGS := -DPD
+LOCAL_SRC_FILES := 0x3c0x7e.c
+LOCAL_SHARED_LIBRARIES = pd
+include $(BUILD_SHARED_LIBRARY)
+
+#---------------------------------------------------------------

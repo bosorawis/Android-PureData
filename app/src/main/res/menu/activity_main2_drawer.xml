@@ -9,7 +9,7 @@
         <item
             android:id="@+id/nav_eight_bit_piano"
             android:icon="@drawable/bit_piano"
-            android:title="8-Bit Piano" />
+            android:title="Instrument" />
         <item
             android:id="@+id/light_saber"
             android:icon="@drawable/bit_piano"

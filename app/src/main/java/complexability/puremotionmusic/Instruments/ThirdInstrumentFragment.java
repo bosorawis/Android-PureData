@@ -523,7 +523,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 float val = (isChecked) ? 1.0f : 0.0f;
                 startAudio();
-                PdBase.sendFloat("init_vars", val);
+                //PdBase.sendFloat("init_vars", val);
 
                 PdBase.sendFloat("left_pitch_sel",selected[LEFT_PITCH]);
                 PdBase.sendFloat("right_pitch_sel", selected[RIGHT_PITCH]);
@@ -689,8 +689,8 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             //PdBase.setReceiver(receiver);
             //PdBase.subscribe("metro_bng");
             ////PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.instrument_1);
-            patchFile = IoUtils.extractResource(in, "instrument_1.pd", getActivity().getCacheDir());
+            InputStream in = res.openRawResource(R.raw.instrument_2_test);
+            patchFile = IoUtils.extractResource(in, "instrument_2_test.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
