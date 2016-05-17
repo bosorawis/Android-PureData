@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -89,25 +90,33 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     SeekBar sineWaveSeekBar;
     SeekBar sawToothSeekBar;
     SeekBar pwmSeekBar;
-    SeekBar dutyCycleSeekBar;
+    SeekBar delaySeekBar;
+    Button leadNoteLengthButton;
 
     TextView sineWaveText;
     TextView sawToothText;
     TextView pwmText;
-    TextView dutyCycleText;
+    TextView delayText;
+    TextView leadNoteLengthText;
+
 
     SeekBar bassSineWaveSeekBar;
     SeekBar bassSawToothSeekBar;
     SeekBar bassPwmSeekBar;
-    SeekBar bassDutyCycleSeekBar;
+    SeekBar bassDelaySeekBar;
+    Button bassNoteLengthButton;
+
+
     TextView bassSineWaveText;
     TextView bassSawToothText;
     TextView bassPwmText;
-    TextView bassDutyCycleText;
+    TextView bassDelayText;
+    TextView bassNoteLengthText;
+
+    Spinner leftHandDelaySpinner;
 
     Button keyButton;
     Button bpmButton;
-    Button noteLengthButton;
 
     TextView bpmText;
     TextView keyText;
@@ -116,6 +125,8 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     ToggleButton onOffButton;
 
     Switch reverbSwitch;
+
+    Button delayButton;
 
     BluetoothSPP bt;
     String availableEffects[];
@@ -226,22 +237,22 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         sineWaveText = (TextView) view.findViewById(R.id.sineWaveText);
         sawToothText = (TextView) view.findViewById(R.id.sawToothText);
         pwmText = (TextView) view.findViewById(R.id.pwmText);
-        dutyCycleText = (TextView) view.findViewById(R.id.dutyCycleText);
+        //delayText = (TextView) view.findViewById(R.id.delayText);
 
         sineWaveSeekBar = (SeekBar) view.findViewById(R.id.sinewaveSeekBar);
         sawToothSeekBar = (SeekBar) view.findViewById(R.id.sawToothSeekBar);
         pwmSeekBar      = (SeekBar) view.findViewById(R.id.pwmSeekBar);
-        dutyCycleSeekBar = (SeekBar) view.findViewById(R.id.dutyCycleSeekBar);
+        //delaySeekBar = (SeekBar) view.findViewById(R.id.delaySeekBar);
 
         bassSineWaveText = (TextView) view.findViewById(R.id.bassSineWaveText);
         bassSawToothText = (TextView) view.findViewById(R.id.bassSawtoothText);
         bassPwmText = (TextView) view.findViewById(R.id.bassPwmText);
-        bassDutyCycleText = (TextView) view.findViewById(R.id.bassDutyCycleText);
+        //bassDelayText = (TextView) view.findViewById(R.id.bassdelayText);
 
         bassSineWaveSeekBar = (SeekBar) view.findViewById(R.id.bassSineWaveSeekbar);
         bassSawToothSeekBar = (SeekBar) view.findViewById(R.id.bassSawToothSeekbar);
         bassPwmSeekBar      = (SeekBar) view.findViewById(R.id.bassPwmSeekBar);
-        bassDutyCycleSeekBar = (SeekBar) view.findViewById(R.id.bassDutyCycleSeekbar);
+        //bassDelaySeekBar = (SeekBar) view.findViewById(R.id.bassDelaySeekbar);
 
         reverbSwitch = (Switch) view.findViewById(R.id.reverbSwitch);
 
@@ -249,9 +260,21 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         keyText = (TextView) view.findViewById(R.id.keyText);
 
         bpmButton = (Button) view.findViewById(R.id.setBpmButton);
-        noteLengthButton = (Button) view.findViewById(R.id.noteValueButton);
-        noteValueText = (TextView) view.findViewById(R.id.noteValueText);
+        leadNoteLengthButton = (Button) view.findViewById(R.id.leadNoteLengthButton);
+        leadNoteLengthText = (TextView) view.findViewById(R.id.leadNoteLengthText);
+
+        bassNoteLengthButton = (Button) view.findViewById(R.id.bassNoteLengthButton);
+        bassNoteLengthText = (TextView) view.findViewById(R.id.bassNoteLengthText);
+
         bpmText = (TextView) view.findViewById(R.id.bpmText);
+
+        leftHandDelaySpinner = (Spinner) view.findViewById(R.id.leftHandDelaySpinner);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(myContext,
+                R.array.note_length_option, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        leftHandDelaySpinner.setAdapter(adapter);
+
 
         keyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,6 +300,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
                 builderSingle.show();
             }
         });
+
         bpmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -317,7 +341,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             }
         });
 
-        noteLengthButton.setOnClickListener(new View.OnClickListener() {
+        leadNoteLengthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(myContext);
@@ -335,8 +359,35 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
                 builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        noteValueText.setText(arrayAdapter.getItem(which));
-                        PdBase.sendFloat("note_length", which);
+                        leadNoteLengthText.setText(arrayAdapter.getItem(which));
+                        PdBase.sendFloat("lead_note_length", which);
+                        Log.d("Item", Integer.toString(which));
+                    }
+                });
+                builderSingle.show();
+            }
+        });
+
+        bassNoteLengthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(myContext);
+                builderSingle.setTitle("Select Note Value:");
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        myContext,
+                        android.R.layout.simple_list_item_1);
+                arrayAdapter.add("1/16");
+                arrayAdapter.add("1/8");
+                arrayAdapter.add("1/4");
+                arrayAdapter.add("1/2");
+                arrayAdapter.add("1");
+
+                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        bassNoteLengthText.setText(arrayAdapter.getItem(which));
+                        PdBase.sendFloat("bass_note_length", which);
                         Log.d("Item", Integer.toString(which));
                     }
                 });
@@ -345,7 +396,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         });
 
         /*
-        SeekBar Handler
+        SeekBar Handlers
          */
 
         sineWaveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -398,11 +449,12 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
 
             }
         });
-        dutyCycleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        /*
+        delaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                dutyCycleText.setText(String.valueOf(progress));
-                PdBase.sendFloat("pwm_duty_cycle1", (float) (progress/100.));
+                delayText.setText(String.valueOf(progress));
+                PdBase.sendFloat("delay_mix_l", (float) (progress/100.));
             }
 
             @Override
@@ -414,7 +466,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-
+        */
         /* for bass*/
         bassSineWaveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -468,10 +520,11 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
 
             }
         });
-        bassDutyCycleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        /*
+        bassDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                bassDutyCycleText.setText(String.valueOf(progress));
+                bassDelayText.setText(String.valueOf(progress));
                 PdBase.sendFloat("pwm_duty_cycle2", (float) (progress/100.));
             }
 
@@ -486,7 +539,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             }
         });
 
-
+        */
         /*
         Initializa Mapper for mapping motions
          */

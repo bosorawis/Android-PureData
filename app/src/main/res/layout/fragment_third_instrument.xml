@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Instruments.ThirdInstrumentFragment">
+    tools:context=".Instruments.ThirdInstrumentFragment"
+    android:id="@+id/thirdContainer">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -106,7 +107,7 @@
                     android:text="set bpm"
                     android:id="@+id/setBpmButton"
                     android:layout_below="@+id/keyButton"
-                    android:layout_toStartOf="@+id/left_pitch_text" />
+                    android:layout_alignParentStart="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -125,39 +126,16 @@
                     android:text="Reverb"
                     android:id="@+id/reverbSwitch"
                     android:checked="false"
-                    android:layout_below="@+id/noteValueButton"
-                    android:layout_alignEnd="@+id/noteValueText"
-                    android:layout_alignStart="@+id/noteValueButton"
-                    android:layout_alignParentBottom="true" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Note Value"
-                    android:id="@+id/noteValueButton"
-                    android:layout_below="@+id/setBpmButton"
-                    android:layout_toStartOf="@+id/bpmText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="1/4"
-                    android:id="@+id/noteValueText"
-                    android:gravity="center"
-                    android:layout_above="@+id/reverbSwitch"
-                    android:layout_alignEnd="@+id/keyText"
-                    android:layout_below="@+id/bpmText"
-                    android:layout_toEndOf="@+id/noteValueButton" />
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Key"
                     android:id="@+id/keyButton"
-                    android:layout_below="@+id/left_pitch_button"
-                    android:layout_alignStart="@+id/setBpmButton"
-                    android:layout_marginTop="47dp" />
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/left_pitch_text" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,6 +147,106 @@
                     android:layout_alignBottom="@+id/keyButton"
                     android:gravity="center"
                     android:layout_alignEnd="@+id/bpmText" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignTop="@+id/keyText"
+                    android:layout_toEndOf="@+id/left_pitch_button"
+                    android:weightSum="2"
+                    android:id="@+id/linearLayout4">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="10"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Left Delay"
+                            android:id="@+id/textView30"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentStart="true"
+                            android:gravity="bottom|center"
+                            android:layout_weight="1" />
+
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="6"
+                            android:layout_gravity="center">
+                            <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                                android:id="@+id/leftDelaySeekBar"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                app:seekBarRotation="CW270"
+                                android:max="100"
+                                android:progress="58"
+                                android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
+                        </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="47"
+                            android:id="@+id/leftDelayText"
+                            android:gravity="top|center" />
+
+                        <Spinner
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/leftHandDelaySpinner"
+                            android:layout_weight="2" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="10"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Right Delay"
+                            android:id="@+id/textView44"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentStart="true"
+                            android:gravity="bottom|center"
+                            android:layout_weight="1" />
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="8"
+                            android:layout_gravity="center">
+                            <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                                android:id="@+id/rightDelaySeekbar"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                app:seekBarRotation="CW270"
+                                android:max="100"
+                                android:progress="58"
+                                android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
+                        </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                        <TextView
+                            android:layout_width="104dp"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="47"
+                            android:id="@+id/rightDelayText"
+                            android:layout_weight="1"
+                            android:gravity="top|center" />
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </RelativeLayout>
 
@@ -191,6 +269,7 @@
                     android:id="@+id/drawTheRightBall"
                     android:layout_weight="1" />
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -199,7 +278,8 @@
             android:layout_height="match_parent"
             android:layout_toEndOf="@+id/instrumentText"
             android:layout_alignParentTop="true"
-            android:weightSum="10">
+            android:weightSum="10"
+            android:id="@+id/linearLayout3">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -290,7 +370,47 @@
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:weightSum="4">
+                            android:weightSum="5">
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:weightSum="10"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="Volume"
+                                    android:id="@+id/textView23"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentStart="true"
+                                    android:gravity="bottom|center"
+                                    android:layout_weight="1" />
+                                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8"
+                                    android:layout_gravity="center">
+                                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                                        android:id="@+id/VolumeSeekBar"
+                                        android:layout_width="0dp"
+                                        android:layout_height="0dp"
+                                        app:seekBarRotation="CW270"
+                                        android:max="100"
+                                        android:progress="58"
+                                        android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
+                                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                                <TextView
+                                    android:layout_width="104dp"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="47"
+                                    android:id="@+id/VolumeText"
+                                    android:gravity="top|center" />
+                            </LinearLayout>
+
 
                             <LinearLayout
                                 android:orientation="vertical"
@@ -385,7 +505,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="PWM"
+                                    android:text="Square"
                                     android:id="@+id/textView6"
                                     android:layout_alignParentTop="true"
                                     android:layout_toStartOf="@+id/textView11"
@@ -417,47 +537,29 @@
 
                                 <!-- This library requires pair of the VerticalSeekBar and VerticalSeekBarWrapper classes -->
                             </LinearLayout>
-                            <LinearLayout
-                                android:orientation="vertical"
+
+                            <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:weightSum="10">
+                                android:layout_weight="1" >
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="Duty Cycle"
-                                    android:id="@+id/textView11"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_alignParentEnd="true"
-                                    android:gravity="center"
-                                    android:layout_weight="1" />
-                                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                                <Button
                                     android:layout_width="wrap_content"
-                                    android:layout_height="150dp"
-                                    android:layout_weight="8"
-                                    android:layout_gravity="center">
-                                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                                        android:id="@+id/dutyCycleSeekBar"
-                                        android:layout_width="0dp"
-                                        android:layout_height="0dp"
-                                        app:seekBarRotation="CW270"
-                                        android:max="100"
-                                        android:progress="34"
-                                        android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
-                                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                                    android:layout_height="wrap_content"
+                                    android:text="Note Value"
+                                    android:id="@+id/leadNoteLengthButton"
+                                    android:layout_above="@+id/leadNoteLengthText"
+                                    android:layout_alignParentStart="true" />
 
                                 <TextView
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="34"
-                                    android:id="@+id/dutyCycleText"
-                                    android:gravity="top|center"
-                                    android:layout_weight="1" />
-                            </LinearLayout>
+                                    android:textAppearance="?android:attr/textAppearanceLarge"
+                                    android:text="1/4"
+                                    android:id="@+id/leadNoteLengthText"
+                                    android:layout_centerVertical="true"
+                                    android:layout_centerHorizontal="true" />
+                            </RelativeLayout>
 
 
                         </LinearLayout>
@@ -465,15 +567,57 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:layout_width="445dp"
-                        android:layout_height="417dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1">
 
                         <LinearLayout
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:weightSum="4">
+                            android:weightSum="5">
+
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:weightSum="10"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="Volume"
+                                    android:id="@+id/textView20"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentStart="true"
+                                    android:gravity="bottom|center"
+                                    android:layout_weight="1" />
+                                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8"
+                                    android:layout_gravity="center">
+                                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                                        android:id="@+id/bassVolumeSeekBar"
+                                        android:layout_width="0dp"
+                                        android:layout_height="0dp"
+                                        app:seekBarRotation="CW270"
+                                        android:max="100"
+                                        android:progress="58"
+                                        android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
+                                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                                <TextView
+                                    android:layout_width="104dp"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="47"
+                                    android:id="@+id/bassVolumeText"
+                                    android:layout_weight="1"
+                                    android:gravity="top|center" />
+                            </LinearLayout>
+
 
                             <LinearLayout
                                 android:orientation="vertical"
@@ -575,7 +719,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="PWM"
+                                    android:text="Square"
                                     android:id="@+id/textView12"
                                     android:layout_alignParentTop="true"
                                     android:layout_toStartOf="@+id/textView11"
@@ -605,48 +749,29 @@
                                     android:layout_weight="1" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:orientation="vertical"
+                            <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_alignParentTop="true"
-                                android:layout_alignParentStart="true"
-                                android:layout_weight="1"
-                                android:weightSum="10" >
+                                android:layout_weight="1">
+
+                                <Button
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Note Value"
+                                    android:id="@+id/bassNoteLengthButton"
+                                    android:layout_above="@+id/bassNoteLengthText"
+                                    android:layout_alignParentStart="true" />
 
                                 <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="Duty Cycle"
-                                    android:id="@+id/textView13"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_alignParentEnd="true"
-                                    android:gravity="bottom|center"
-                                    android:layout_weight="1" />
-                                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
                                     android:layout_width="wrap_content"
-                                    android:layout_height="150dp"
-                                    android:layout_weight="8"
-                                    android:layout_gravity="center">
-                                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                                        android:id="@+id/bassDutyCycleSeekbar"
-                                        android:layout_width="0dp"
-                                        android:layout_height="0dp"
-                                        app:seekBarRotation="CW270"
-                                        android:max="100"
-                                        android:progress="58"
-                                        android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
-                                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
-                                <TextView
-                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="58"
-                                    android:id="@+id/bassDutyCycleText"
-                                    android:gravity="top|center"
-                                    android:layout_weight="1" />
-                            </LinearLayout>
+                                    android:textAppearance="?android:attr/textAppearanceLarge"
+                                    android:text="1/4"
+                                    android:id="@+id/bassNoteLengthText"
+                                    android:layout_centerVertical="true"
+                                    android:layout_centerHorizontal="true" />
+                            </RelativeLayout>
+
                         </LinearLayout>
                     </RelativeLayout>
                 </LinearLayout>
@@ -679,9 +804,9 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Bass"
             android:id="@+id/textView14"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="79dp"
             android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/instrumentImage" />
+            android:layout_alignEnd="@+id/instrumentText" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -690,7 +815,7 @@
             android:text="Lead"
             android:id="@+id/textView15"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/instrumentImage" />
+            android:layout_toStartOf="@+id/linearLayout3" />
 
     </RelativeLayout>
 
