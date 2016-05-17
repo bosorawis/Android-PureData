@@ -437,12 +437,12 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                volumeText.setText(String.valueOf(progress));
 
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                volumeText.setText(String.valueOf(seekBar));
             }
 
             @Override
@@ -524,12 +524,12 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         bassVolumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                bassVolumeText.setText(String.valueOf(progress));
 
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                bassVolumeText.setText(String.valueOf(seekBar));
             }
 
             @Override
