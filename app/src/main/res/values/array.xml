@@ -37,8 +37,8 @@
         <string-array name="note_length_option">
             <item>1/16</item>
             <item>1/8</item>
-            <item><![CDATA[&#188;]]></item>
-            <item><![CDATA[&#189;]]></item>
+            <item>1/4</item>
+            <item>1/2</item>
             <item>1</item>
         </string-array>
 </resources>

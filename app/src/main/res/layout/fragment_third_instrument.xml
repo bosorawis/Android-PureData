@@ -126,7 +126,7 @@
                     android:text="Reverb"
                     android:id="@+id/reverbSwitch"
                     android:checked="false"
-                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/setBpmButton"
                     android:layout_alignParentStart="true" />
 
                 <Button
@@ -175,11 +175,22 @@
                             android:gravity="bottom|center"
                             android:layout_weight="1" />
 
+                        <Spinner
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/leftHandDelaySpinner"
+                            android:layout_weight="2"
+                            android:layout_below="@+id/setBpmButton"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@+id/linearLayout4"
+                            android:background="#6e6e6e"
+                            android:gravity="center" />
+
                         <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="6"
-                            android:layout_gravity="center">
+                            android:layout_height="105dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="6">
                             <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
                                 android:id="@+id/leftDelaySeekBar"
                                 android:layout_width="0dp"
@@ -195,13 +206,8 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="47"
                             android:id="@+id/leftDelayText"
-                            android:gravity="top|center" />
-
-                        <Spinner
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/leftHandDelaySpinner"
-                            android:layout_weight="2" />
+                            android:gravity="top|center"
+                            android:layout_weight="1" />
 
                     </LinearLayout>
 
@@ -220,13 +226,24 @@
                             android:id="@+id/textView44"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentStart="true"
-                            android:gravity="bottom|center"
-                            android:layout_weight="1" />
+                            android:gravity="bottom|center" />
+
+                        <Spinner
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rightHandDelaySpinner"
+                            android:layout_weight="2"
+                            android:layout_below="@+id/setBpmButton"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@+id/linearLayout4"
+                            android:background="#6e6e6e"
+                            android:gravity="center" />
+
                         <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="8"
-                            android:layout_gravity="center">
+                            android:layout_width="152dp"
+                            android:layout_height="117dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="6">
                             <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
                                 android:id="@+id/rightDelaySeekbar"
                                 android:layout_width="0dp"
@@ -237,7 +254,7 @@
                                 android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                         </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
                         <TextView
-                            android:layout_width="104dp"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="47"
@@ -394,7 +411,7 @@
                                     android:layout_weight="8"
                                     android:layout_gravity="center">
                                     <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                                        android:id="@+id/VolumeSeekBar"
+                                        android:id="@+id/volumeSeekBar"
                                         android:layout_width="0dp"
                                         android:layout_height="0dp"
                                         app:seekBarRotation="CW270"
@@ -407,7 +424,7 @@
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:text="47"
-                                    android:id="@+id/VolumeText"
+                                    android:id="@+id/volumeText"
                                     android:gravity="top|center" />
                             </LinearLayout>
 

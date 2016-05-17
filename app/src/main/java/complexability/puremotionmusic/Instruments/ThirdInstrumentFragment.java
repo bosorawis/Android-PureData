@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -87,36 +88,41 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     DrawTheBall drawTheLeftBall;
     DrawRightBall drawTheRightBall;
 
+    SeekBar volumeSeekBar;
     SeekBar sineWaveSeekBar;
     SeekBar sawToothSeekBar;
     SeekBar pwmSeekBar;
-    SeekBar delaySeekBar;
     Button leadNoteLengthButton;
 
+    TextView volumeText;
     TextView sineWaveText;
     TextView sawToothText;
     TextView pwmText;
-    TextView delayText;
     TextView leadNoteLengthText;
 
-
+    SeekBar bassVolumeSeekBar;
     SeekBar bassSineWaveSeekBar;
     SeekBar bassSawToothSeekBar;
     SeekBar bassPwmSeekBar;
-    SeekBar bassDelaySeekBar;
     Button bassNoteLengthButton;
 
-
+    TextView bassVolumeText;
     TextView bassSineWaveText;
     TextView bassSawToothText;
     TextView bassPwmText;
-    TextView bassDelayText;
     TextView bassNoteLengthText;
 
     Spinner leftHandDelaySpinner;
+    Spinner rightHandDelaySpinner;
 
     Button keyButton;
     Button bpmButton;
+
+    SeekBar leftDelaySeekBar;
+    TextView leftDelayText;
+
+    SeekBar rightDelaySeekBar;
+    TextView rightDelayText;
 
     TextView bpmText;
     TextView keyText;
@@ -233,26 +239,26 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         //imageView.setImageResource(R.drawable.eightbit_instr);
 
 
-
+        volumeText   = (TextView) view.findViewById(R.id.volumeText);
         sineWaveText = (TextView) view.findViewById(R.id.sineWaveText);
         sawToothText = (TextView) view.findViewById(R.id.sawToothText);
         pwmText = (TextView) view.findViewById(R.id.pwmText);
-        //delayText = (TextView) view.findViewById(R.id.delayText);
 
+
+        volumeSeekBar   = (SeekBar) view.findViewById(R.id.volumeSeekBar);
         sineWaveSeekBar = (SeekBar) view.findViewById(R.id.sinewaveSeekBar);
         sawToothSeekBar = (SeekBar) view.findViewById(R.id.sawToothSeekBar);
         pwmSeekBar      = (SeekBar) view.findViewById(R.id.pwmSeekBar);
-        //delaySeekBar = (SeekBar) view.findViewById(R.id.delaySeekBar);
 
+        bassVolumeText   = (TextView) view.findViewById(R.id.bassVolumeText);
         bassSineWaveText = (TextView) view.findViewById(R.id.bassSineWaveText);
         bassSawToothText = (TextView) view.findViewById(R.id.bassSawtoothText);
         bassPwmText = (TextView) view.findViewById(R.id.bassPwmText);
-        //bassDelayText = (TextView) view.findViewById(R.id.bassdelayText);
 
+        bassVolumeSeekBar   = (SeekBar) view.findViewById(R.id.bassVolumeSeekBar);
         bassSineWaveSeekBar = (SeekBar) view.findViewById(R.id.bassSineWaveSeekbar);
         bassSawToothSeekBar = (SeekBar) view.findViewById(R.id.bassSawToothSeekbar);
         bassPwmSeekBar      = (SeekBar) view.findViewById(R.id.bassPwmSeekBar);
-        //bassDelaySeekBar = (SeekBar) view.findViewById(R.id.bassDelaySeekbar);
 
         reverbSwitch = (Switch) view.findViewById(R.id.reverbSwitch);
 
@@ -266,16 +272,45 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         bassNoteLengthButton = (Button) view.findViewById(R.id.bassNoteLengthButton);
         bassNoteLengthText = (TextView) view.findViewById(R.id.bassNoteLengthText);
 
+        leftDelaySeekBar = (SeekBar) view.findViewById(R.id.leftDelaySeekBar);
+        rightDelaySeekBar = (SeekBar) view.findViewById(R.id.rightDelaySeekbar);
+
+        leftDelayText = (TextView) view.findViewById(R.id.leftDelayText);
+        rightDelayText = (TextView) view.findViewById(R.id.rightDelayText);
+
         bpmText = (TextView) view.findViewById(R.id.bpmText);
 
         leftHandDelaySpinner = (Spinner) view.findViewById(R.id.leftHandDelaySpinner);
+        rightHandDelaySpinner = (Spinner) view.findViewById(R.id.rightHandDelaySpinner);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(myContext,
                 R.array.note_length_option, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         leftHandDelaySpinner.setAdapter(adapter);
+        rightHandDelaySpinner.setAdapter(adapter);
+        leftHandDelaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        rightHandDelaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         keyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -399,6 +434,23 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         SeekBar Handlers
          */
 
+        volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                volumeText.setText(String.valueOf(seekBar));
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         sineWaveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -468,6 +520,25 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         });
         */
         /* for bass*/
+
+        bassVolumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                bassVolumeText.setText(String.valueOf(seekBar));
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
         bassSineWaveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -520,11 +591,29 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
 
             }
         });
-        /*
-        bassDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+        //-------Delay seekbar-----//
+        rightDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                bassDelayText.setText(String.valueOf(progress));
+                rightDelayText.setText(String.valueOf(progress));
+                PdBase.sendFloat("pwm_duty_cycle2", (float) (progress/100.));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        leftDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                leftDelayText.setText(String.valueOf(progress));
                 PdBase.sendFloat("pwm_duty_cycle2", (float) (progress/100.));
             }
 
@@ -539,7 +628,6 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             }
         });
 
-        */
         /*
         Initializa Mapper for mapping motions
          */
