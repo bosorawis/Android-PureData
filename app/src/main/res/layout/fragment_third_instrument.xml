@@ -197,14 +197,14 @@
                                 android:layout_height="0dp"
                                 app:seekBarRotation="CW270"
                                 android:max="100"
-                                android:progress="58"
+                                android:progress="50"
                                 android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                         </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="47"
+                            android:text="50"
                             android:id="@+id/leftDelayText"
                             android:gravity="top|center"
                             android:layout_weight="1" />
@@ -250,14 +250,14 @@
                                 android:layout_height="0dp"
                                 app:seekBarRotation="CW270"
                                 android:max="100"
-                                android:progress="58"
+                                android:progress="50"
                                 android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                         </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
                         <TextView
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="47"
+                            android:text="50"
                             android:id="@+id/rightDelayText"
                             android:layout_weight="1"
                             android:gravity="top|center" />
@@ -416,14 +416,14 @@
                                         android:layout_height="0dp"
                                         app:seekBarRotation="CW270"
                                         android:max="100"
-                                        android:progress="58"
+                                        android:progress="50"
                                         android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
                                 <TextView
                                     android:layout_width="104dp"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="47"
+                                    android:text="50"
                                     android:id="@+id/volumeText"
                                     android:gravity="top|center" />
                             </LinearLayout>
@@ -622,14 +622,14 @@
                                         android:layout_height="0dp"
                                         app:seekBarRotation="CW270"
                                         android:max="100"
-                                        android:progress="58"
+                                        android:progress="50"
                                         android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
                                 <TextView
                                     android:layout_width="104dp"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="47"
+                                    android:text="50"
                                     android:id="@+id/bassVolumeText"
                                     android:layout_weight="1"
                                     android:gravity="top|center" />

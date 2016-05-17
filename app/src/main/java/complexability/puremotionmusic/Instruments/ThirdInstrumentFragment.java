@@ -291,7 +291,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         leftHandDelaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                PdBase.sendFloat("delay_speed_l", position);
             }
 
             @Override
@@ -303,7 +303,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         rightHandDelaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                PdBase.sendFloat("delay_speed_r", position);
             }
 
             @Override
@@ -395,7 +395,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         leadNoteLengthText.setText(arrayAdapter.getItem(which));
-                        PdBase.sendFloat("lead_note_length", which);
+                        PdBase.sendFloat("note1_length", which);
                         Log.d("Item", Integer.toString(which));
                     }
                 });
@@ -422,7 +422,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         bassNoteLengthText.setText(arrayAdapter.getItem(which));
-                        PdBase.sendFloat("bass_note_length", which);
+                        PdBase.sendFloat("note2_length", which);
                         Log.d("Item", Integer.toString(which));
                     }
                 });
@@ -438,7 +438,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 volumeText.setText(String.valueOf(progress));
-
+                PdBase.sendFloat("lead_volume", (float) ((float) 0.3*(progress/100.)));
             }
 
             @Override
@@ -525,7 +525,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 bassVolumeText.setText(String.valueOf(progress));
-
+                PdBase.sendFloat("bass_volume", (float) (0.3*progress/100.));
             }
 
             @Override
@@ -597,7 +597,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 rightDelayText.setText(String.valueOf(progress));
-                PdBase.sendFloat("pwm_duty_cycle2", (float) (progress/100.));
+                PdBase.sendFloat("delay_mix_r", (float) ((float) 5.*(progress/100.)));
             }
 
             @Override
@@ -614,7 +614,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 leftDelayText.setText(String.valueOf(progress));
-                PdBase.sendFloat("pwm_duty_cycle2", (float) (progress/100.));
+                PdBase.sendFloat("delay_mix_l", (float) ((float) 5.*(progress/100.)));
             }
 
             @Override
@@ -830,8 +830,8 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             //PdBase.setReceiver(receiver);
             //PdBase.subscribe("metro_bng");
             ////PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.instrument_2_test);
-            patchFile = IoUtils.extractResource(in, "instrument_2_test.pd", getActivity().getCacheDir());
+            InputStream in = res.openRawResource(R.raw.instrument_3);
+            patchFile = IoUtils.extractResource(in, "instrument_3.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
