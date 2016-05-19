@@ -184,17 +184,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         String moveTo = null;
-        if (id == R.id.sequencer) {
-            moveTo = "SineWave";
-            // Handle the camera action
-        } else if (id == R.id.nav_eight_bit_piano) {
+
+        if (id == R.id.nav_eight_bit_piano) {
             moveTo = "ThirdInstrument";
         }
         else if (id == R.id.light_saber){
             moveTo = "LightSaber";
         }
-        else if (id == R.id.peter_griffin){
-            moveTo = "PeterGriffin";
+        else if (id == R.id.sine_wave){
+            moveTo = "SineWave";
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

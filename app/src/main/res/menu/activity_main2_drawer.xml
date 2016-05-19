@@ -3,10 +3,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/sequencer"
-            android:icon="@drawable/ic_sequencer"
-            android:title="Sequencer" />
-        <item
             android:id="@+id/nav_eight_bit_piano"
             android:icon="@drawable/bit_piano"
             android:title="Instrument" />
@@ -15,10 +11,9 @@
             android:icon="@drawable/bit_piano"
             android:title="Light Saber" />
         <item
-            android:id="@+id/peter_griffin"
+            android:id="@+id/sine_wave"
             android:icon="@drawable/bit_piano"
-            android:title="Peter" />
-
+            android:title="The Ramen" />
 
     </group>
 

@@ -271,13 +271,13 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
 
     @Override
     protected void changeToNextInstrument() {
-        ((MainActivity) getActivity()).moveToFragmentByName("ReverbFragment");
+        ((MainActivity) getActivity()).moveToFragmentByName("ThirdInstrumentFragment");
 
     }
 
     @Override
     protected void changeToPrevInstrument() {
-        ((MainActivity) getActivity()).moveToFragmentByName("ReverbFragment");
+        ((MainActivity) getActivity()).moveToFragmentByName("ThirdInstrumentFragment");
     }
 
     @Override
@@ -299,14 +299,16 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        if(pdService.isRunning()){
-            stopAudio();
-        }
-        cleanup();
-        try{
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(pdService != null) {
+            if (pdService.isRunning()) {
+                stopAudio();
+            }
+            cleanup();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -475,8 +477,10 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         bt.setOnDataReceivedListener(null);
         ((MainActivity) getActivity()).cleanUpBluetoothListener();
         cleanup();
-        if(pdService.isRunning()){
-            stopAudio();
+        if(pdService!=null) {
+            if (pdService.isRunning()) {
+                stopAudio();
+            }
         }
         cleanup();
     }

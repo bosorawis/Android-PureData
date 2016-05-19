@@ -545,11 +545,11 @@ public class ReverbFragment extends InstrumentBase implements SharedPreferences.
         PdBase.sendFloat("left_roll", -leftMotion[ROLL]);
         PdBase.sendFloat("right_pitch", rightMotion[PITCH]);
         PdBase.sendFloat("right_roll", -rightMotion[ROLL]);
-        Log.d(TAG,"RIGHTHAND ACCEL x: " + Float.toString((r_x_accel)) + "\t y: "+Float.toString( r_y_accel) +"\t z: "+Float.toString( r_z_accel));
-        Log.d(TAG,"RIGHTHAND ORIEN Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));
+        //Log.d(TAG,"RIGHTHAND ACCEL x: " + Float.toString((r_x_accel)) + "\t y: "+Float.toString( r_y_accel) +"\t z: "+Float.toString( r_z_accel));
+        //Log.d(TAG,"RIGHTHAND ORIEN Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));
 
-        Log.d(TAG,"LEFTHAND ACCEL x: " + Float.toString((l_x_accel)) + "\t\t y: "+Float.toString(l_y_accel) +"\t\t z: "+Float.toString(l_z_accel));
-        Log.d(TAG,"LEFTHAND ORIEN Roll: " + Integer.toString((int)leftMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)leftMotion[PITCH]));
+        //Log.d(TAG,"LEFTHAND ACCEL x: " + Float.toString((l_x_accel)) + "\t\t y: "+Float.toString(l_y_accel) +"\t\t z: "+Float.toString(l_z_accel));
+        //Log.d(TAG,"LEFTHAND ORIEN Roll: " + Integer.toString((int)leftMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)leftMotion[PITCH]));
 
         drawTheLeftBall.updateValue( leftMotion[ROLL], -leftMotion[PITCH]);
         drawTheRightBall.updateValue(rightMotion[ROLL], -rightMotion[PITCH]);

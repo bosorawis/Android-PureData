@@ -272,45 +272,45 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         bassNoteLengthButton = (Button) view.findViewById(R.id.bassNoteLengthButton);
         bassNoteLengthText = (TextView) view.findViewById(R.id.bassNoteLengthText);
 
-        leftDelaySeekBar = (SeekBar) view.findViewById(R.id.leftDelaySeekBar);
-        rightDelaySeekBar = (SeekBar) view.findViewById(R.id.rightDelaySeekbar);
+        //leftDelaySeekBar = (SeekBar) view.findViewById(R.id.leftDelaySeekBar);
+        //rightDelaySeekBar = (SeekBar) view.findViewById(R.id.rightDelaySeekbar);
 
-        leftDelayText = (TextView) view.findViewById(R.id.leftDelayText);
-        rightDelayText = (TextView) view.findViewById(R.id.rightDelayText);
+        //leftDelayText = (TextView) view.findViewById(R.id.leftDelayText);
+        //rightDelayText = (TextView) view.findViewById(R.id.rightDelayText);
 
         bpmText = (TextView) view.findViewById(R.id.bpmText);
 
-        leftHandDelaySpinner = (Spinner) view.findViewById(R.id.leftHandDelaySpinner);
-        rightHandDelaySpinner = (Spinner) view.findViewById(R.id.rightHandDelaySpinner);
+        //leftHandDelaySpinner = (Spinner) view.findViewById(R.id.leftHandDelaySpinner);
+        //rightHandDelaySpinner = (Spinner) view.findViewById(R.id.rightHandDelaySpinner);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(myContext,
                 R.array.note_length_option, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        leftHandDelaySpinner.setAdapter(adapter);
-        rightHandDelaySpinner.setAdapter(adapter);
-        leftHandDelaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                PdBase.sendFloat("delay_speed_l", position);
-            }
+        //leftHandDelaySpinner.setAdapter(adapter);
+        //rightHandDelaySpinner.setAdapter(adapter);
+        //leftHandDelaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //    @Override
+        //    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //        PdBase.sendFloat("delay_speed_l", position);
+        //    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        //    @Override
+        //    public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+        //    }
+        //});
 
-        rightHandDelaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                PdBase.sendFloat("delay_speed_r", position);
-            }
+        //rightHandDelaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //    @Override
+        //    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //        PdBase.sendFloat("delay_speed_r", position);
+        //    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        //    @Override
+        //    public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+        //    }
+        //});
         keyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -438,7 +438,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 volumeText.setText(String.valueOf(progress));
-                PdBase.sendFloat("lead_volume", (float) ((float) 0.3*(progress/100.)));
+                PdBase.sendFloat("lead_volume", (float) (0.3*(progress/100.)));
             }
 
             @Override
@@ -501,24 +501,6 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
 
             }
         });
-        /*
-        delaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                delayText.setText(String.valueOf(progress));
-                PdBase.sendFloat("delay_mix_l", (float) (progress/100.));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-        */
         /* for bass*/
 
         bassVolumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -593,40 +575,40 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         });
 
         //-------Delay seekbar-----//
-        rightDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                rightDelayText.setText(String.valueOf(progress));
-                PdBase.sendFloat("delay_mix_r", (float) ((float) 5.*(progress/100.)));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-        leftDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                leftDelayText.setText(String.valueOf(progress));
-                PdBase.sendFloat("delay_mix_l", (float) ((float) 5.*(progress/100.)));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+        //rightDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        //    @Override
+        //    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        //        rightDelayText.setText(String.valueOf(progress));
+        //        PdBase.sendFloat("delay_mix_r", (float) ((float) 5.*(progress/100.)));
+        //    }
+//
+        //    @Override
+        //    public void onStartTrackingTouch(SeekBar seekBar) {
+//
+        //    }
+//
+        //    @Override
+        //    public void onStopTrackingTouch(SeekBar seekBar) {
+//
+        //    }
+        //});
+        //leftDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        //    @Override
+        //    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        //        leftDelayText.setText(String.valueOf(progress));
+        //        PdBase.sendFloat("delay_mix_l", (float) ((float) 5.*(progress/100.)));
+        //    }
+//
+        //    @Override
+        //    public void onStartTrackingTouch(SeekBar seekBar) {
+//
+        //    }
+//
+        //    @Override
+        //    public void onStopTrackingTouch(SeekBar seekBar) {
+//
+        //    }
+        //});
 
         /*
         Initializa Mapper for mapping motions
@@ -717,14 +699,16 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         Log.d(TAG,"onDetach");
         super.onDetach();
         mListener = null;
-        if(pdService.isRunning()){
-            stopAudio();
-        }
-        cleanup();
-        try{
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(pdService!=null) {
+            if (pdService.isRunning()) {
+                stopAudio();
+            }
+            cleanup();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
