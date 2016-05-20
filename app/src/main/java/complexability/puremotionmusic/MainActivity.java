@@ -25,6 +25,7 @@ import java.util.Objects;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
+import complexability.puremotionmusic.Instruments.SwordFragment;
 import complexability.puremotionmusic.Instruments.ThirdInstrumentFragment;
 import complexability.puremotionmusic.Instruments.LightSaberFragment;
 import complexability.puremotionmusic.Instruments.PeterGriffinFragment;
@@ -36,7 +37,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Sequencer.OnFragmentInteractionListener,
         ReverbFragment.OnFragmentInteractionListener, MainFragment.OnFragmentInteractionListener,
         SineWave.OnFragmentInteractionListener, LightSaberFragment.OnFragmentInteractionListener,
-        PeterGriffinFragment.OnFragmentInteractionListener, ThirdInstrumentFragment.OnFragmentInteractionListener{
+        PeterGriffinFragment.OnFragmentInteractionListener, ThirdInstrumentFragment.OnFragmentInteractionListener,
+        SwordFragment.OnFragmentInteractionListener{
 
 
     private static final String TAG = "MainActivity";
@@ -194,7 +196,9 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.sine_wave){
             moveTo = "SineWave";
         }
-
+        else if (id == R.id.sword){
+            moveTo = "SwordFragment";
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
@@ -297,7 +301,9 @@ public class MainActivity extends AppCompatActivity
         else if (Objects.equals(string, "ThirdInstrument")){
             fragment = new ThirdInstrumentFragment();
         }
-
+        else if (Objects.equals(string, "SwordFragment")){
+            fragment = new SwordFragment();
+        }
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
         transaction.addToBackStack(null);

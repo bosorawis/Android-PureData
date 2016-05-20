@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
@@ -28,7 +27,6 @@ import org.puredata.core.utils.IoUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Random;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -39,31 +37,30 @@ import complexability.puremotionmusic.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LightSaberFragment.OnFragmentInteractionListener} interface
+ * {@link SwordFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LightSaberFragment#newInstance} factory method to
+ * Use the {@link SwordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LightSaberFragment extends AccelBaseInstrument implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-    private static final String TAG = "LightSaberFragment";
+public class SwordFragment extends AccelBaseInstrument implements SharedPreferences.OnSharedPreferenceChangeListener {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String TAG = "SwordFragment";
     private PdService pdService = null;
     ToggleButton onOffButton;
     BluetoothSPP bt;
-
-    public LightSaberFragment() {
-        // Required empty public constructor
-    }
-
-    public static LightSaberFragment newInstance(String param1, String param2) {
-        LightSaberFragment fragment = new LightSaberFragment();
-
+    public static SwordFragment newInstance(String param1, String param2) {
+        SwordFragment fragment = new SwordFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+        }
     }
     private final ServiceConnection pdConnection = new ServiceConnection() {
         @Override
@@ -86,7 +83,7 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_light_saber, container, false);
+        final View view = inflater.inflate(R.layout.fragment_sword, container, false);
         onOffButton = (ToggleButton) view.findViewById(R.id.onOffButton);
 
         onOffButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -94,8 +91,6 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 float val = (isChecked) ? 1.0f : 0.0f;
                 startAudio();
-                //PdBase.sendFloat("init_vars", val);
-                //PdBase.sendFloat("bpm", (float) 70.0);
                 PdBase.sendFloat("onOff", val);
                 PdBase.sendFloat("init_vars", val);
             }
@@ -103,7 +98,6 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
         bt = ((MainActivity) getActivity()).getBt();
         bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             public void onDataReceived(byte[] data, String message) {
-                //Log.d(TAG,"hello");
                 if (data.length >=24) {
                     dataProc(data);
                 }
@@ -117,6 +111,10 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
 
         return view;
     }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+    }
     private void initPd() throws IOException {
         Resources res = getResources();
         Log.d(TAG, "initpd");
@@ -127,8 +125,8 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
         PdAudio.initAudio(sampleRate, 0, 2, 8, true);
         try {
             File dir = getActivity().getApplicationContext().getFilesDir();
-            IoUtils.extractZipResource(getResources().openRawResource(R.raw.lightsaber),dir,true);
-            File pdPatch = new File(dir, "lightsaber.pd");
+            IoUtils.extractZipResource(getResources().openRawResource(R.raw.sword),dir,true);
+            File pdPatch = new File(dir, "sword.pd");
             PdBase.openPatch(pdPatch);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -236,19 +234,17 @@ public class LightSaberFragment extends AccelBaseInstrument implements SharedPre
         float right_mag = findMagnitude(r_x_accel, r_y_accel, r_z_accel);
         if(data[24]!= 0){
             final Random num = new Random();
-            int val = num.nextInt(5);
-            Log.d(TAG,"clash: " + val);
-
-            PdBase.sendFloat("clash", (float) 1.0);
+            int val = num.nextInt(3)+1;
+            PdBase.sendFloat("clash", (float) val);
             return;
         }
 
         if(left_mag > 1.75 || right_mag > 1.75){
-            final Random num = new Random();
-            int val = num.nextInt(5);
-            Log.d(TAG,"val: " + (float) val);
             PdBase.sendFloat("slash", (float) 1.0);
             return;
+        }
+        else{
+            //PdBase.sendFloat("slash", (float) 0.0);
         }
     }
     private void startAudio() {

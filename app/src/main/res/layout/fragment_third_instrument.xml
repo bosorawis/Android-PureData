@@ -116,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="120"
+                    android:text="150"
                     android:id="@+id/bpmText"
                     android:layout_toEndOf="@+id/setBpmButton"
                     android:layout_alignBottom="@+id/setBpmButton"
@@ -345,14 +345,14 @@
                                         android:layout_height="0dp"
                                         app:seekBarRotation="CW270"
                                         android:max="100"
-                                        android:progress="60"
+                                        android:progress="76"
                                         android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
                                 <TextView
                                     android:layout_width="104dp"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="60"
+                                    android:text="76"
                                     android:id="@+id/sineWaveText"
                                     android:layout_weight="1"
                                     android:gravity="top|center" />
@@ -386,14 +386,14 @@
                                         android:layout_height="0dp"
                                         app:seekBarRotation="CW270"
                                         android:max="100"
-                                        android:progress="42"
+                                        android:progress="29"
                                         android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
                                 <TextView
                                     android:layout_width="fill_parent"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="42"
+                                    android:text="29"
                                     android:id="@+id/sawToothText"
                                     android:layout_weight="1"
                                     android:layout_gravity="left|center"
@@ -427,7 +427,7 @@
                                         android:layout_height="0dp"
                                         app:seekBarRotation="CW270"
                                         android:max="100"
-                                        android:progress="15"
+                                        android:progress="82"
                                         android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
@@ -435,7 +435,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="15"
+                                    android:text="82"
                                     android:id="@+id/pwmText"
                                     android:gravity="top|center"
                                     android:layout_weight="1" />
@@ -460,7 +460,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceLarge"
-                                    android:text="1/4"
+                                    android:text="1/8"
                                     android:id="@+id/leadNoteLengthText"
                                     android:layout_centerVertical="true"
                                     android:layout_centerHorizontal="true" />
@@ -510,14 +510,14 @@
                                         android:layout_height="0dp"
                                         app:seekBarRotation="CW270"
                                         android:max="100"
-                                        android:progress="50"
+                                        android:progress="75"
                                         android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
                                 <TextView
                                     android:layout_width="104dp"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="50"
+                                    android:text="75"
                                     android:id="@+id/bassVolumeText"
                                     android:layout_weight="1"
                                     android:gravity="top|center" />
@@ -554,14 +554,14 @@
                                         android:layout_height="0dp"
                                         app:seekBarRotation="CW270"
                                         android:max="100"
-                                        android:progress="47"
+                                        android:progress="20"
                                         android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
                                 <TextView
                                     android:layout_width="104dp"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="47"
+                                    android:text="20"
                                     android:id="@+id/bassSineWaveText"
                                     android:layout_weight="1"
                                     android:gravity="top|center" />
@@ -597,14 +597,14 @@
                                         android:layout_height="0dp"
                                         app:seekBarRotation="CW270"
                                         android:max="100"
-                                        android:progress="43"
+                                        android:progress="100"
                                         android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
                                 <TextView
                                     android:layout_width="fill_parent"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="43"
+                                    android:text="100"
                                     android:id="@+id/bassSawtoothText"
                                     android:layout_weight="1"
                                     android:layout_gravity="left|center"
@@ -641,14 +641,14 @@
                                         android:layout_height="0dp"
                                         app:seekBarRotation="CW270"
                                         android:max="100"
-                                        android:progress="53"
+                                        android:progress="100"
                                         android:indeterminate="false" /> <!-- Rotation: CW90 or CW270 -->
                                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:text="53"
+                                    android:text="100"
                                     android:id="@+id/bassPwmText"
                                     android:gravity="top|center"
                                     android:layout_weight="1" />

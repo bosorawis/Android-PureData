@@ -6,15 +6,19 @@
             android:id="@+id/nav_eight_bit_piano"
             android:icon="@drawable/bit_piano"
             android:title="Instrument" />
+
+        <item
+            android:id="@+id/sine_wave"
+            android:icon="@drawable/bit_piano"
+            android:title="The Ramen" />
         <item
             android:id="@+id/light_saber"
             android:icon="@drawable/bit_piano"
             android:title="Light Saber" />
         <item
-            android:id="@+id/sine_wave"
+            android:id="@+id/sword"
             android:icon="@drawable/bit_piano"
-            android:title="The Ramen" />
-
+            android:title="Sword" />
     </group>
 
 

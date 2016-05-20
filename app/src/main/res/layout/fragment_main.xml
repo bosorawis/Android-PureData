@@ -16,7 +16,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="3">
+            android:weightSum="2">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -26,15 +26,15 @@
                 android:weightSum="10">
 
                 <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="563dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
                     android:id="@+id/eight_bit_button"
                     android:src="@drawable/bit_piano"
                     android:layout_alignParentTop="true"
                     android:layout_toEndOf="@+id/sineWaveButton"
-                    android:layout_gravity="center_horizontal"
                     android:padding="20dp"
-                    android:scaleType="fitCenter"/>
+                    android:scaleType="fitCenter"
+                    android:layout_weight="4" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -42,6 +42,26 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Instrument Mode"
                     android:id="@+id/textView16"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sineWaveButton"
+                    android:src="@drawable/sinewave_ic"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/eight_bit_button"
+                    android:padding="20dp"
+                    android:scaleType="fitCenter"
+                    android:layout_weight="4" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="The Ramen"
+                    android:id="@+id/textView17"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1" />
             </LinearLayout>
@@ -62,46 +82,36 @@
                     android:layout_toEndOf="@+id/eight_bit_button"
                     android:padding="20dp"
                     android:scaleType="fitCenter"
-                    android:layout_weight="9"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_weight="4" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Sound Effect"
+                    android:text="Light Saber"
                     android:id="@+id/textView18"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:weightSum="10" >
 
                 <ImageButton
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/sineWaveButton"
-                    android:src="@drawable/sinewave_ic"
-                    android:layout_alignParentTop="true"
-                    android:layout_toEndOf="@+id/eight_bit_button"
+                    android:id="@+id/swordButton"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_sword"
+                    android:layout_weight="4"
                     android:padding="20dp"
-                    android:scaleType="fitCenter"
-                    android:layout_weight="9"
-                    android:layout_gravity="center_horizontal" />
+                    android:scaleType="fitCenter" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="The Ramen"
-                    android:id="@+id/textView17"
+                    android:text="Sword"
+                    android:id="@+id/textView19"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1" />
+
             </LinearLayout>
 
         </LinearLayout>

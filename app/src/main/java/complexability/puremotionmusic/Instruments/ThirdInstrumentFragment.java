@@ -133,11 +133,11 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     Switch reverbSwitch;
 
     Button delayButton;
-
+    boolean onStart = true;
     BluetoothSPP bt;
     String availableEffects[];
 
-    int currentBpm = 120;
+    int currentBpm = 150;
 
     int  leadSineWavetVal = 60;
     int  leadSawToothVal = 42;
@@ -385,6 +385,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                         myContext,
                         android.R.layout.simple_list_item_1);
+                arrayAdapter.add("1/32");
                 arrayAdapter.add("1/16");
                 arrayAdapter.add("1/8");
                 arrayAdapter.add("1/4");
@@ -412,6 +413,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                         myContext,
                         android.R.layout.simple_list_item_1);
+                arrayAdapter.add("1/32");
                 arrayAdapter.add("1/16");
                 arrayAdapter.add("1/8");
                 arrayAdapter.add("1/4");
@@ -507,7 +509,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 bassVolumeText.setText(String.valueOf(progress));
-                PdBase.sendFloat("bass_volume", (float) (MAX_VOLUME*progress/100.));
+                PdBase.sendFloat("bass_volume", (float) (0.2*progress/100.));
             }
 
             @Override
@@ -611,8 +613,12 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 float val = (isChecked) ? 1.0f : 0.0f;
                 startAudio();
-                //PdBase.sendFloat("init_vars", val);
+                if(onStart){
+                    PdBase.sendFloat("init_vars" , val);
+                    PdBase.sendFloat("init_vars" , val);
+                    onStart = false;
 
+                }
                 PdBase.sendFloat("left_pitch_sel",selected[LEFT_PITCH]);
                 PdBase.sendFloat("right_pitch_sel", selected[RIGHT_PITCH]);
                 PdBase.sendFloat("left_roll_sel", selected[LEFT_ROLL]);
