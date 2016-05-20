@@ -157,7 +157,7 @@ public class Sequencer extends PureDataBaseFragment {
             public void onClick(View v) {
                 new MaterialDialog.Builder(myContext)
                         .title(R.string.title)
-                        .items(R.array.sequencer_effect_name)
+                        .items(R.array.sinewave_effect_name)
                         .itemsCallbackSingleChoice(selected[0], new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {

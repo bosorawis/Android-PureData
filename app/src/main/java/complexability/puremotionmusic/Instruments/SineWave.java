@@ -53,7 +53,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
 
     private static final String TAG = "ReverbFragment";
     private static final int[] AVAILABLE_EFFECT = new int[]{0, 1, 2};
-    private static final String[] AVAILABLE_EFFECT_NAME  = {"Chord","Note","Band Pass","Compressor", "Reverb", "Volume", "Rhythm", "BPM"};
+    //private static final String[] AVAILABLE_EFFECT_NAME  = {"Chord","Note","Band Pass","Compressor", "Reverb", "Volume", "Rhythm", "BPM"};
 
 
 
@@ -77,6 +77,8 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
     ToggleButton onOffButton;
     DrawTheBall drawTheLeftBall;
     DrawRightBall drawTheRightBall;
+
+    String availableEffects[];
 
     BluetoothSPP bt;
     public SineWave() {
@@ -162,11 +164,11 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         // Inflate the layout for this fragment
         //final View view = inflater.inflate(R.layout.fragment_reverb, container, false);
         final View view = inflater.inflate(R.layout.fragment_rev_test, container, false);
-
         TextView instrumentName  = (TextView) view.findViewById(R.id.instrumentName);
         RelativeLayout mainLayout = (RelativeLayout) view.findViewById(R.id.mainLayout);
         ImageView imageView = (ImageView) view.findViewById(R.id.instrumentImage);
         instrumentName.setText("Sine Wave Generator");
+        availableEffects = getActivity().getResources().getStringArray(R.array.sinewave_effect_name);
 
         imageView.setImageResource(R.drawable.sinewave);
 
@@ -176,7 +178,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         /*
         Value Initialization
          */
-        choices =  getActivity().getResources().getStringArray(R.array.reverb_effect_name);
+        choices =  getActivity().getResources().getStringArray(R.array.sinewave_effect_name);
         for (int i = 0 ; i < selectedString.length ; i++){
             //TODO Initializing
             selected[i] = -1;
@@ -219,11 +221,11 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 float val = (isChecked) ? 1.0f : 0.0f;
                 startAudio();
+                PdBase.sendFloat("init_vars", val);
                 PdBase.sendFloat("left_pitch_sel",selected[LEFT_PITCH]);
                 PdBase.sendFloat("right_pitch_sel", selected[RIGHT_PITCH]);
                 PdBase.sendFloat("left_roll_sel", selected[LEFT_ROLL]);
                 PdBase.sendFloat("right_roll_sel", selected[RIGHT_ROLL]);
-                PdBase.sendFloat("init_vars", val);
                 PdBase.sendFloat("onOff", val);
             }
         });
@@ -271,13 +273,13 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
 
     @Override
     protected void changeToNextInstrument() {
-        ((MainActivity) getActivity()).moveToFragmentByName("ThirdInstrumentFragment");
+        ((MainActivity) getActivity()).moveToFragmentByName("ThirdInstrument");
 
     }
 
     @Override
     protected void changeToPrevInstrument() {
-        ((MainActivity) getActivity()).moveToFragmentByName("ThirdInstrumentFragment");
+        ((MainActivity) getActivity()).moveToFragmentByName("ThirdInstrument");
     }
 
     @Override
@@ -345,7 +347,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
 
         new MaterialDialog.Builder(myContext)
                 .title(R.string.title)
-                .items(R.array.reverb_effect_name)
+                .items(R.array.sinewave_effect_name)
                 .itemsCallbackSingleChoice(selected[motion], new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -357,7 +359,7 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
                         //selectedString[finalMotion] = (String) text;
                         //finalCur.setText(AVAILABLE_EFFECT_NAME[finalMotion]);
                         sendChange(finalMotion,which);
-                        if(which < AVAILABLE_EFFECT.length && which >= 0) {
+                        if(which < availableEffects.length && which >= 0) {
                             Log.d(TAG, choices[which]);
                             //userSelected(finalMotion, choices[which]);
                         }
@@ -372,24 +374,24 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         Log.d(TAG,"final:" + Integer.toString(finalMotion) +"\t\t   which:" + Integer.toString(which));
         switch (finalMotion){
             case LEFT_PITCH:
-                left_pitch_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                left_pitch_text.setText(availableEffects[which]);
                 PdBase.sendFloat("left_pitch_sel",which);
-                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Left hand pitch");
+                Log.d(TAG,"SENDING \"" + availableEffects[which] + "\" for Left hand pitch");
                 break;
             case RIGHT_PITCH:
-                right_pitch_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                right_pitch_text.setText(availableEffects[which]);
                 PdBase.sendFloat("right_pitch_sel", which);
-                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Right hand pitch");
+                Log.d(TAG,"SENDING \"" + availableEffects[which] + "\" for Right hand pitch");
                 break;
             case LEFT_ROLL:
-                left_roll_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                left_roll_text.setText(availableEffects[which]);
                 PdBase.sendFloat("left_roll_sel", which);
-                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Left hand roll");
+                Log.d(TAG,"SENDING \"" + availableEffects[which] + "\" for Left hand roll");
                 break;
             case RIGHT_ROLL:
-                right_roll_text.setText(AVAILABLE_EFFECT_NAME[which]);
+                right_roll_text.setText(availableEffects[which]);
                 PdBase.sendFloat("right_roll_sel", which);
-                Log.d(TAG,"SENDING \"" + AVAILABLE_EFFECT_NAME[which] + "\" for Right hand roll");
+                Log.d(TAG,"SENDING \"" + availableEffects[which] + "\" for Right hand roll");
                 break;
             default:
                 break;
@@ -428,8 +430,8 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
             PdBase.setReceiver(receiver);
             PdBase.subscribe("metro_bng");
             //PdBase.subscribe("android");
-            InputStream in = res.openRawResource(R.raw.continuous_test);
-            patchFile = IoUtils.extractResource(in, "continuous_test.pd", getActivity().getCacheDir());
+            InputStream in = res.openRawResource(R.raw.sinewave);
+            patchFile = IoUtils.extractResource(in, "sinewave.pd", getActivity().getCacheDir());
             PdBase.openPatch(patchFile);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -535,30 +537,31 @@ public class SineWave extends InstrumentBase implements SharedPreferences.OnShar
         float r_z_gyro = concat(data[RIGHT_Z_GYRO_LOWBYTE], data[RIGHT_Z_GYRO_HIGHBYTE]);
 
 
-        rightMotion = calculateRightHandKalmanPitchRollForCheckOff(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
-        leftMotion  = calculateLeftHandKalmanPitchRollForCheckOff(l_x_accel, l_y_accel, l_z_accel, l_x_gyro, l_y_gyro, l_z_gyro);
-        PdBase.sendFloat("left_pitch",2*leftMotion[PITCH]);
-        PdBase.sendFloat("left_roll", -leftMotion[ROLL]);
-        PdBase.sendFloat("right_pitch", 2*rightMotion[PITCH]);
-        PdBase.sendFloat("right_roll", -rightMotion[ROLL]);
-        Log.d(TAG,"RIGHTHAND ACCEL x: " + Float.toString((r_x_accel)) + "\t y: "+Float.toString( r_y_accel) +"\t z: "+Float.toString( r_z_accel));
-        Log.d(TAG,"RIGHTHAND ORIEN Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));
+        rightMotion = calculateRightHandKalmanPitchRollForCheckOffTest(r_x_accel, r_y_accel, r_z_accel, r_x_gyro, r_y_gyro, r_z_gyro);
+        leftMotion  = calculateLeftHandKalmanPitchRollForCheckOffTest(l_x_accel, l_y_accel, l_z_accel, l_x_gyro, l_y_gyro, l_z_gyro);
+        PdBase.sendFloat("left_pitch",leftMotion[PITCH]);
+        PdBase.sendFloat("left_roll", leftMotion[ROLL]);
+        PdBase.sendFloat("right_pitch", rightMotion[PITCH]);
+        PdBase.sendFloat("right_roll", rightMotion[ROLL]);
+        //Log.d(TAG,"RIGHTHAND ACCEL x: " + Float.toString((r_x_accel)) + "\t y: "+Float.toString( r_y_accel) +"\t z: "+Float.toString( r_z_accel));
+        //Log.d(TAG,"RIGHTHAND ORIEN Roll: " + Integer.toString((int)rightMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)rightMotion[PITCH]));
 
-        Log.d(TAG,"LEFTHAND ACCEL x: " + Float.toString((l_x_accel)) + "\t y: "+Float.toString(l_y_accel) +"\t z: "+Float.toString(l_z_accel));
-        Log.d(TAG,"LEFTHAND ORIEN Roll: " + Integer.toString((int)leftMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)leftMotion[PITCH]));
+        //Log.d(TAG,"LEFTHAND ACCEL x: " + Float.toString((l_x_accel)) + "\t y: "+Float.toString(l_y_accel) +"\t z: "+Float.toString(l_z_accel));
+        //Log.d(TAG,"LEFTHAND ORIEN Roll: " + Integer.toString((int)leftMotion[ROLL]) + "\t Pitch: "+Integer.toString((int)leftMotion[PITCH]));
 
         drawTheLeftBall.updateValue( leftMotion[ROLL], -leftMotion[PITCH]);
         drawTheRightBall.updateValue(rightMotion[ROLL], -rightMotion[PITCH]);
     }
     public void initText(){
-        left_pitch_text.setText(AVAILABLE_EFFECT_NAME[0]);
-        left_roll_text.setText(AVAILABLE_EFFECT_NAME[1]);
-        right_pitch_text.setText(AVAILABLE_EFFECT_NAME[2]);
-        right_roll_text.setText(AVAILABLE_EFFECT_NAME[3]);
-        selected[0] = 0;
-        selected[1] = 1;
-        selected[2] = 2;
-        selected[3] = 3;
+
+        left_pitch_text.setText(availableEffects[2]);
+        left_roll_text.setText(availableEffects[0]);
+        right_pitch_text.setText(availableEffects[2]);
+        right_roll_text.setText(availableEffects[1]);
+        selected[LEFT_PITCH] = 2;
+        selected[LEFT_ROLL] = 0;
+        selected[RIGHT_PITCH] = 2;
+        selected[RIGHT_ROLL] = 1;
     }
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

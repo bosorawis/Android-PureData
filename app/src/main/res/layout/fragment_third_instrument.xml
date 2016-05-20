@@ -22,8 +22,11 @@
             android:checked="false"
             android:layout_below="@+id/instrumentImage"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="48dp" />
-
+            android:layout_marginTop="48dp"
+            android:textOn=""
+            android:textOff=""
+            android:background="@drawable/check"
+            android:buttonTint="@color/md_btn_selected_dark"/>
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -42,7 +45,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Roll"
+                    android:text="Twist"
                     android:id="@+id/left_roll_button"
                     android:drawableStart="@drawable/ic_rot_left"
                     android:drawableEnd="@drawable/ic_rot_right"
@@ -65,7 +68,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="pitch"
+                    android:text="Tilt"
                     android:id="@+id/left_pitch_button"
                     android:drawableStart="@drawable/ic_pitch_forward"
                     android:drawableEnd="@drawable/ic_pitch_backward"
@@ -204,7 +207,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Roll"
+                    android:text="Twist"
                     android:id="@+id/right_roll_button"
                     android:layout_below="@+id/textView10"
                     android:layout_alignParentEnd="true"
@@ -214,7 +217,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pitch"
+                    android:text="Tilt"
                     android:id="@+id/right_pitch_button"
                     android:layout_below="@+id/right_roll_button"
                     android:layout_alignParentEnd="true"

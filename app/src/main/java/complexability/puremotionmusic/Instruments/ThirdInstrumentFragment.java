@@ -67,7 +67,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
     private static final int TOTAL_EFFECT = 3;
 
     private static final String TAG = "ThirdInstrumentFragment";
-
+    private static final float MAX_VOLUME = (float) 0.15;
     private OnFragmentInteractionListener mListener;
     private PdService pdService = null;
     private int[] selected = new int[TOTAL_MOTION];
@@ -438,7 +438,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 volumeText.setText(String.valueOf(progress));
-                PdBase.sendFloat("lead_volume", (float) (0.3*(progress/100.)));
+                PdBase.sendFloat("lead_volume", (float) (MAX_VOLUME*(progress/100.)));
             }
 
             @Override
@@ -455,7 +455,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 sineWaveText.setText(String.valueOf(progress));
-                PdBase.sendFloat("sine_osc1_level", (float) (progress/100.));
+                PdBase.sendFloat("sine_osc1_level", (float) (progress/200.));
             }
 
             @Override
@@ -472,7 +472,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 sawToothText.setText(String.valueOf(progress));
-                PdBase.sendFloat("sawtooth_osc1_level", (float) (progress/100.));
+                PdBase.sendFloat("sawtooth_osc1_level", (float) (progress/200.));
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -488,7 +488,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 pwmText.setText(String.valueOf(progress));
-                PdBase.sendFloat("pwm_osc1_level", (float) (progress/100.));
+                PdBase.sendFloat("pwm_osc1_level", (float) (progress/200.));
             }
 
             @Override
@@ -507,7 +507,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 bassVolumeText.setText(String.valueOf(progress));
-                PdBase.sendFloat("bass_volume", (float) (0.3*progress/100.));
+                PdBase.sendFloat("bass_volume", (float) (MAX_VOLUME*progress/100.));
             }
 
             @Override
@@ -525,7 +525,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 bassSineWaveText.setText(String.valueOf(progress));
-                PdBase.sendFloat("sine_osc2_level", (float) (progress/100.));
+                PdBase.sendFloat("sine_osc2_level", (float) (progress/200.));
 
             }
 
@@ -543,7 +543,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 bassSawToothText.setText(String.valueOf(progress));
-                PdBase.sendFloat("sawtooth_osc2_level", (float) (progress/100.));
+                PdBase.sendFloat("sawtooth_osc2_level", (float) (progress/200.));
             }
 
             @Override
@@ -560,7 +560,7 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 bassPwmText.setText(String.valueOf(progress));
                 Log.d(TAG, Float.toString((float) (progress/100.0)));
-                PdBase.sendFloat("pwm_osc2_level", (float) (progress/100.));
+                PdBase.sendFloat("pwm_osc2_level", (float) (progress/200.));
             }
 
             @Override
@@ -574,41 +574,6 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
             }
         });
 
-        //-------Delay seekbar-----//
-        //rightDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-        //    @Override
-        //    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        //        rightDelayText.setText(String.valueOf(progress));
-        //        PdBase.sendFloat("delay_mix_r", (float) ((float) 5.*(progress/100.)));
-        //    }
-//
-        //    @Override
-        //    public void onStartTrackingTouch(SeekBar seekBar) {
-//
-        //    }
-//
-        //    @Override
-        //    public void onStopTrackingTouch(SeekBar seekBar) {
-//
-        //    }
-        //});
-        //leftDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-        //    @Override
-        //    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        //        leftDelayText.setText(String.valueOf(progress));
-        //        PdBase.sendFloat("delay_mix_l", (float) ((float) 5.*(progress/100.)));
-        //    }
-//
-        //    @Override
-        //    public void onStartTrackingTouch(SeekBar seekBar) {
-//
-        //    }
-//
-        //    @Override
-        //    public void onStopTrackingTouch(SeekBar seekBar) {
-//
-        //    }
-        //});
 
         /*
         Initializa Mapper for mapping motions
@@ -957,11 +922,11 @@ public class ThirdInstrumentFragment extends InstrumentBase implements View.OnCl
         drawTheRightBall.updateValue(rightMotion[ROLL], -rightMotion[PITCH]);
     }
     public void initText(){
-        left_pitch_text.setText(availableEffects[3]);
+        left_pitch_text.setText(availableEffects[6]);
         left_roll_text.setText(availableEffects[0]);
         right_pitch_text.setText(availableEffects[2]);
         right_roll_text.setText(availableEffects[1]);
-        selected[LEFT_PITCH] = 3;
+        selected[LEFT_PITCH] = 6;
         selected[LEFT_ROLL] = 0;
         selected[RIGHT_PITCH] = 2;
         selected[RIGHT_ROLL] = 1;
